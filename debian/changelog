@@ -1,0 +1,6 @@
+chromium-browser (53.0.2785.143-0ubuntu0.14.04.1.1145) trusty-security; urgency=medium
+
+  * debian/patches/defang-ct-timebomb: backport TLS cert invalidity based
+    on build-time.  (LP: #1641380)
+
+ -- Chad MILLER <chad.miller@canonical.com>  Mon, 14 Nov 2016 10:06:44 -0500
