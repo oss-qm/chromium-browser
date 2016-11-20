@@ -66,7 +66,7 @@
                 'COMPILED_FROM_DSP',
               ],
             }],
-            ['OS=="mac" or OS=="ios" or OS=="android" or os_bsd==1 or chromecast==1', {
+            ['OS=="mac" or OS=="ios" or OS=="android" or os_bsd==1 or chromecast==1 or OS=="linux"', {
               'defines': [
                 'HAVE_EXPAT_CONFIG_H',
               ],
