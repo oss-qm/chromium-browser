@@ -364,25 +364,6 @@ bool PathProvider(int key, base::FilePath* result) {
 #endif
       cur = cur.Append(FILE_PATH_LITERAL("pnacl"));
       break;
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
-#if defined(WIDEVINE_CDM_IS_COMPONENT)
-    case chrome::DIR_COMPONENT_WIDEVINE_CDM:
-      if (!PathService::Get(chrome::DIR_USER_DATA, &cur))
-        return false;
-      cur = cur.AppendASCII(kWidevineCdmBaseDirectory);
-      break;
-#endif  // defined(WIDEVINE_CDM_IS_COMPONENT)
-    // TODO(xhwang): FILE_WIDEVINE_CDM_ADAPTER has different meanings.
-    // In the component case, this is the source adapter. Otherwise, it is the
-    // actual Pepper module that gets loaded.
-    case chrome::FILE_WIDEVINE_CDM_ADAPTER:
-      if (!GetComponentDirectory(&cur))
-        return false;
-      cur = cur.Append(
-          media::GetPlatformSpecificDirectory(kWidevineCdmBaseDirectory));
-      cur = cur.AppendASCII(kWidevineCdmAdapterFileName);
-      break;
-#endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
     case chrome::FILE_RESOURCES_PACK:
 #if defined(OS_MACOSX)
       cur = base::mac::FrameworkBundlePath();

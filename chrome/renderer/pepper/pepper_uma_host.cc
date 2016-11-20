@@ -50,10 +50,6 @@ const char* const kWhitelistedHistogramPrefixes[] = {
 };
 
 const char* const kWhitelistedPluginBaseNames[] = {
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
-    kWidevineCdmAdapterFileName,  // see http://crbug.com/368743
-                                  // and http://crbug.com/410630
-#endif
     ChromeContentClient::kPDFPluginPath,
 };
 

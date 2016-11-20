@@ -88,16 +88,9 @@ const char kUnexpectedResult[] = "unexpected result";
 #define EXPECT_ECK_NO_MATCH EXPECT_UNKNOWN_KEYSYSTEM
 #endif  // defined(ENABLE_PEPPER_CDMS)
 
-// Expectations for Widevine.
-#if defined(WIDEVINE_CDM_AVAILABLE)
-#define EXPECT_WV_SUCCESS EXPECT_SUCCESS
-#define EXPECT_WV_PROPRIETARY EXPECT_PROPRIETARY
-#define EXPECT_WV_NO_MATCH EXPECT_NO_MATCH
-#else  // defined(WIDEVINE_CDM_AVAILABLE)
 #define EXPECT_WV_SUCCESS EXPECT_UNKNOWN_KEYSYSTEM
 #define EXPECT_WV_PROPRIETARY EXPECT_UNKNOWN_KEYSYSTEM
 #define EXPECT_WV_NO_MATCH EXPECT_UNKNOWN_KEYSYSTEM
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 
 };  // namespace
 
@@ -675,10 +668,8 @@ IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesTest,
       kVideoWebMMimeType, no_codecs(), kExternalClearKey));
 
 // This will fail in all builds unless widevine is available.
-#if !defined(WIDEVINE_CDM_AVAILABLE)
   EXPECT_UNKNOWN_KEYSYSTEM(AreCodecsSupportedByKeySystem(
       kVideoWebMMimeType, no_codecs(), kWidevine));
-#endif
 
   // Clear Key should still be registered.
   EXPECT_SUCCESS(AreCodecsSupportedByKeySystem(
@@ -700,7 +691,6 @@ IN_PROC_BROWSER_TEST_F(
 }
 
 // This will fail in all builds unless Widevine is available.
-#if !defined(WIDEVINE_CDM_AVAILABLE)
 IN_PROC_BROWSER_TEST_F(
     EncryptedMediaSupportedTypesWidevineCDMRegisteredWithWrongPathTest,
     PepperCDMsRegisteredButAdapterNotPresent) {
@@ -711,6 +701,5 @@ IN_PROC_BROWSER_TEST_F(
   EXPECT_SUCCESS(AreCodecsSupportedByKeySystem(
       kVideoWebMMimeType, no_codecs(), kClearKey));
 }
-#endif  // !defined(WIDEVINE_CDM_AVAILABLE)
 #endif  // defined(ENABLE_PEPPER_CDMS)
 }  // namespace chrome

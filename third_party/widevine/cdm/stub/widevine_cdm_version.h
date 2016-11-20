@@ -10,6 +10,4 @@
 
 #include "third_party/widevine/cdm/widevine_cdm_common.h"
 
-#define WIDEVINE_CDM_AVAILABLE
-
 #endif  // WIDEVINE_CDM_VERSION_H_

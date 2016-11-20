@@ -66,12 +66,6 @@ class TestContentRendererClient : public ContentRendererClient {
     key_systems_properties->emplace_back(
         new TestKeySystemProperties("test.keysystem"));
 
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(WIDEVINE_CDM_IS_COMPONENT)
-    if (is_extra_key_system_enabled_) {
-      key_systems_properties->emplace_back(
-          new TestKeySystemProperties(kWidevineKeySystem));
-    }
-#endif
   }
 
   void EnableExtraKeySystem() { is_extra_key_system_enabled_ = true; }
@@ -80,18 +74,6 @@ class TestContentRendererClient : public ContentRendererClient {
   // Whether a platform-specific extra key system is "supported" by |this|.
   bool is_extra_key_system_enabled_;
 };
-
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(WIDEVINE_CDM_IS_COMPONENT)
-bool ContainsWidevine(
-    const std::vector<std::unique_ptr<media::KeySystemProperties>>&
-        key_systems_properties) {
-  for (const auto& key_system_properties : key_systems_properties) {
-    if (key_system_properties->GetKeySystemName() == kWidevineKeySystem)
-      return true;
-  }
-  return false;
-}
-#endif
 
 }  // namespace
 
@@ -130,11 +112,7 @@ TEST_F(RenderMediaClientTest, KeySystemNameForUMA) {
       clearkey_uma_name = info.key_system_name_for_uma;
   }
 
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  EXPECT_EQ("Widevine", widevine_uma_name);
-#else
   EXPECT_TRUE(widevine_uma_name.empty());
-#endif
 
   EXPECT_TRUE(clearkey_uma_name.empty()) << "Clear Key is added by media/ and "
                                             "should not be added by the "
@@ -156,29 +134,6 @@ TEST_F(RenderMediaClientTest, IsKeySystemsUpdateNeeded) {
   // No update needed immediately after AddSupportedKeySystems() call.
   EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
 
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(WIDEVINE_CDM_IS_COMPONENT)
-  // Widevine not supported because extra key system isn't enabled.
-  EXPECT_FALSE(ContainsWidevine(key_systems_properties));
-
-  // This is timing related. The update interval for Widevine is 1000 ms.
-  EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
-  tick_clock->Advance(base::TimeDelta::FromMilliseconds(990));
-  EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
-  tick_clock->Advance(base::TimeDelta::FromMilliseconds(10));
-  EXPECT_TRUE(render_media_client_->IsKeySystemsUpdateNeeded());
-
-  EnableExtraKeySystem();
-
-  key_systems_properties.clear();
-  render_media_client_->AddSupportedKeySystems(&key_systems_properties);
-  EXPECT_TRUE(ContainsWidevine(key_systems_properties));
-
-  EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
-  tick_clock->Advance(base::TimeDelta::FromMilliseconds(1000));
-  EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
-  tick_clock->Advance(base::TimeDelta::FromMilliseconds(1000));
-  EXPECT_FALSE(render_media_client_->IsKeySystemsUpdateNeeded());
-#endif
 }
 
 }  // namespace content

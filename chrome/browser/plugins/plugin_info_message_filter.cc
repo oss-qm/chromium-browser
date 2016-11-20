@@ -69,14 +69,6 @@ bool ShouldUseJavaScriptSettingForPlugin(const WebPluginInfo& plugin) {
     return true;
 #endif
 
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
-  // Treat CDM invocations like JavaScript.
-  if (plugin.name == base::ASCIIToUTF16(kWidevineCdmDisplayName)) {
-    DCHECK(plugin.type == WebPluginInfo::PLUGIN_TYPE_PEPPER_OUT_OF_PROCESS);
-    return true;
-  }
-#endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
-
   return false;
 }
 
@@ -91,14 +83,6 @@ enum PluginAvailabilityStatusForUMA {
 
 static void SendPluginAvailabilityUMA(const std::string& mime_type,
                                       PluginAvailabilityStatusForUMA status) {
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  // Only report results for Widevine CDM.
-  if (mime_type != kWidevineCdmPluginMimeType)
-    return;
-
-  UMA_HISTOGRAM_ENUMERATION("Plugin.AvailabilityStatus.WidevineCdm",
-                            status, PLUGIN_AVAILABILITY_STATUS_MAX);
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 }
 
 #endif  // defined(ENABLE_PEPPER_CDMS)

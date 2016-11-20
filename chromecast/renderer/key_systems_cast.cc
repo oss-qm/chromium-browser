@@ -95,24 +95,6 @@ void AddChromecastKeySystems(
       new PlayReadyKeySystemProperties(enable_persistent_license_support));
 #endif  // defined(PLAYREADY_CDM_AVAILABLE)
 
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  using Robustness = cdm::WidevineKeySystemProperties::Robustness;
-  ::media::SupportedCodecs codecs =
-      ::media::EME_CODEC_MP4_AAC | ::media::EME_CODEC_MP4_AVC1 |
-      ::media::EME_CODEC_WEBM_VP8 | ::media::EME_CODEC_WEBM_VP9;
-  key_systems_properties->emplace_back(new cdm::WidevineKeySystemProperties(
-      codecs,  // Regular codecs.
-#if defined(OS_ANDROID)
-      codecs,  // Hardware-secure codecs.
-#endif
-      Robustness::HW_SECURE_ALL,             // Max audio robustness.
-      Robustness::HW_SECURE_ALL,             // Max video robustness.
-      EmeSessionTypeSupport::NOT_SUPPORTED,  // persistent-license.
-      EmeSessionTypeSupport::NOT_SUPPORTED,  // persistent-release-message.
-      // Note: On Chromecast, all CDMs may have persistent state.
-      EmeFeatureSupport::ALWAYS_ENABLED,    // Persistent state.
-      EmeFeatureSupport::ALWAYS_ENABLED));  // Distinctive identifier.
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 }
 
 }  // namespace shell

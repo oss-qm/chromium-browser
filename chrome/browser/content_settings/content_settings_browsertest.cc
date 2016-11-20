@@ -473,17 +473,6 @@ IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
   RunLoadPepperPluginTest(kClearKeyCdmPepperMimeType, false);
 }
 
-#if defined(WIDEVINE_CDM_AVAILABLE) && !defined(OS_CHROMEOS)
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
-                       WidevineCdm) {
-  // Check that Widevine CDM is available and registered.
-  base::FilePath adapter_path =
-      GetPepperCdmPath(kWidevineCdmBaseDirectory, kWidevineCdmAdapterFileName);
-  EXPECT_TRUE(base::PathExists(adapter_path)) << adapter_path.MaybeAsASCII();
-  EXPECT_TRUE(IsPepperCdmRegistered(kWidevineCdmPluginMimeType));
-  RunLoadPepperPluginTest(kWidevineCdmPluginMimeType, true);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE) && !defined(OS_CHROMEOS)
 #endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if !defined(DISABLE_NACL)
@@ -503,17 +492,6 @@ IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesJavaScriptBlockedTest,
   RunJavaScriptBlockedTest("load_clearkey_no_js.html", false);
 }
 
-#if defined(WIDEVINE_CDM_AVAILABLE)
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesJavaScriptBlockedTest,
-                       WidevineCdm) {
-  // Check that Widevine CDM is available and registered.
-  base::FilePath adapter_path =
-      GetPepperCdmPath(kWidevineCdmBaseDirectory, kWidevineCdmAdapterFileName);
-  EXPECT_TRUE(base::PathExists(adapter_path)) << adapter_path.MaybeAsASCII();
-  EXPECT_TRUE(IsPepperCdmRegistered(kWidevineCdmPluginMimeType));
-  RunJavaScriptBlockedTest("load_widevine_no_js.html", true);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 #endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if !defined(DISABLE_NACL)

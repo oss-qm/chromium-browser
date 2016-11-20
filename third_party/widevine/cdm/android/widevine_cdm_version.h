@@ -7,7 +7,4 @@
 
 #include "third_party/widevine/cdm/widevine_cdm_common.h"
 
-// Indicates that the Widevine CDM is available.
-#define WIDEVINE_CDM_AVAILABLE
-
 #endif  // WIDEVINE_CDM_VERSION_H_

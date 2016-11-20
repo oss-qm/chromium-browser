@@ -74,18 +74,6 @@ void MeasureSizeAndTimeToLoadCdm(const std::string& cdm_base_dir,
 }  // namespace
 
 #if defined(ENABLE_PEPPER_CDMS)
-#if defined(WIDEVINE_CDM_AVAILABLE)
-TEST(LoadCDMPerfTest, Widevine) {
-  MeasureSizeAndTimeToLoadCdm(
-      kWidevineCdmBaseDirectory,
-      base::GetNativeLibraryName(kWidevineCdmLibraryName));
-}
-
-TEST(LoadCDMPerfTest, WidevineAdapter) {
-  MeasureSizeAndTimeToLoadCdm(kWidevineCdmBaseDirectory,
-                              kWidevineCdmAdapterFileName);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 
 TEST(LoadCDMPerfTest, ExternalClearKey) {
   MeasureSizeAndTimeToLoadCdm(
