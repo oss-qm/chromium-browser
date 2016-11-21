@@ -1,3 +1,18 @@
+From: Chad Miller <chad.miller@canonical.com>
+Subject: defang CT timebomb
+
+Chromium refuses to connect certain https sites (eg. amazon, etsy, ...)
+with claiming an insecure connection (CERTIFICATE_TRANSPARENCY_REQUIRED,
+BUILD_NOT_TIMELY), which is a false alert, that cannot be bypassed.
+
+The reason behind is a badly implemented new feature called "Certificate
+Transparency", which basicly checks some globals logs of collected
+site certificates in order to defend against rogue/compromised CAs.
+Unfortunately they check the validity of the (built-in) log pointers
+by the build-time of the chromium binary. Pretty obvious that this
+is just silly - it just makes the whole logic fail miserably, rendering
+lots of sites just inaccessible, when the binary isn't recompiled 
+regularily.
 
 --- a/net/quic/crypto/proof_verifier_chromium.cc
 +++ b/net/quic/crypto/proof_verifier_chromium.cc

@@ -1,6 +1,5 @@
-Description: Prefer a /usr/share directory named after the package if it
-  exists.
-Author: Chad Miller <chad.miller@canonical.com>
+From: Chad Miller <chad.miller@canonical.com>
+Subject: Prefer a /usr/share directory named after the package if it exists.
 
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc

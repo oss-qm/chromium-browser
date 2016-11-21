@@ -1,3 +1,8 @@
+From: uknown@uknown.org
+Subject: test: drop references to missing test files
+
+FIXME: still needed ? (the file seems to be there now)
+
 --- a/chrome/test/data/webui_test_resources.grd
 +++ b/chrome/test/data/webui_test_resources.grd
 @@ -8,7 +8,6 @@

@@ -1,6 +1,6 @@
-description: don't set sse2 compiler flags on i386
-author: Michael Gilbert <mgilbert@debian.org>
-debian-bug: http://bugs.debian.org/750361
+From: Michael Gilbert <mgilbert@debian.org>
+Subject: don't set sse2 compiler flags on i386
+X-Debian-Bug: http://bugs.debian.org/750361
 
 --- a/build/common.gypi
 +++ b/build/common.gypi
@@ -498,17 +498,6 @@ debian-bug: http://bugs.debian.org/750361
      SIMD::packOneRowOfRGBA8LittleToRGBA8(source, destination, pixelsPerRow);
  #else
      for (unsigned i = 0; i < pixelsPerRow; ++i) {
---- a/third_party/pdfium/skia/skia_library_opts.gyp
-+++ b/third_party/pdfium/skia/skia_library_opts.gyp
-@@ -46,7 +46,7 @@
-           # be in the regular skia target. But we need skia_opts for arm
-           # anyway, so putting sse2_sources here is simpler than making this
-           # conditionally a type none target on x86.
--          'sources': [ '<@(sse2_sources)' ],
-+          'sources': [ '<@(none_sources)' ],
-           'dependencies': [
-             'skia_opts_ssse3',
-             'skia_opts_sse41',
 --- a/third_party/qcms/qcms.gyp
 +++ b/third_party/qcms/qcms.gyp
 @@ -50,7 +50,7 @@
@@ -520,24 +509,3 @@ debian-bug: http://bugs.debian.org/750361
                'defines': [
                  'SSE2_ENABLE',
                ],
-@@ -110,4 +110,4 @@
- # tab-width:2
- # indent-tabs-mode:nil
- # End:
--# vim: set expandtab tabstop=2 shiftwidth=2:
-\ No newline at end of file
-+# vim: set expandtab tabstop=2 shiftwidth=2:
---- a/third_party/skia/gyp/opts.gyp
-+++ b/third_party/skia/gyp/opts.gyp
-@@ -33,9 +33,9 @@
-       ],
-       'conditions': [
-         [ '"x86" in skia_arch_type and skia_os != "ios"', {
--          'cflags': [ '-msse2' ],
-+          'cflags': [ ],
-           'dependencies': [ 'opts_ssse3', 'opts_sse41', 'opts_sse42', 'opts_avx', 'opts_avx2' ],
--          'sources': [ '<@(sse2_sources)' ],
-+          'sources': [ '<@(none_sources)' ],
-         }],
- 
-         [ 'skia_arch_type == "mips"', {

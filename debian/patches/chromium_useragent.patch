@@ -1,5 +1,5 @@
-Description: Add "Chromium" and "Ubuntu" to the user-agent text.
-Author: Chad Miller <chad.miller@canonical.com>
+From: Chad Miller <chad.miller@canonical.com>
+Subject: user_agent: add "Chromium" and "Ubuntu" to the user-agent text.
 
 --- a/content/common/user_agent.cc
 +++ b/content/common/user_agent.cc

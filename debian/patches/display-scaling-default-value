@@ -1,8 +1,8 @@
-Description: Set default scaling to be 1:1, instead of using the hardware's
+Subject: Set default scaling to be 1:1, instead of using the hardware's
   reporting to define scaling by default.  This is because hardware lies.  Lots
   of it does.
-Author: Chad MILLER <chad.miller@canonical.com>
-Forwarded: not-needed
+From: Chad MILLER <chad.miller@canonical.com>
+X-Patch-Forwarded: not-needed
 
 --- a/ui/views/widget/desktop_aura/desktop_screen_x11.cc
 +++ b/ui/views/widget/desktop_aura/desktop_screen_x11.cc

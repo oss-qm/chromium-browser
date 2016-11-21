@@ -1,6 +1,6 @@
-Description: GYP assumes ARMv7 always wants NEON, even if compile flags disable.
+From: Chad Miller <chad.miller@canonical.com>
+Subject: webrtc: GYP assumes ARMv7 always wants NEON, even if compile flags disable.
 Origin: http://code.google.com/p/chromium/issues/detail?id=154107
-Author: Chad Miller <chad.miller@canonical.com>
 Bug-Chromium: 154107
 Bug-Ubuntu: 1084852
 

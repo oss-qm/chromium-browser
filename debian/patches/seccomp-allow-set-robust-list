@@ -1,3 +1,6 @@
+From: unknown@unknown.org
+Subject: sandbox: seccomp: allow set robust list
+
 --- a/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
 @@ -164,7 +164,7 @@ ResultExpr EvaluateSyscallImpl(int fs_de

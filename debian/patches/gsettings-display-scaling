@@ -1,6 +1,6 @@
-Description: Read display scaling from gsettings.
-Author: Chad MILLER <chad.miller@canonical.com>
-Forwarded: yes
+From: Chad MILLER <chad.miller@canonical.com>
+Subject: Read display scaling from gsettings.
+X-Patch-Forwarded: yes
 
 --- a/build/linux/system.gyp
 +++ b/build/linux/system.gyp

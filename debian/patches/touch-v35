@@ -1,6 +1,6 @@
-Description: Add touchscreen support for other xi2 devices.
-Author: Chad MILLER <chad.miller@canonical.com>
-Forwarded: yes
+Subject: Add touchscreen support for other xi2 devices.
+From: Chad MILLER <chad.miller@canonical.com>
+X-Patch-Forwarded: yes
 
 --- a/ui/events/devices/x11/touch_factory_x11.cc
 +++ b/ui/events/devices/x11/touch_factory_x11.cc

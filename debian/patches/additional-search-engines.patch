@@ -1,3 +1,6 @@
+From: unknown@unknown.org
+Subject: search_engines: add DuckDuckGo to prepopulated search engines
+
 --- a/components/search_engines/prepopulated_engines.json
 +++ b/components/search_engines/prepopulated_engines.json
 @@ -14,6 +14,7 @@

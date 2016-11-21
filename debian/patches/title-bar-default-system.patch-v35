@@ -1,4 +1,5 @@
-Description: Never default to using the custom title bar. Chromium should
+From: unknown@unknown.org
+Subject: Never default to using the custom title bar. Chromium should
   integrate, not be a special little snowflake.
 
 --- a/ui/base/x/x11_util.cc
