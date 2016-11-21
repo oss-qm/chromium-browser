@@ -19,11 +19,6 @@ MediaKeysController::MediaKeysController(MediaKeysClient* client)
 {
 }
 
-WebEncryptedMediaClient* MediaKeysController::encryptedMediaClient(ExecutionContext* context)
-{
-    return m_client->encryptedMediaClient(context);
-}
-
 void MediaKeysController::provideMediaKeysTo(Page& page, MediaKeysClient* client)
 {
     MediaKeysController::provideTo(page, supplementName(), new MediaKeysController(client));

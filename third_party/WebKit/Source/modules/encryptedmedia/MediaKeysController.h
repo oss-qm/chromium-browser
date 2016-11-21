@@ -12,13 +12,10 @@ namespace blink {
 
 class ExecutionContext;
 class MediaKeysClient;
-class WebEncryptedMediaClient;
 
 class MODULES_EXPORT MediaKeysController final : public GarbageCollected<MediaKeysController>, public Supplement<Page> {
     USING_GARBAGE_COLLECTED_MIXIN(MediaKeysController);
 public:
-    WebEncryptedMediaClient* encryptedMediaClient(ExecutionContext*);
-
     static void provideMediaKeysTo(Page&, MediaKeysClient*);
     static MediaKeysController* from(Page* page) { return static_cast<MediaKeysController*>(Supplement<Page>::from(page, supplementName())); }
 

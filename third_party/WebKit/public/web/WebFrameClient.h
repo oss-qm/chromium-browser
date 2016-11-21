@@ -77,7 +77,6 @@ class WebContentDecryptionModule;
 class WebCookieJar;
 class WebCString;
 class WebDataSource;
-class WebEncryptedMediaClient;
 class WebExternalPopupMenu;
 class WebExternalPopupMenuClient;
 class WebFileChooserCompletion;
@@ -585,11 +584,6 @@ public:
     virtual void willStartUsingPeerConnectionHandler(WebRTCPeerConnectionHandler*) { }
 
     virtual WebUserMediaClient* userMediaClient() { return 0; }
-
-
-    // Encrypted Media -------------------------------------------------
-
-    virtual WebEncryptedMediaClient* encryptedMediaClient() { return 0; }
 
 
     // Web MIDI -------------------------------------------------------------

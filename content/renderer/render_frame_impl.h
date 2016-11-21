@@ -108,7 +108,6 @@ class MediaServiceProvider;
 class RendererWebMediaPlayerDelegate;
 class SurfaceManager;
 class UrlIndex;
-class WebEncryptedMediaClientImpl;
 }
 
 namespace shell {
@@ -604,7 +603,6 @@ class CONTENT_EXPORT RenderFrameImpl
   void willStartUsingPeerConnectionHandler(
       blink::WebRTCPeerConnectionHandler* handler) override;
   blink::WebUserMediaClient* userMediaClient() override;
-  blink::WebEncryptedMediaClient* encryptedMediaClient() override;
   blink::WebMIDIClient* webMIDIClient() override;
   blink::WebString userAgentOverride() override;
   blink::WebString doNotTrackValue() override;
@@ -1160,10 +1158,6 @@ class CONTENT_EXPORT RenderFrameImpl
 
   // Destroyed via the RenderFrameObserver::OnDestruct() mechanism.
   UserMediaClientImpl* web_user_media_client_;
-
-  // EncryptedMediaClient attached to this frame; lazily initialized.
-  std::unique_ptr<media::WebEncryptedMediaClientImpl>
-      web_encrypted_media_client_;
 
   // The media permission dispatcher attached to this frame.
   std::unique_ptr<MediaPermissionDispatcher> media_permission_dispatcher_;

@@ -10,12 +10,10 @@
 namespace blink {
 
 class ExecutionContext;
-class WebEncryptedMediaClient;
 
 class MediaKeysClient {
     USING_FAST_MALLOC(MediaKeysClient);
 public:
-    virtual WebEncryptedMediaClient* encryptedMediaClient(ExecutionContext*) = 0;
 
 protected:
     virtual ~MediaKeysClient() { }

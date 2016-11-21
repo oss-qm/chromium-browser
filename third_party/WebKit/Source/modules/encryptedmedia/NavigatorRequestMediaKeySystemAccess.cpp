@@ -17,7 +17,6 @@
 #include "platform/Histogram.h"
 #include "platform/Logging.h"
 #include "platform/network/ParsedContentType.h"
-#include "public/platform/WebEncryptedMediaClient.h"
 #include "public/platform/WebEncryptedMediaRequest.h"
 #include "public/platform/WebMediaKeySystemConfiguration.h"
 #include "public/platform/WebMediaKeySystemMediaCapability.h"

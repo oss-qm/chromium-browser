@@ -16,8 +16,6 @@
 
 namespace media {
 
-class WebEncryptedMediaClientImpl;
-
 class WebContentDecryptionModuleAccessImpl
     : public blink::WebContentDecryptionModuleAccess {
  public:
@@ -25,8 +23,7 @@ class WebContentDecryptionModuleAccessImpl
       const blink::WebString& key_system,
       const blink::WebSecurityOrigin& security_origin,
       const blink::WebMediaKeySystemConfiguration& configuration,
-      const CdmConfig& cdm_config,
-      const base::WeakPtr<WebEncryptedMediaClientImpl>& client);
+      const CdmConfig& cdm_config);
   ~WebContentDecryptionModuleAccessImpl() override;
 
   // blink::WebContentDecryptionModuleAccess interface.
@@ -39,8 +36,7 @@ class WebContentDecryptionModuleAccessImpl
       const blink::WebString& key_system,
       const blink::WebSecurityOrigin& security_origin,
       const blink::WebMediaKeySystemConfiguration& configuration,
-      const CdmConfig& cdm_config,
-      const base::WeakPtr<WebEncryptedMediaClientImpl>& client);
+      const CdmConfig& cdm_config);
 
   const blink::WebString key_system_;
   const blink::WebSecurityOrigin security_origin_;
@@ -48,8 +44,6 @@ class WebContentDecryptionModuleAccessImpl
   const CdmConfig cdm_config_;
 
   // Keep a WeakPtr as client is owned by render_frame_impl.
-  base::WeakPtr<WebEncryptedMediaClientImpl> client_;
-
   DISALLOW_COPY_AND_ASSIGN(WebContentDecryptionModuleAccessImpl);
 };
 
