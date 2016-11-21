@@ -216,10 +216,6 @@
 #include "ui/ozone/public/ozone_switches.h"
 #endif
 
-#if defined(ENABLE_BROWSER_CDMS)
-#include "content/browser/media/cdm/browser_cdm_manager.h"
-#endif
-
 #if defined(ENABLE_PLUGINS)
 #include "content/browser/plugin_service_impl.h"
 #endif
@@ -960,9 +956,6 @@ void RenderProcessHostImpl::CreateMessageFilters() {
   browser_demuxer_android_ = new BrowserDemuxerAndroid();
   AddFilter(browser_demuxer_android_.get());
 #endif
-#if defined(ENABLE_BROWSER_CDMS)
-  AddFilter(new BrowserCdmManager(GetID(), NULL));
-#endif
 
   WebSocketDispatcherHost::GetRequestContextCallback
       websocket_request_context_callback(
@@ -1127,18 +1120,6 @@ const base::TimeTicks& RenderProcessHostImpl::GetInitTimeForNavigationMetrics()
     const {
   return init_time_;
 }
-
-#if defined(ENABLE_BROWSER_CDMS)
-scoped_refptr<media::MediaKeys> RenderProcessHostImpl::GetCdm(
-    int render_frame_id,
-    int cdm_id) const {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-  BrowserCdmManager* manager = BrowserCdmManager::FromProcess(GetID());
-  if (!manager)
-    return nullptr;
-  return manager->GetCdm(render_frame_id, cdm_id);
-}
-#endif
 
 bool RenderProcessHostImpl::IsProcessBackgrounded() const {
   return is_process_backgrounded_;

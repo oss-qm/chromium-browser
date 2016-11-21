@@ -2129,12 +2129,6 @@
         'browser/geolocation/wifi_data_provider_linux.cc',
       ],
     }],
-    ['enable_browser_cdms==1', {
-      'sources': [
-        'browser/media/cdm/browser_cdm_manager.cc',
-        'browser/media/cdm/browser_cdm_manager.h',
-      ],
-    }],
     ['OS == "linux"', {
       'dependencies': [
         '../third_party/boringssl/boringssl.gyp:boringssl',

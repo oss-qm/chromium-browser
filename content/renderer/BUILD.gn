@@ -211,15 +211,6 @@ source_set("renderer") {
     deps += [ "//printing" ]
   }
 
-  if (enable_browser_cdms) {
-    sources += [
-      "media/cdm/proxy_media_keys.cc",
-      "media/cdm/proxy_media_keys.h",
-      "media/cdm/renderer_cdm_manager.cc",
-      "media/cdm/renderer_cdm_manager.h",
-    ]
-  }
-
   if (enable_mojo_media) {
     sources += [
       "media/media_interface_provider.cc",

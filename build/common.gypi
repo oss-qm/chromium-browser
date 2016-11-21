@@ -2036,12 +2036,6 @@
         'use_cups%': 0,
       }],
 
-      ['OS=="android" or chromecast==1', {
-        'enable_browser_cdms%': 1,
-      }, {
-        'enable_browser_cdms%': 0,
-      }],
-
       # Native Client glibc toolchain is enabled except on mips
       ['target_arch=="mipsel" or target_arch=="mips64el"', {
         'disable_glibc%': 1,
@@ -2719,9 +2713,6 @@
       }],
       ['enable_viewport==1', {
         'defines': ['ENABLE_VIEWPORT'],
-      }],
-      ['enable_browser_cdms==1', {
-        'defines': ['ENABLE_BROWSER_CDMS'],
       }],
       ['notifications==1', {
         'defines': ['ENABLE_NOTIFICATIONS'],

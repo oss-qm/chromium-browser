@@ -161,10 +161,6 @@ class CONTENT_EXPORT RenderProcessHostImpl
   std::unique_ptr<base::SharedPersistentMemoryAllocator> TakeMetricsAllocator()
       override;
   const base::TimeTicks& GetInitTimeForNavigationMetrics() const override;
-#if defined(ENABLE_BROWSER_CDMS)
-  scoped_refptr<media::MediaKeys> GetCdm(int render_frame_id,
-                                         int cdm_id) const override;
-#endif
   bool IsProcessBackgrounded() const override;
   void IncrementWorkerRefCount() override;
   void DecrementWorkerRefCount() override;

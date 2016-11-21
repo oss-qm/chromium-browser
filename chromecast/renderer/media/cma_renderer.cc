@@ -208,9 +208,6 @@ bool CmaRenderer::HasVideo() {
 void CmaRenderer::SetCdm(::media::CdmContext* cdm_context,
                          const ::media::CdmAttachedCB& cdm_attached_cb) {
   DCHECK(thread_checker_.CalledOnValidThread());
-#if defined(ENABLE_BROWSER_CDMS)
-  media_pipeline_->SetCdm(cdm_context->GetCdmId());
-#endif
   cdm_attached_cb.Run(true);
 }
 

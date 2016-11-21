@@ -227,11 +227,6 @@
 #include "third_party/WebKit/public/platform/WebFloatPoint.h"
 #endif
 
-#if defined(ENABLE_BROWSER_CDMS)
-#include "content/renderer/media/cdm/render_cdm_factory.h"
-#include "content/renderer/media/cdm/renderer_cdm_manager.h"
-#endif
-
 #if defined(ENABLE_MOJO_MEDIA)
 #include "content/renderer/media/media_interface_provider.h"
 #endif
@@ -1077,9 +1072,6 @@ RenderFrameImpl::RenderFrameImpl(const CreateParams& params)
       media_session_manager_(NULL),
 #endif
       media_surface_manager_(nullptr),
-#if defined(ENABLE_BROWSER_CDMS)
-      cdm_manager_(NULL),
-#endif
 #if defined(VIDEO_HOLE)
       contains_media_player_(false),
 #endif
@@ -6138,12 +6130,6 @@ media::CdmFactory* RenderFrameImpl::GetCdmFactory() {
     return cdm_factory_.get();
   }
 #endif  //  defined(ENABLE_MOJO_CDM)
-
-#if defined(ENABLE_BROWSER_CDMS)
-  if (!cdm_manager_)
-    cdm_manager_ = new RendererCdmManager(this);
-  cdm_factory_.reset(new RenderCdmFactory(cdm_manager_));
-#endif  // defined(ENABLE_BROWSER_CDMS)
 
   return cdm_factory_.get();
 }

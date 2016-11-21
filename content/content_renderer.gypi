@@ -881,14 +881,6 @@
         '../third_party/opus/opus.gyp:opus',
       ],
     }],
-    ['enable_browser_cdms==1', {
-      'sources': [
-        'renderer/media/cdm/proxy_media_keys.cc',
-        'renderer/media/cdm/proxy_media_keys.h',
-        'renderer/media/cdm/renderer_cdm_manager.cc',
-        'renderer/media/cdm/renderer_cdm_manager.h',
-      ],
-    }],
     ['use_seccomp_bpf==1', {
       'defines': ['USE_SECCOMP_BPF'],
     }],
