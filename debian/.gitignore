@@ -1,0 +1,5 @@
+chromium-browser.debhelper.log
+chromium-browser.sh
+chromium-chromedriver.debhelper.log
+chromium-codecs-ffmpeg-extra.debhelper.log
+chromium-codecs-ffmpeg.debhelper.log
