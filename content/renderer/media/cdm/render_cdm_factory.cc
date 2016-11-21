@@ -17,24 +17,8 @@
 #include "media/base/media_keys.h"
 #include "media/cdm/aes_decryptor.h"
 #include "url/gurl.h"
-#if defined(ENABLE_PEPPER_CDMS)
-#include "content/renderer/media/cdm/ppapi_decryptor.h"
-#elif defined(ENABLE_BROWSER_CDMS)
-#include "content/renderer/media/cdm/proxy_media_keys.h"
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 namespace content {
-
-#if defined(ENABLE_PEPPER_CDMS)
-RenderCdmFactory::RenderCdmFactory(
-    const CreatePepperCdmCB& create_pepper_cdm_cb)
-    : create_pepper_cdm_cb_(create_pepper_cdm_cb) {}
-#elif defined(ENABLE_BROWSER_CDMS)
-RenderCdmFactory::RenderCdmFactory(RendererCdmManager* manager)
-    : manager_(manager) {}
-#else
-RenderCdmFactory::RenderCdmFactory() {}
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 RenderCdmFactory::~RenderCdmFactory() {
   DCHECK(thread_checker_.CalledOnValidThread());
@@ -71,27 +55,6 @@ void RenderCdmFactory::Create(
         FROM_HERE, base::Bind(cdm_created_cb, cdm, ""));
     return;
   }
-
-#if defined(ENABLE_PEPPER_CDMS)
-  DCHECK(!cdm_config.use_hw_secure_codecs);
-  PpapiDecryptor::Create(
-      key_system, security_origin, cdm_config.allow_distinctive_identifier,
-      cdm_config.allow_persistent_state, create_pepper_cdm_cb_,
-      session_message_cb, session_closed_cb, legacy_session_error_cb,
-      session_keys_change_cb, session_expiration_update_cb, cdm_created_cb);
-#elif defined(ENABLE_BROWSER_CDMS)
-  DCHECK(cdm_config.allow_distinctive_identifier);
-  DCHECK(cdm_config.allow_persistent_state);
-  ProxyMediaKeys::Create(
-      key_system, security_origin, cdm_config.use_hw_secure_codecs, manager_,
-      session_message_cb, session_closed_cb, legacy_session_error_cb,
-      session_keys_change_cb, session_expiration_update_cb, cdm_created_cb);
-#else
-  // No possible CDM to create, so fail the request.
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE,
-      base::Bind(cdm_created_cb, nullptr, "Key system not supported."));
-#endif  // defined(ENABLE_PEPPER_CDMS)
 }
 
 }  // namespace content

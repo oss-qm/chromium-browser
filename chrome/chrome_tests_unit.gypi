@@ -2183,17 +2183,6 @@
             '../ui/views/views.gyp:views',
           ],
         }],
-        ['enable_pepper_cdms==1', {
-          'sources' : [
-            'browser/media/pepper_cdm_test_constants.cc',
-            'browser/media/pepper_cdm_test_constants.h',
-            'browser/media/pepper_cdm_test_helper.cc',
-            'browser/media/pepper_cdm_test_helper.h',
-          ],
-          'dependencies': [
-            '../media/media.gyp:cdm_paths',
-          ],
-        }],
       ],
     },
     {

@@ -165,12 +165,6 @@ EmeFeatureSupport WidevineKeySystemProperties::GetDistinctiveIdentifierSupport()
   return distinctive_identifier_support_;
 }
 
-#if defined(ENABLE_PEPPER_CDMS)
-std::string WidevineKeySystemProperties::GetPepperType() const {
-  return kWidevineCdmPluginMimeType;
-}
-#endif
-
 }  // namespace cdm
 
 #endif  // WIDEVINE_CDM_AVAILABLE

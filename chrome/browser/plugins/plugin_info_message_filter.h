@@ -110,21 +110,6 @@ class PluginInfoMessageFilter : public content::BrowserMessageFilter {
                      IPC::Message* reply_msg,
                      const std::vector<content::WebPluginInfo>& plugins);
 
-#if defined(ENABLE_PEPPER_CDMS)
-  // Returns whether any internal plugin supporting |mime_type| is registered
-  // and enabled. Does not determine whether the plugin can actually be
-  // instantiated (e.g. whether it has all its dependencies).
-  // When the returned *|is_available| is true, |additional_param_names| and
-  // |additional_param_values| contain the name-value pairs, if any, specified
-  // for the *first* non-disabled plugin found that is registered for
-  // |mime_type|.
-  void OnIsInternalPluginAvailableForMimeType(
-      const std::string& mime_type,
-      bool* is_available,
-      std::vector<base::string16>* additional_param_names,
-      std::vector<base::string16>* additional_param_values);
-#endif
-
   Context context_;
 
   scoped_refptr<base::SingleThreadTaskRunner> main_thread_task_runner_;

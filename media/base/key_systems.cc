@@ -185,10 +185,6 @@ class KeySystemsImpl : public KeySystems {
 
   bool UseAesDecryptor(const std::string& key_system) const;
 
-#if defined(ENABLE_PEPPER_CDMS)
-  std::string GetPepperType(const std::string& key_system) const;
-#endif
-
   // These two functions are for testing purpose only.
   void AddCodecMask(EmeMediaType media_type,
                     const std::string& codec,
@@ -415,12 +411,6 @@ void KeySystemsImpl::AddSupportedKeySystems(
     // other platforms, (except for the AES decryptor) assume that the CDM can
     // and will do anything.
     bool can_block = properties->UseAesDecryptor();
-#if defined(ENABLE_PEPPER_CDMS)
-    DCHECK_EQ(properties->UseAesDecryptor(),
-              properties->GetPepperType().empty());
-    if (!properties->GetPepperType().empty())
-      can_block = true;
-#endif
     if (!can_block) {
       DCHECK(properties->GetDistinctiveIdentifierSupport() ==
              EmeFeatureSupport::ALWAYS_ENABLED);
@@ -512,24 +502,6 @@ bool KeySystemsImpl::UseAesDecryptor(const std::string& key_system) const {
   }
   return key_system_iter->second->UseAesDecryptor();
 }
-
-#if defined(ENABLE_PEPPER_CDMS)
-std::string KeySystemsImpl::GetPepperType(const std::string& key_system) const {
-  DCHECK(thread_checker_.CalledOnValidThread());
-
-  KeySystemPropertiesMap::const_iterator key_system_iter =
-      key_system_properties_map_.find(key_system);
-  if (key_system_iter == key_system_properties_map_.end()) {
-    DLOG(FATAL) << key_system << " is not a known system";
-    return std::string();
-  }
-  const std::string& type = key_system_iter->second->GetPepperType();
-  DLOG_IF(FATAL, type.empty()) << key_system_iter->second->GetKeySystemName()
-                               << " is not Pepper-based";
-  return type;
-}
-
-#endif
 
 void KeySystemsImpl::AddCodecMask(EmeMediaType media_type,
                                   const std::string& codec,
@@ -711,12 +683,6 @@ std::string GetKeySystemNameForUMA(const std::string& key_system) {
 bool CanUseAesDecryptor(const std::string& key_system) {
   return KeySystemsImpl::GetInstance()->UseAesDecryptor(key_system);
 }
-
-#if defined(ENABLE_PEPPER_CDMS)
-std::string GetPepperType(const std::string& key_system) {
-  return KeySystemsImpl::GetInstance()->GetPepperType(key_system);
-}
-#endif
 
 // These two functions are for testing purpose only. The declaration in the
 // header file is guarded by "#if defined(UNIT_TEST)" so that they can be used

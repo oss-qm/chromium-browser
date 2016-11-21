@@ -45,11 +45,6 @@
 #include "base/mac/scoped_nsautorelease_pool.h"
 #endif
 
-#if defined(ENABLE_PEPPER_CDMS)
-#include "chrome/browser/media/pepper_cdm_test_constants.h"
-#include "chrome/browser/media/pepper_cdm_test_helper.h"
-#endif
-
 using content::BrowserThread;
 using net::URLRequestMockHTTPJob;
 
@@ -326,29 +321,12 @@ class PepperContentSettingsSpecialCasesTest : public ContentSettingsTest {
  protected:
   // Registers any CDM plugins not registered by default.
   void SetUpCommandLine(base::CommandLine* command_line) override {
-#if defined(ENABLE_PEPPER_CDMS)
-    // Append the switch to register the External Clear Key CDM.
-    base::FilePath::StringType pepper_plugins = BuildPepperCdmRegistration(
-        kClearKeyCdmBaseDirectory, kClearKeyCdmAdapterFileName,
-        kClearKeyCdmDisplayName, kClearKeyCdmPepperMimeType);
-    command_line->AppendSwitchNative(switches::kRegisterPepperPlugins,
-                                     pepper_plugins);
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if !defined(DISABLE_NACL)
     // Ensure NaCl can run.
     command_line->AppendSwitch(switches::kEnableNaCl);
 #endif
   }
-
-#if defined(ENABLE_PEPPER_CDMS)
-  void SetUpDefaultCommandLine(base::CommandLine* command_line) override {
-    base::CommandLine default_command_line(base::CommandLine::NO_PROGRAM);
-    InProcessBrowserTest::SetUpDefaultCommandLine(&default_command_line);
-    test_launcher_utils::RemoveCommandLineSwitch(
-        default_command_line, switches::kDisableComponentUpdate, command_line);
-  }
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
   void RunLoadPepperPluginTest(const char* mime_type, bool expect_loaded) {
     const char* expected_result = expect_loaded ? "Loaded" : "Not Loaded";
@@ -451,40 +429,8 @@ class PepperContentSettingsSpecialCasesJavaScriptBlockedTest
   }
 };
 
-#if defined(ENABLE_PEPPER_CDMS)
-// A sanity check to verify that the plugin that is used as a baseline below
-// can be loaded.
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesTest, Baseline) {
-  HostContentSettingsMapFactory::GetForProfile(browser()->profile())
-      ->SetDefaultContentSetting(CONTENT_SETTINGS_TYPE_PLUGINS,
-                                 CONTENT_SETTING_ALLOW);
-
-  RunLoadPepperPluginTest(kClearKeyCdmPepperMimeType, true);
-}
-#endif  // defined(ENABLE_PEPPER_CDMS)
-
 // The following tests verify that Pepper plugins that use JavaScript settings
 // instead of Plugins settings still work when Plugins are blocked.
-
-#if defined(ENABLE_PEPPER_CDMS)
-// The plugin successfully loaded above is blocked.
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
-                       Normal) {
-  RunLoadPepperPluginTest(kClearKeyCdmPepperMimeType, false);
-}
-
-#if defined(WIDEVINE_CDM_AVAILABLE) && !defined(OS_CHROMEOS)
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
-                       WidevineCdm) {
-  // Check that Widevine CDM is available and registered.
-  base::FilePath adapter_path =
-      GetPepperCdmPath(kWidevineCdmBaseDirectory, kWidevineCdmAdapterFileName);
-  EXPECT_TRUE(base::PathExists(adapter_path)) << adapter_path.MaybeAsASCII();
-  EXPECT_TRUE(IsPepperCdmRegistered(kWidevineCdmPluginMimeType));
-  RunLoadPepperPluginTest(kWidevineCdmPluginMimeType, true);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE) && !defined(OS_CHROMEOS)
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if !defined(DISABLE_NACL)
 IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
@@ -495,26 +441,6 @@ IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesPluginsBlockedTest,
 
 // The following tests verify that those same Pepper plugins do not work when
 // JavaScript is blocked.
-
-#if defined(ENABLE_PEPPER_CDMS)
-// A plugin with no special behavior is not blocked when JavaScript is blocked.
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesJavaScriptBlockedTest,
-                       Normal) {
-  RunJavaScriptBlockedTest("load_clearkey_no_js.html", false);
-}
-
-#if defined(WIDEVINE_CDM_AVAILABLE)
-IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesJavaScriptBlockedTest,
-                       WidevineCdm) {
-  // Check that Widevine CDM is available and registered.
-  base::FilePath adapter_path =
-      GetPepperCdmPath(kWidevineCdmBaseDirectory, kWidevineCdmAdapterFileName);
-  EXPECT_TRUE(base::PathExists(adapter_path)) << adapter_path.MaybeAsASCII();
-  EXPECT_TRUE(IsPepperCdmRegistered(kWidevineCdmPluginMimeType));
-  RunJavaScriptBlockedTest("load_widevine_no_js.html", true);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if !defined(DISABLE_NACL)
 IN_PROC_BROWSER_TEST_F(PepperContentSettingsSpecialCasesJavaScriptBlockedTest,

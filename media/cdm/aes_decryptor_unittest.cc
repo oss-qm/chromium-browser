@@ -1017,12 +1017,6 @@ INSTANTIATE_TEST_CASE_P(AesDecryptor,
                         AesDecryptorTest,
                         testing::Values("AesDecryptor"));
 
-#if defined(ENABLE_PEPPER_CDMS)
-INSTANTIATE_TEST_CASE_P(CdmAdapter,
-                        AesDecryptorTest,
-                        testing::Values("CdmAdapter"));
-#endif
-
 // TODO(jrummell): Once MojoCdm/MojoCdmService/MojoDecryptor/
 // MojoDecryptorService are implemented, add a third version that tests the
 // CDM via mojo.

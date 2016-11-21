@@ -2036,12 +2036,6 @@
         'use_cups%': 0,
       }],
 
-      ['enable_plugins==1 and (OS=="linux" or OS=="mac" or OS=="win") and chromecast==0', {
-        'enable_pepper_cdms%': 1,
-      }, {
-        'enable_pepper_cdms%': 0,
-      }],
-
       ['OS=="android" or chromecast==1', {
         'enable_browser_cdms%': 1,
       }, {
@@ -2725,9 +2719,6 @@
       }],
       ['enable_viewport==1', {
         'defines': ['ENABLE_VIEWPORT'],
-      }],
-      ['enable_pepper_cdms==1', {
-        'defines': ['ENABLE_PEPPER_CDMS'],
       }],
       ['enable_browser_cdms==1', {
         'defines': ['ENABLE_BROWSER_CDMS'],

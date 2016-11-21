@@ -625,12 +625,6 @@ test("media_unittests") {
     deps += [ "//media/base/mac:unittests" ]
   }
 
-  # If ExternalClearKey is built, we can test CdmAdapter.
-  if (enable_pepper_cdms) {
-    sources += [ "cdm/cdm_adapter_unittest.cc" ]
-    data_deps += [ "//media/cdm/ppapi:clearkeycdm" ]
-  }
-
   if (media_use_ffmpeg) {
     deps += [ "//media/ffmpeg:ffmpeg_unittests" ]
     sources += [

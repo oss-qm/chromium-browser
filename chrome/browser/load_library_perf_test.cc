@@ -18,11 +18,6 @@
 
 #include "widevine_cdm_version.h"  //  In SHARED_INTERMEDIATE_DIR.
 
-#if defined(ENABLE_PEPPER_CDMS)
-#include "chrome/browser/media/pepper_cdm_test_constants.h"
-#include "media/cdm/cdm_paths.h"
-#endif
-
 namespace {
 
 // Measures the size (bytes) and time to load (sec) of a native library.
@@ -60,41 +55,4 @@ void MeasureSizeAndTimeToLoadNativeLibrary(
                          true);
 }
 
-#if defined(ENABLE_PEPPER_CDMS)
-
-void MeasureSizeAndTimeToLoadCdm(const std::string& cdm_base_dir,
-                                 const std::string& cdm_name) {
-  MeasureSizeAndTimeToLoadNativeLibrary(
-      media::GetPlatformSpecificDirectory(cdm_base_dir),
-      base::FilePath::FromUTF8Unsafe(cdm_name));
-}
-
-#endif  // defined(ENABLE_PEPPER_CDMS)
-
 }  // namespace
-
-#if defined(ENABLE_PEPPER_CDMS)
-#if defined(WIDEVINE_CDM_AVAILABLE)
-TEST(LoadCDMPerfTest, Widevine) {
-  MeasureSizeAndTimeToLoadCdm(
-      kWidevineCdmBaseDirectory,
-      base::GetNativeLibraryName(kWidevineCdmLibraryName));
-}
-
-TEST(LoadCDMPerfTest, WidevineAdapter) {
-  MeasureSizeAndTimeToLoadCdm(kWidevineCdmBaseDirectory,
-                              kWidevineCdmAdapterFileName);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
-
-TEST(LoadCDMPerfTest, ExternalClearKey) {
-  MeasureSizeAndTimeToLoadCdm(
-      kClearKeyCdmBaseDirectory,
-      base::GetNativeLibraryName(media::kClearKeyCdmLibraryName));
-}
-
-TEST(LoadCDMPerfTest, ExternalClearKeyAdapter) {
-  MeasureSizeAndTimeToLoadCdm(kClearKeyCdmBaseDirectory,
-                              kClearKeyCdmAdapterFileName);
-}
-#endif  // defined(ENABLE_PEPPER_CDMS)

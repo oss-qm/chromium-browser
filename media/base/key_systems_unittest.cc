@@ -413,15 +413,6 @@ TEST_F(KeySystemsTest, Basic_UnrecognizedKeySystem) {
 
   EXPECT_EQ("Unknown", GetKeySystemNameForUMA(kUnrecognized));
   EXPECT_FALSE(CanUseAesDecryptor(kUnrecognized));
-
-#if defined(ENABLE_PEPPER_CDMS)
-  std::string type;
-#if !defined(NDEBUG) || defined(DCHECK_ALWAYS_ON)
-  EXPECT_DEATH(type = GetPepperType(kUnrecognized),
-               "x-org.example.unrecognized is not a known system");
-#endif
-  EXPECT_TRUE(type.empty());
-#endif
 }
 
 TEST_F(KeySystemsTest, Basic_UsesAesDecryptor) {
@@ -433,14 +424,6 @@ TEST_F(KeySystemsTest, Basic_UsesAesDecryptor) {
   EXPECT_EQ("UseAes", GetKeySystemNameForUMA(kUsesAes));
 
   EXPECT_TRUE(CanUseAesDecryptor(kUsesAes));
-#if defined(ENABLE_PEPPER_CDMS)
-  std::string type;
-#if !defined(NDEBUG) || defined(DCHECK_ALWAYS_ON)
-  EXPECT_DEATH(type = GetPepperType(kUsesAes),
-               "x-org.example.clear is not Pepper-based");
-#endif
-  EXPECT_TRUE(type.empty());
-#endif
 }
 
 TEST_F(KeySystemsTest,
@@ -590,9 +573,6 @@ TEST_F(KeySystemsTest, Basic_ExternalDecryptor) {
       kVideoWebM, no_codecs(), kExternal));
 
   EXPECT_FALSE(CanUseAesDecryptor(kExternal));
-#if defined(ENABLE_PEPPER_CDMS)
-  EXPECT_EQ("application/x-ppapi-external-cdm", GetPepperType(kExternal));
-#endif  // defined(ENABLE_PEPPER_CDMS)
 }
 
 TEST_F(

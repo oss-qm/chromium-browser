@@ -20,9 +20,7 @@ bool KeySystemProperties::UseAesDecryptor() const {
 }
 
 std::string KeySystemProperties::GetPepperType() const {
-#if !defined(ENABLE_PEPPER_CDMS)
   NOTREACHED();
-#endif
   return "";
 }
 

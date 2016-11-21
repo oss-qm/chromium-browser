@@ -128,10 +128,6 @@ enable_spellcheck = !is_ios
 # Use the operating system's spellchecker rather than hunspell.
 use_browser_spellchecker = is_android || is_mac
 
-# Enables the use of CDMs in pepper plugins.
-enable_pepper_cdms =
-    enable_plugins && (is_linux || is_mac || is_win) && !is_chromecast
-
 # The seccomp-bpf sandbox is only supported on five architectures
 # currently.
 # Do not disable seccomp_bpf anywhere without talking to

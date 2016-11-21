@@ -18,9 +18,6 @@
 #include "third_party/WebKit/public/platform/WebContentDecryptionModuleResult.h"
 
 namespace blink {
-#if defined(ENABLE_PEPPER_CDMS)
-class WebLocalFrame;
-#endif
 class WebSecurityOrigin;
 }
 

@@ -1408,13 +1408,6 @@ if (!is_android) {
               ".",
               "//chrome")
     }
-    if (enable_pepper_cdms) {
-      # Runtime dependencies.
-      data_deps += [
-        "//media/cdm/ppapi:clearkeycdmadapter",
-        "//third_party/widevine/cdm:widevinecdmadapter",
-      ]
-    }
     if (!enable_print_preview) {
       sources -= [
         "../browser/extensions/api/cloud_print_private/cloud_print_private_apitest.cc",
@@ -1669,17 +1662,6 @@ if (!is_android) {
       "//testing/perf",
       "//third_party/widevine/cdm:version_h",
     ]
-
-    if (enable_pepper_cdms) {
-      deps += [
-        "//chrome/browser:pepper_cdm_test_constants",
-        "//media:cdm_paths",
-      ]
-      data_deps = [
-        "//media/cdm/ppapi:clearkeycdmadapter",
-        "//third_party/widevine/cdm:widevinecdmadapter",
-      ]
-    }
 
     # This target should not require the Chrome executable to run.
     assert_no_deps = [ "//chrome" ]

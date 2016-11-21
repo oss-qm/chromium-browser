@@ -24,11 +24,6 @@
 #include "base/android/build_info.h"
 #endif
 
-#if defined(ENABLE_PEPPER_CDMS)
-#include "chrome/browser/media/pepper_cdm_test_constants.h"
-#include "chrome/browser/media/pepper_cdm_test_helper.h"
-#endif
-
 #include "widevine_cdm_version.h"  //  In SHARED_INTERMEDIATE_DIR.
 
 // Available key systems.
@@ -241,15 +236,6 @@ class EncryptedMediaTestBase : public MediaBrowserTest {
         switches::kDisableGestureRequirementForMediaPlayback);
   }
 
-#if defined(ENABLE_PEPPER_CDMS)
-  void SetUpDefaultCommandLine(base::CommandLine* command_line) override {
-    base::CommandLine default_command_line(base::CommandLine::NO_PROGRAM);
-    InProcessBrowserTest::SetUpDefaultCommandLine(&default_command_line);
-    test_launcher_utils::RemoveCommandLineSwitch(
-        default_command_line, switches::kDisableComponentUpdate, command_line);
-  }
-#endif  // defined(ENABLE_PEPPER_CDMS)
-
   void SetUpCommandLineForKeySystem(const std::string& key_system,
                                     base::CommandLine* command_line) {
     if (GetServerConfig(key_system))
@@ -258,59 +244,8 @@ class EncryptedMediaTestBase : public MediaBrowserTest {
       // TODO(shadi): Add port forwarding to the test web server configuration.
       command_line->AppendSwitch(switches::kDisableWebSecurity);
 
-#if defined(ENABLE_PEPPER_CDMS)
-    if (IsExternalClearKey(key_system)) {
-      RegisterPepperCdm(command_line, kClearKeyCdmBaseDirectory,
-                        kClearKeyCdmAdapterFileName, kClearKeyCdmDisplayName,
-                        kClearKeyCdmPepperMimeType);
-    }
-#endif  // defined(ENABLE_PEPPER_CDMS)
   }
 };
-
-#if defined(ENABLE_PEPPER_CDMS)
-// Tests encrypted media playback using ExternalClearKey key system in
-// decrypt-and-decode mode.
-class ECKEncryptedMediaTest : public EncryptedMediaTestBase {
- public:
-  // We use special |key_system| names to do non-playback related tests, e.g.
-  // kExternalClearKeyFileIOTestKeySystem is used to test file IO.
-  void TestNonPlaybackCases(const std::string& key_system,
-                            const std::string& expected_title) {
-    // Since we do not test playback, arbitrarily choose a test file and source
-    // type.
-    RunEncryptedMediaTest(kDefaultEmePlayer, "bear-a_enc-a.webm",
-                          kWebMAudioOnly, key_system, SRC, kNoSessionToLoad,
-                          false, PlayTwice::NO, expected_title);
-  }
-
-  void TestPlaybackCase(const std::string& session_to_load,
-                        const std::string& expected_title) {
-    RunEncryptedMediaTest(kDefaultEmePlayer, "bear-320x240-v_enc-v.webm",
-                          kWebMVideoOnly, kExternalClearKeyKeySystem, SRC,
-                          session_to_load, false, PlayTwice::NO,
-                          expected_title);
-  }
-
- protected:
-  void SetUpCommandLine(base::CommandLine* command_line) override {
-    EncryptedMediaTestBase::SetUpCommandLine(command_line);
-    SetUpCommandLineForKeySystem(kExternalClearKeyKeySystem, command_line);
-  }
-};
-
-#if defined(WIDEVINE_CDM_AVAILABLE)
-// Tests encrypted media playback using Widevine key system.
-class WVEncryptedMediaTest : public EncryptedMediaTestBase {
- protected:
-  void SetUpCommandLine(base::CommandLine* command_line) override {
-    EncryptedMediaTestBase::SetUpCommandLine(command_line);
-    SetUpCommandLineForKeySystem(kWidevineKeySystem, command_line);
-  }
-};
-
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 // Tests encrypted media playback with a combination of parameters:
 // - char*: Key system name.
@@ -420,26 +355,6 @@ INSTANTIATE_TEST_CASE_P(MSE_ClearKey,
                         Combine(Values(kClearKeyKeySystem), Values(MSE)));
 
 // External Clear Key is currently only used on platforms that use Pepper CDMs.
-#if defined(ENABLE_PEPPER_CDMS)
-INSTANTIATE_TEST_CASE_P(SRC_ExternalClearKey,
-                        EncryptedMediaTest,
-                        Combine(Values(kExternalClearKeyKeySystem),
-                                Values(SRC)));
-
-INSTANTIATE_TEST_CASE_P(MSE_ExternalClearKey,
-                        EncryptedMediaTest,
-                        Combine(Values(kExternalClearKeyKeySystem),
-                                Values(MSE)));
-
-const char kExternalClearKeyDecryptOnlyKeySystem[] =
-    "org.chromium.externalclearkey.decryptonly";
-
-// To reduce test time, only run ExternalClearKeyDecryptOnly with MSE.
-INSTANTIATE_TEST_CASE_P(MSE_ExternalClearKeyDecryptOnly,
-                        EncryptedMediaTest,
-                        Combine(Values(kExternalClearKeyDecryptOnlyKeySystem),
-                                Values(MSE)));
-#endif  // defined(ENABLE_PEPPER_CDMS)
 
 #if defined(WIDEVINE_CDM_AVAILABLE)
 #if !defined(OS_CHROMEOS)
@@ -601,40 +516,3 @@ IN_PROC_BROWSER_TEST_F(WVEncryptedMediaTest, ParentThrowsException) {
                         PlayTwice::NO, kEmeNotSupportedError);
 }
 #endif  // defined(WIDEVINE_CDM_AVAILABLE)
-
-#if defined(ENABLE_PEPPER_CDMS)
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, InitializeCDMFail) {
-  TestNonPlaybackCases(kExternalClearKeyInitializeFailKeySystem,
-                       kEmeNotSupportedError);
-}
-
-// When CDM crashes, we should still get a decode error. |kError| is reported
-// when the HTMLVideoElement error event fires, indicating an error happened
-// during playback.
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, CDMCrashDuringDecode) {
-  IgnorePluginCrash();
-  TestNonPlaybackCases(kExternalClearKeyCrashKeySystem, kError);
-}
-
-// Testing that the media browser test does fail on plugin crash.
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, CDMExpectedCrash) {
-  // Plugin crash is not ignored by default, the test is expected to fail.
-  EXPECT_NONFATAL_FAILURE(
-      TestNonPlaybackCases(kExternalClearKeyCrashKeySystem, kError),
-      "Failing test due to plugin crash.");
-}
-
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, FileIOTest) {
-  TestNonPlaybackCases(kExternalClearKeyFileIOTestKeySystem,
-                       kFileIOTestSuccess);
-}
-
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, LoadLoadableSession) {
-  TestPlaybackCase(kLoadableSession, kEnded);
-}
-
-IN_PROC_BROWSER_TEST_F(ECKEncryptedMediaTest, LoadUnknownSession) {
-  TestPlaybackCase(kUnknownSession, kEmeSessionNotFound);
-}
-
-#endif  // defined(ENABLE_PEPPER_CDMS)

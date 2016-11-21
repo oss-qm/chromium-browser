@@ -94,48 +94,6 @@
       'target_name': 'widevinecdmadapter_binary',
       'product_name': 'widevinecdmadapter',
       'type': 'none',
-      'conditions': [
-        [ '(branding == "Chrome" or enable_widevine == 1) and enable_pepper_cdms == 1', {
-          'dependencies': [
-            '<(DEPTH)/ppapi/ppapi.gyp:ppapi_cpp',
-            '<(DEPTH)/media/media_cdm_adapter.gyp:cdmadapter',
-            'widevine_cdm_version_h',
-            'widevine_cdm_manifest',
-            'widevinecdm',
-            'widevinecdmadapter_resources',
-          ],
-          'sources': [
-            '<(SHARED_INTERMEDIATE_DIR)/widevinecdmadapter_version.rc',
-          ],
-          'conditions': [
-            [ 'os_posix == 1 and OS != "mac"', {
-              'libraries': [
-                '-lrt',
-                # Copied/created by widevinecdm.
-                '<(PRODUCT_DIR)/<(widevine_cdm_path)/libwidevinecdm.so',
-              ],
-            }],
-            [ 'OS == "win"', {
-              'libraries': [
-                # Copied/created by widevinecdm.
-                '<(PRODUCT_DIR)/<(widevine_cdm_path)/widevinecdm.dll.lib',
-              ],
-            }],
-            [ 'OS == "mac"', {
-              'libraries': [
-                # Copied/created by widevinecdm.
-                '<(PRODUCT_DIR)/<(widevine_cdm_path)/libwidevinecdm.dylib',
-              ],
-            }, {
-              # Put Widevine CDM adapter to the correct path directly except
-              # for mac. On mac strip_save_dsym doesn't work with product_dir
-              # so we rely on "widevinecdmadapter" target to copy it over.
-              # See http://crbug.com/611990
-              'product_dir': '<(PRODUCT_DIR)/<(widevine_cdm_path)',
-            }],
-          ],
-        }],
-      ],
     },
     {
       # GN version: //third_party/widevine/cdm:widevinecdmadapter
@@ -146,14 +104,6 @@
       'type': 'none',
       'dependencies': [
         'widevinecdmadapter_binary',
-      ],
-      'conditions': [
-        [ '(branding == "Chrome" or enable_widevine == 1) and enable_pepper_cdms == 1 and OS == "mac"', {
-          'copies': [{
-            'destination': '<(PRODUCT_DIR)/<(widevine_cdm_path)',
-            'files': [ '<(PRODUCT_DIR)/widevinecdmadapter.plugin' ],
-          }],
-        }],
       ],
     },
     {

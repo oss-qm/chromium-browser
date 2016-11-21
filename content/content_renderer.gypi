@@ -304,11 +304,6 @@
       'renderer/media/audio_renderer_sink_cache.h',
       'renderer/media/audio_renderer_sink_cache_impl.cc',
       'renderer/media/audio_renderer_sink_cache_impl.h',
-      'renderer/media/cdm/pepper_cdm_wrapper.h',
-      'renderer/media/cdm/pepper_cdm_wrapper_impl.cc',
-      'renderer/media/cdm/pepper_cdm_wrapper_impl.h',
-      'renderer/media/cdm/ppapi_decryptor.cc',
-      'renderer/media/cdm/ppapi_decryptor.h',
       'renderer/media/cdm/render_cdm_factory.cc',
       'renderer/media/cdm/render_cdm_factory.h',
       'renderer/media/html_audio_element_capturer_source.cc',
@@ -884,15 +879,6 @@
         '../ppapi/ppapi_internal.gyp:ppapi_proxy',
         '../ppapi/ppapi_internal.gyp:ppapi_shared',
         '../third_party/opus/opus.gyp:opus',
-      ],
-    }],
-    ['enable_pepper_cdms != 1', {
-      'sources!': [
-        'renderer/media/cdm/pepper_cdm_wrapper.h',
-        'renderer/media/cdm/pepper_cdm_wrapper_impl.cc',
-        'renderer/media/cdm/pepper_cdm_wrapper_impl.h',
-        'renderer/media/cdm/ppapi_decryptor.cc',
-        'renderer/media/cdm/ppapi_decryptor.h',
       ],
     }],
     ['enable_browser_cdms==1', {

@@ -227,10 +227,7 @@
 #include "third_party/WebKit/public/platform/WebFloatPoint.h"
 #endif
 
-#if defined(ENABLE_PEPPER_CDMS)
-#include "content/renderer/media/cdm/pepper_cdm_wrapper_impl.h"
-#include "content/renderer/media/cdm/render_cdm_factory.h"
-#elif defined(ENABLE_BROWSER_CDMS)
+#if defined(ENABLE_BROWSER_CDMS)
 #include "content/renderer/media/cdm/render_cdm_factory.h"
 #include "content/renderer/media/cdm/renderer_cdm_manager.h"
 #endif
@@ -6142,15 +6139,11 @@ media::CdmFactory* RenderFrameImpl::GetCdmFactory() {
   }
 #endif  //  defined(ENABLE_MOJO_CDM)
 
-#if defined(ENABLE_PEPPER_CDMS)
-  DCHECK(frame_);
-  cdm_factory_.reset(
-      new RenderCdmFactory(base::Bind(&PepperCdmWrapperImpl::Create, frame_)));
-#elif defined(ENABLE_BROWSER_CDMS)
+#if defined(ENABLE_BROWSER_CDMS)
   if (!cdm_manager_)
     cdm_manager_ = new RendererCdmManager(this);
   cdm_factory_.reset(new RenderCdmFactory(cdm_manager_));
-#endif  // defined(ENABLE_PEPPER_CDMS)
+#endif  // defined(ENABLE_BROWSER_CDMS)
 
   return cdm_factory_.get();
 }

@@ -75,12 +75,6 @@
 #include "ppapi/shared_impl/ppapi_permissions.h"
 #endif
 
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
-    !defined(WIDEVINE_CDM_IS_COMPONENT)
-#define WIDEVINE_CDM_AVAILABLE_NOT_COMPONENT
-#include "chrome/common/widevine_cdm_constants.h"
-#endif
-
 #if defined(OS_ANDROID)
 #include "chrome/common/chrome_media_client_android.h"
 #endif

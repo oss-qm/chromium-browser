@@ -2690,13 +2690,6 @@
         ['enable_supervised_users==1', {
           'sources': [ '<@(chrome_browser_tests_supervised_user_sources)' ],
         }],
-        ['enable_pepper_cdms==1', {
-          'dependencies': [
-            # Runtime dependencies.
-            '../media/media.gyp:clearkeycdmadapter',
-            '../third_party/widevine/cdm/widevine_cdm.gyp:widevinecdmadapter',
-          ],
-        }],
         ['enable_print_preview==0', {
           'sources!': [
             'browser/extensions/api/cloud_print_private/cloud_print_private_apitest.cc',
@@ -3136,17 +3129,6 @@
       'include_dirs': [
         '..',
         '<(SHARED_INTERMEDIATE_DIR)',
-      ],
-      'conditions': [
-        ['enable_pepper_cdms==1', {
-          'dependencies': [
-            'test_support_common',
-            '../media/media.gyp:cdm_paths',
-            # Runtime dependencies.
-            '../media/media.gyp:clearkeycdmadapter',
-            '../third_party/widevine/cdm/widevine_cdm.gyp:widevinecdmadapter',
-          ],
-        }],
       ],
     },  # target 'load_library_perf_tests'
   ],
