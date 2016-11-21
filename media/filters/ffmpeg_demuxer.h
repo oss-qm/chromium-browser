@@ -179,7 +179,6 @@ class FFmpegDemuxerStream : public DemuxerStream {
   std::unique_ptr<FFmpegBitstreamConverter> bitstream_converter_;
 #endif
 
-  std::string encryption_key_id_;
   bool fixup_negative_timestamps_;
 
   DISALLOW_COPY_AND_ASSIGN(FFmpegDemuxerStream);
@@ -189,7 +188,6 @@ class MEDIA_EXPORT FFmpegDemuxer : public Demuxer {
  public:
   FFmpegDemuxer(const scoped_refptr<base::SingleThreadTaskRunner>& task_runner,
                 DataSource* data_source,
-                const EncryptedMediaInitDataCB& encrypted_media_init_data_cb,
                 const MediaTracksUpdatedCB& media_tracks_updated_cb,
                 const scoped_refptr<MediaLog>& media_log);
   ~FFmpegDemuxer() override;
@@ -207,11 +205,6 @@ class MEDIA_EXPORT FFmpegDemuxer : public Demuxer {
   DemuxerStream* GetStream(DemuxerStream::Type type) override;
   base::TimeDelta GetStartTime() const override;
   int64_t GetMemoryUsage() const override;
-
-  // Calls |encrypted_media_init_data_cb_| with the initialization data
-  // encountered in the file.
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::string& encryption_key_id);
 
   // Allow FFmpegDemuxerStream to notify us when there is updated information
   // about capacity and what buffered data is available.
@@ -329,8 +322,6 @@ class MEDIA_EXPORT FFmpegDemuxer : public Demuxer {
   // FFmpegURLProtocol implementation and corresponding glue bits.
   std::unique_ptr<BlockingUrlProtocol> url_protocol_;
   std::unique_ptr<FFmpegGlue> glue_;
-
-  const EncryptedMediaInitDataCB encrypted_media_init_data_cb_;
 
   const MediaTracksUpdatedCB media_tracks_updated_cb_;
 

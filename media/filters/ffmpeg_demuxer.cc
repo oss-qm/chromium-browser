@@ -275,7 +275,6 @@ FFmpegDemuxerStream::FFmpegDemuxerStream(
       fixup_negative_timestamps_(false) {
   DCHECK(demuxer_);
 
-  bool is_encrypted = false;
   int rotation = 0;
   AVDictionaryEntry* rotation_entry = NULL;
 
@@ -284,12 +283,10 @@ FFmpegDemuxerStream::FFmpegDemuxerStream(
     case AVMEDIA_TYPE_AUDIO:
       DCHECK(audio_config_.get() && !video_config_.get());
       type_ = AUDIO;
-      is_encrypted = audio_config_->is_encrypted();
       break;
     case AVMEDIA_TYPE_VIDEO:
       DCHECK(video_config_.get() && !audio_config_.get());
       type_ = VIDEO;
-      is_encrypted = video_config_->is_encrypted();
 
       rotation_entry = av_dict_get(stream->metadata, "rotate", NULL, 0);
       if (rotation_entry && rotation_entry->value && rotation_entry->value[0])
@@ -324,24 +321,6 @@ FFmpegDemuxerStream::FFmpegDemuxerStream(
 
   // Calculate the duration.
   duration_ = ConvertStreamTimestamp(stream->time_base, stream->duration);
-
-  if (is_encrypted) {
-    AVDictionaryEntry* key = av_dict_get(stream->metadata, "enc_key_id", NULL,
-                                         0);
-    DCHECK(key);
-    DCHECK(key->value);
-    if (!key || !key->value)
-      return;
-    base::StringPiece base64_key_id(key->value);
-    std::string enc_key_id;
-    base::Base64Decode(base64_key_id, &enc_key_id);
-    DCHECK(!enc_key_id.empty());
-    if (enc_key_id.empty())
-      return;
-
-    encryption_key_id_.assign(enc_key_id);
-    demuxer_->OnEncryptedMediaInitData(EmeInitDataType::WEBM, enc_key_id);
-  }
 }
 
 FFmpegDemuxerStream::~FFmpegDemuxerStream() {
@@ -396,15 +375,6 @@ void FFmpegDemuxerStream::EnqueuePacket(ScopedAVPacket packet) {
 
     std::unique_ptr<DecryptConfig> decrypt_config;
     int data_offset = 0;
-    if ((type() == DemuxerStream::AUDIO && audio_config_->is_encrypted()) ||
-        (type() == DemuxerStream::VIDEO && video_config_->is_encrypted())) {
-      if (!WebMCreateDecryptConfig(
-              packet->data, packet->size,
-              reinterpret_cast<const uint8_t*>(encryption_key_id_.data()),
-              encryption_key_id_.size(), &decrypt_config, &data_offset)) {
-        LOG(ERROR) << "Creation of DecryptConfig failed.";
-      }
-    }
 
     // If a packet is returned by FFmpeg's av_parser_parse2() the packet will
     // reference inner memory of FFmpeg.  As such we should transfer the packet
@@ -767,7 +737,6 @@ base::TimeDelta FFmpegDemuxerStream::ConvertStreamTimestamp(
 FFmpegDemuxer::FFmpegDemuxer(
     const scoped_refptr<base::SingleThreadTaskRunner>& task_runner,
     DataSource* data_source,
-    const EncryptedMediaInitDataCB& encrypted_media_init_data_cb,
     const MediaTracksUpdatedCB& media_tracks_updated_cb,
     const scoped_refptr<MediaLog>& media_log)
     : host_(NULL),
@@ -783,7 +752,6 @@ FFmpegDemuxer::FFmpegDemuxer(
       fallback_stream_for_seeking_(-1, kNoTimestamp()),
       text_enabled_(false),
       duration_known_(false),
-      encrypted_media_init_data_cb_(encrypted_media_init_data_cb),
       media_tracks_updated_cb_(media_tracks_updated_cb),
       weak_factory_(this) {
   DCHECK(task_runner_.get());
@@ -980,14 +948,6 @@ int64_t FFmpegDemuxer::GetMemoryUsage() const {
       allocation_size += stream->MemoryUsage();
   }
   return allocation_size;
-}
-
-void FFmpegDemuxer::OnEncryptedMediaInitData(
-    EmeInitDataType init_data_type,
-    const std::string& encryption_key_id) {
-  std::vector<uint8_t> key_id_local(encryption_key_id.begin(),
-                                    encryption_key_id.end());
-  encrypted_media_init_data_cb_.Run(init_data_type, key_id_local);
 }
 
 void FFmpegDemuxer::NotifyCapacityAvailable() {
@@ -1423,8 +1383,6 @@ void FFmpegDemuxer::OnFindStreamInfoDone(const PipelineStatusCB& status_cb,
                                         video_codec->time_base.den));
     metadata_event->params.SetString(
         "video_format", VideoPixelFormatToString(video_config.format()));
-    metadata_event->params.SetBoolean("video_is_encrypted",
-                                      video_config.is_encrypted());
   }
 
   SetTimeProperty(metadata_event.get(), "max_duration", max_duration);

@@ -52,11 +52,6 @@ MATCHER(IsEndOfStreamBuffer,
   return arg->end_of_stream();
 }
 
-const uint8_t kEncryptedMediaInitData[] = {
-    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-    0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35,
-};
-
 static void EosOnReadDone(bool* got_eos_buffer,
                           DemuxerStream::Status status,
                           const scoped_refptr<DecoderBuffer>& buffer) {
@@ -93,15 +88,12 @@ class FFmpegDemuxerTest : public testing::Test {
 
     CreateDataSource(name);
 
-    Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb = base::Bind(
-        &FFmpegDemuxerTest::OnEncryptedMediaInitData, base::Unretained(this));
-
     Demuxer::MediaTracksUpdatedCB tracks_updated_cb = base::Bind(
         &FFmpegDemuxerTest::OnMediaTracksUpdated, base::Unretained(this));
 
     demuxer_.reset(new FFmpegDemuxer(
         message_loop_.task_runner(), data_source_.get(),
-        encrypted_media_init_data_cb, tracks_updated_cb, new MediaLog()));
+        tracks_updated_cb, new MediaLog()));
   }
 
   MOCK_METHOD1(CheckPoint, void(int v));
@@ -208,10 +200,6 @@ class FFmpegDemuxerTest : public testing::Test {
                       location,
                       read_expectation);
   }
-
-  MOCK_METHOD2(OnEncryptedMediaInitData,
-               void(EmeInitDataType init_data_type,
-                    const std::vector<uint8_t>& init_data));
 
   void OnMediaTracksUpdated(std::unique_ptr<MediaTracks> tracks) {
     CHECK(tracks.get());
@@ -403,19 +391,6 @@ TEST_F(FFmpegDemuxerTest, Initialize_MultitrackText) {
 
   // Unknown stream should never be present.
   EXPECT_FALSE(demuxer_->GetStream(DemuxerStream::UNKNOWN));
-}
-
-TEST_F(FFmpegDemuxerTest, Initialize_Encrypted) {
-  EXPECT_CALL(*this,
-              OnEncryptedMediaInitData(
-                  EmeInitDataType::WEBM,
-                  std::vector<uint8_t>(kEncryptedMediaInitData,
-                                       kEncryptedMediaInitData +
-                                           arraysize(kEncryptedMediaInitData))))
-      .Times(Exactly(2));
-
-  CreateDemuxer("bear-320x240-av_enc-av.webm");
-  InitializeDemuxer();
 }
 
 TEST_F(FFmpegDemuxerTest, Read_Audio) {

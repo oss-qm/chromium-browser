@@ -1331,7 +1331,6 @@ void WebMediaPlayerImpl::StartPipeline() {
         BIND_TO_RENDER_LOOP(&WebMediaPlayerImpl::OnFFmpegMediaTracksUpdated);
 
     demuxer_.reset(new FFmpegDemuxer(media_task_runner_, data_source_.get(),
-                                     encrypted_media_init_data_cb,
                                      media_tracks_updated_cb, media_log_));
 #else
     OnError(PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN);

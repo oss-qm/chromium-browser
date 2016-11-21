@@ -196,7 +196,7 @@ static void RunDemuxerBenchmark(const std::string& filename) {
     Demuxer::MediaTracksUpdatedCB tracks_updated_cb =
         base::Bind(&OnMediaTracksUpdated);
     FFmpegDemuxer demuxer(message_loop.task_runner(), &data_source,
-                          encrypted_media_init_data_cb, tracks_updated_cb,
+                          tracks_updated_cb,
                           new MediaLog());
 
     demuxer.Initialize(&demuxer_host,

@@ -315,7 +315,7 @@ DemuxResult FFmpegDemuxForTest(const base::FilePath& filepath,
 
   ::media::FFmpegDemuxer demuxer(
       base::ThreadTaskRunnerHandle::Get(), &data_source,
-      base::Bind(&OnEncryptedMediaInitData), base::Bind(&OnMediaTracksUpdated),
+      base::Bind(&OnMediaTracksUpdated),
       new ::media::MediaLog());
   ::media::WaitableMessageLoopEvent init_event;
   demuxer.Initialize(&fake_demuxer_host,
