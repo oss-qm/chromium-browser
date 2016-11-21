@@ -23,16 +23,6 @@
 #include "base/android/build_info.h"
 #endif
 
-// Available key systems.
-const char kClearKeyKeySystem[] = "org.w3.clearkey";
-const char kExternalClearKeyKeySystem[] = "org.chromium.externalclearkey";
-const char kExternalClearKeyFileIOTestKeySystem[] =
-    "org.chromium.externalclearkey.fileiotest";
-const char kExternalClearKeyInitializeFailKeySystem[] =
-    "org.chromium.externalclearkey.initializefail";
-const char kExternalClearKeyCrashKeySystem[] =
-    "org.chromium.externalclearkey.crash";
-
 // Supported media types.
 const char kWebMAudioOnly[] = "audio/webm; codecs=\"vorbis\"";
 const char kWebMVideoOnly[] = "video/webm; codecs=\"vp8\"";
@@ -92,13 +82,6 @@ static bool IsMSESupported() {
 // Base class for encrypted media tests.
 class EncryptedMediaTestBase : public MediaBrowserTest {
  public:
-  bool IsExternalClearKey(const std::string& key_system) {
-    if (key_system == kExternalClearKeyKeySystem)
-      return true;
-    std::string prefix = std::string(kExternalClearKeyKeySystem) + '.';
-    return key_system.substr(0, prefix.size()) == prefix;
-  }
-
   void RunEncryptedMediaTestPage(
       const std::string& html_page,
       const std::string& key_system,
@@ -322,16 +305,6 @@ class EncryptedMediaTest : public EncryptedMediaTestBase,
 
 using ::testing::Combine;
 using ::testing::Values;
-
-#if !defined(OS_ANDROID)
-INSTANTIATE_TEST_CASE_P(SRC_ClearKey,
-                        EncryptedMediaTest,
-                        Combine(Values(kClearKeyKeySystem), Values(SRC)));
-#endif  // !defined(OS_ANDROID)
-
-INSTANTIATE_TEST_CASE_P(MSE_ClearKey,
-                        EncryptedMediaTest,
-                        Combine(Values(kClearKeyKeySystem), Values(MSE)));
 
 // External Clear Key is currently only used on platforms that use Pepper CDMs.
 

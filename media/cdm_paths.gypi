@@ -40,17 +40,5 @@
         }],
       ],
     },
-    'conditions' : [
-      # Only enable platform specific path for Win and Mac, where CDMs are
-      # Chrome components.
-      # TODO(xhwang): Improve how we enable platform specific path. See
-      # http://crbug.com/468584
-      ['( OS == "win" or OS == "mac") and (target_arch == "ia32" or target_arch == "x64")', {
-        # Path of Clear Key CDMs relative to the output dir.
-        'clearkey_cdm_path%': 'ClearKeyCdm/_platform_specific/<(component_os)_<(component_arch)',
-      }, {
-        'clearkey_cdm_path%': '.',
-      }],
-    ]
   },
 }

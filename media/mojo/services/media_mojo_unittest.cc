@@ -32,7 +32,6 @@ namespace media {
 namespace {
 
 #if defined(ENABLE_MOJO_CDM)
-const char kClearKeyKeySystem[] = "org.w3.clearkey";
 const char kInvalidKeySystem[] = "invalid.key.system";
 #endif
 const char kSecurityOrigin[] = "http://foo.com";
@@ -144,11 +143,6 @@ class MediaShellTest : public shell::test::ShellTest {
 // even when the loop is idle, we may still have pending events in the pipe.
 
 #if defined(ENABLE_MOJO_CDM)
-TEST_F(MediaShellTest, InitializeCdm_Success) {
-  InitializeCdm(kClearKeyKeySystem, true, 1);
-  run_loop_->Run();
-}
-
 TEST_F(MediaShellTest, InitializeCdm_InvalidKeySystem) {
   InitializeCdm(kInvalidKeySystem, false, 0);
   run_loop_->Run();

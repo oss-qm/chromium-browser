@@ -15,9 +15,6 @@
 #include "media/base/media.h"
 #endif
 
-// Available key systems.
-const char kClearKeyKeySystem[] = "org.w3.clearkey";
-
 // Supported media types.
 const char kWebMAudioOnly[] = "audio/webm; codecs=\"vorbis\"";
 const char kWebMVideoOnly[] = "video/webm; codecs=\"vp8\"";
@@ -136,12 +133,6 @@ class EncryptedMediaTest : public content::MediaBrowserTest,
 
 using ::testing::Combine;
 using ::testing::Values;
-
-INSTANTIATE_TEST_CASE_P(SRC_ClearKey, EncryptedMediaTest,
-                        Combine(Values(kClearKeyKeySystem), Values(SRC)));
-
-INSTANTIATE_TEST_CASE_P(MSE_ClearKey, EncryptedMediaTest,
-                        Combine(Values(kClearKeyKeySystem), Values(MSE)));
 
 IN_PROC_BROWSER_TEST_P(EncryptedMediaTest, Playback_AudioOnly_WebM) {
   TestSimplePlayback("bear-a_enc-a.webm", kWebMAudioOnly);

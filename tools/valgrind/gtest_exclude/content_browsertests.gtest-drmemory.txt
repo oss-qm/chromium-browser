@@ -32,9 +32,6 @@ ServiceWorkerVersionBrowserTest.TimeoutStartingWorker
 # http://crbug.com/464029
 WebRtcBrowserTest.CallAndModifyStream
 
-# http://crbug.com/470507
-SRC_ClearKey/EncryptedMediaTest.Playback_VideoClearAudio_WebM/0
-
 # http://crbug.com/484351
 PluginTest.VerifyPluginWindowRect
 

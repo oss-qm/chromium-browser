@@ -35,7 +35,6 @@ using ::testing::StrictMock;
 namespace media {
 
 const int64_t kStartPlayingTimeInMs = 100;
-const char kClearKeyKeySystem[] = "org.w3.clearkey";
 
 ACTION_P2(SetError, renderer_client, error) {
   renderer_client->OnError(error);
@@ -157,10 +156,6 @@ class MojoRendererTest : public ::testing::Test {
   void CreateCdm() {
     new MojoCdmService(mojo_cdm_service_context_.GetWeakPtr(), &cdm_factory_,
                        mojo::GetProxy(&remote_cdm_));
-    remote_cdm_->Initialize(
-        kClearKeyKeySystem, "https://www.test.com",
-        mojom::CdmConfig::From(CdmConfig()),
-        base::Bind(&MojoRendererTest::OnCdmCreated, base::Unretained(this)));
     base::RunLoop().RunUntilIdle();
   }
 

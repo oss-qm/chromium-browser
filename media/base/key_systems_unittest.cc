@@ -29,9 +29,6 @@ const char kUseAesNameForUMA[] = "UseAes";
 const char kExternal[] = "x-com.example.test";
 const char kExternalNameForUMA[] = "External";
 
-const char kClearKey[] = "org.w3.clearkey";
-const char kExternalClearKey[] = "org.chromium.externalclearkey";
-
 const char kAudioWebM[] = "audio/webm";
 const char kVideoWebM[] = "video/webm";
 const char kAudioFoo[] = "audio/foo";
@@ -244,11 +241,6 @@ class PotentiallySupportedNamesTestMediaClient : public TestMediaClient {
 
 void PotentiallySupportedNamesTestMediaClient::AddSupportedKeySystems(
     std::vector<std::unique_ptr<KeySystemProperties>>* key_systems) {
-  // org.w3.clearkey is automatically registered.
-  key_systems->emplace_back(
-      new AesKeySystemProperties("org.chromium.externalclearkey"));
-  key_systems->emplace_back(
-      new AesKeySystemProperties("org.chromium.externalclearkey.something"));
   key_systems->emplace_back(
       new AesKeySystemProperties("com.chromecast.something"));
   key_systems->emplace_back(new AesKeySystemProperties("x-something"));
@@ -381,27 +373,6 @@ class KeySystemsTest : public testing::Test {
 TEST_F(KeySystemsTest, EmptyKeySystem) {
   EXPECT_FALSE(IsSupportedKeySystem(std::string()));
   EXPECT_EQ("Unknown", GetKeySystemNameForUMA(std::string()));
-}
-
-// Clear Key is the only key system registered in content.
-TEST_F(KeySystemsTest, ClearKey) {
-  EXPECT_TRUE(IsSupportedKeySystem(kClearKey));
-  EXPECT_TRUE(IsSupportedKeySystemWithMediaMimeType(
-      kVideoWebM, no_codecs(), kClearKey));
-
-  EXPECT_EQ("ClearKey", GetKeySystemNameForUMA(kClearKey));
-}
-
-TEST_F(KeySystemsTest, ClearKeyWithInitDataType) {
-  EXPECT_TRUE(IsSupportedKeySystem(kClearKey));
-  EXPECT_TRUE(
-      IsSupportedKeySystemWithInitDataType(kClearKey, EmeInitDataType::WEBM));
-  EXPECT_TRUE(
-      IsSupportedKeySystemWithInitDataType(kClearKey, EmeInitDataType::KEYIDS));
-
-  // All other InitDataTypes are not supported.
-  EXPECT_FALSE(IsSupportedKeySystemWithInitDataType(kClearKey,
-                                                    EmeInitDataType::UNKNOWN));
 }
 
 // The key system is not registered and therefore is unrecognized.
@@ -681,14 +652,6 @@ TEST_F(
       kAudioFoo, vorbis_codec(), kExternal));
 }
 
-TEST_F(KeySystemsTest, KeySystemNameForUMA) {
-  EXPECT_EQ("ClearKey", GetKeySystemNameForUMA(kClearKey));
-
-  // External Clear Key never has a UMA name.
-  if (CanRunExternalKeySystemTests())
-    EXPECT_EQ("Unknown", GetKeySystemNameForUMA(kExternalClearKey));
-}
-
 TEST_F(KeySystemsTest, KeySystemsUpdate) {
   EXPECT_TRUE(IsSupportedKeySystem(kUsesAes));
   EXPECT_TRUE(IsSupportedKeySystemWithMediaMimeType(
@@ -713,19 +676,10 @@ TEST_F(KeySystemsPotentiallySupportedNamesTest, PotentiallySupportedNames) {
   EXPECT_FALSE(IsSupportedKeySystem("org.w3"));
   EXPECT_FALSE(IsSupportedKeySystem("org.w3."));
   EXPECT_FALSE(IsSupportedKeySystem("org.w3.clearke"));
-  EXPECT_TRUE(IsSupportedKeySystem("org.w3.clearkey"));
-  EXPECT_FALSE(IsSupportedKeySystem("org.w3.clearkeys"));
 
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium"));
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium."));
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium.externalclearke"));
-  EXPECT_TRUE(IsSupportedKeySystem("org.chromium.externalclearkey"));
-  EXPECT_FALSE(IsSupportedKeySystem("org.chromium.externalclearkeys"));
-  EXPECT_FALSE(IsSupportedKeySystem("org.chromium.externalclearkey."));
-  EXPECT_TRUE(IsSupportedKeySystem("org.chromium.externalclearkey.something"));
-  EXPECT_FALSE(
-      IsSupportedKeySystem("org.chromium.externalclearkey.something.else"));
-  EXPECT_FALSE(IsSupportedKeySystem("org.chromium.externalclearkey.other"));
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium.other"));
 
   EXPECT_FALSE(IsSupportedKeySystem("com.chromecast"));

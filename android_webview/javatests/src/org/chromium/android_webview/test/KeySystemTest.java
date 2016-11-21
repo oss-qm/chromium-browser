@@ -119,12 +119,6 @@ public class KeySystemTest extends AwTestBase {
 
     @Feature({"AndroidWebView"})
     @SmallTest
-    public void testSupportClearKeySystem() throws Throwable {
-        assertEquals("\"supported\"", isKeySystemSupported("org.w3.clearkey"));
-    }
-
-    @Feature({"AndroidWebView"})
-    @SmallTest
     public void testNotSupportFooKeySystem() throws Throwable {
         assertEquals("\"NotSupportedError\"", isKeySystemSupported("com.foo.keysystem"));
     }

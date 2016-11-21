@@ -97,7 +97,6 @@
    obj:*
    ...
    fun:*LoadNativeLibrary*
-   fun:*ExternalClearKeyTestHelper*
 }
 {
    bug_555798_b

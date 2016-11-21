@@ -51,6 +51,3 @@ IndexedDBBrowserTestSingleProcess.RenderThreadShutdownTest
 
 # http://crbug.com/338421
 GinBrowserTest.GinAndGarbageCollection
-
-# http://crbug.com/343604
-MSE_ClearKey/EncryptedMediaTest.ConfigChangeVideo/0

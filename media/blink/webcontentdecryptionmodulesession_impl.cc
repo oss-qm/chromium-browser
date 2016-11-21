@@ -197,29 +197,6 @@ static bool SanitizeResponse(const std::string& key_system,
   if (response_length > limits::kMaxSessionResponseLength)
     return false;
 
-  if (IsClearKey(key_system) || IsExternalClearKey(key_system)) {
-    std::string key_string(response, response + response_length);
-    KeyIdAndKeyPairs keys;
-    MediaKeys::SessionType session_type = MediaKeys::TEMPORARY_SESSION;
-    if (!ExtractKeysFromJWKSet(key_string, &keys, &session_type))
-      return false;
-
-    // Must contain at least one key.
-    if (keys.empty())
-      return false;
-
-    for (const auto key_pair : keys) {
-      if (key_pair.first.size() < limits::kMinKeyIdLength ||
-          key_pair.first.size() > limits::kMaxKeyIdLength) {
-        return false;
-      }
-    }
-
-    std::string sanitized_data = GenerateJWKSet(keys, session_type);
-    sanitized_response->assign(sanitized_data.begin(), sanitized_data.end());
-    return true;
-  }
-
   sanitized_response->assign(response, response + response_length);
   return true;
 }

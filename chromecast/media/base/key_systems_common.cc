@@ -12,11 +12,6 @@ namespace chromecast {
 namespace media {
 
 CastKeySystem GetKeySystemByName(const std::string& key_system_name) {
-
-  if (::media::IsClearKey(key_system_name)) {
-    return KEY_SYSTEM_CLEAR_KEY;
-  }
-
   return KEY_SYSTEM_NONE;
 }
 

@@ -23,10 +23,7 @@
 
 namespace media {
 
-const char kClearKeyKeySystem[] = "org.w3.clearkey";
-
 // These names are used by UMA. Do not change them!
-const char kClearKeyKeySystemNameForUMA[] = "ClearKey";
 const char kUnknownKeySystemNameForUMA[] = "Unknown";
 
 struct NamedCodec {
@@ -66,64 +63,6 @@ static const NamedCodec kCodecStrings[] = {
 #endif  // defined(USE_PROPRIETARY_CODECS)
 };
 
-class ClearKeyProperties : public KeySystemProperties {
- public:
-  std::string GetKeySystemName() const override { return kClearKeyKeySystem; }
-
-  bool IsSupportedInitDataType(EmeInitDataType init_data_type) const override {
-#if defined(USE_PROPRIETARY_CODECS)
-    if (init_data_type == EmeInitDataType::CENC)
-      return true;
-#endif
-    return init_data_type == EmeInitDataType::WEBM ||
-           init_data_type == EmeInitDataType::KEYIDS;
-  }
-
-  SupportedCodecs GetSupportedCodecs() const override {
-    // On Android, Vorbis, VP8, AAC and AVC1 are supported in MediaCodec:
-    // http://developer.android.com/guide/appendix/media-formats.html
-    // VP9 support is device dependent.
-    SupportedCodecs codecs = EME_CODEC_WEBM_ALL;
-
-#if defined(OS_ANDROID)
-    // Temporarily disable VP9 support for Android.
-    // TODO(xhwang): Use mime_util.h to query VP9 support on Android.
-    codecs &= ~EME_CODEC_WEBM_VP9;
-
-    // Opus is not supported on Android yet. http://crbug.com/318436.
-    // TODO(sandersd): Check for platform support to set this bit.
-    codecs &= ~EME_CODEC_WEBM_OPUS;
-#endif  // defined(OS_ANDROID)
-
-#if defined(USE_PROPRIETARY_CODECS)
-    codecs |= EME_CODEC_MP4_ALL;
-#endif  // defined(USE_PROPRIETARY_CODECS)
-
-    return codecs;
-  }
-
-  EmeConfigRule GetRobustnessConfigRule(
-      EmeMediaType media_type,
-      const std::string& requested_robustness) const override {
-    return requested_robustness.empty() ? EmeConfigRule::SUPPORTED
-                                        : EmeConfigRule::NOT_SUPPORTED;
-  }
-  EmeSessionTypeSupport GetPersistentLicenseSessionSupport() const override {
-    return EmeSessionTypeSupport::NOT_SUPPORTED;
-  }
-  EmeSessionTypeSupport GetPersistentReleaseMessageSessionSupport()
-      const override {
-    return EmeSessionTypeSupport::NOT_SUPPORTED;
-  }
-  EmeFeatureSupport GetPersistentStateSupport() const override {
-    return EmeFeatureSupport::NOT_SUPPORTED;
-  }
-  EmeFeatureSupport GetDistinctiveIdentifierSupport() const override {
-    return EmeFeatureSupport::NOT_SUPPORTED;
-  }
-  bool UseAesDecryptor() const override { return true; }
-};
-
 // Returns whether the |key_system| is known to Chromium and is thus likely to
 // be implemented in an interoperable way.
 // True is always returned for a |key_system| that begins with "x-".
@@ -149,13 +88,6 @@ class ClearKeyProperties : public KeySystemProperties {
 // appropriate glue/adapter code, and added all the appropriate data to
 // KeySystemsImpl. Only then should you change this function.
 static bool IsPotentiallySupportedKeySystem(const std::string& key_system) {
-  // Known and supported key systems.
-  if (key_system == kClearKeyKeySystem)
-    return true;
-
-  // External Clear Key is known and supports suffixes for testing.
-  if (IsExternalClearKey(key_system))
-    return true;
 
   // Chromecast defines behaviors for Cast clients within its reverse domain.
   const char kChromecastRoot[] = "com.chromecast";
@@ -328,10 +260,6 @@ void KeySystemsImpl::InitializeUMAInfo() {
     key_system_name_for_uma_map_[info.key_system] =
         info.key_system_name_for_uma;
   }
-
-  // Clear Key is always supported.
-  key_system_name_for_uma_map_[kClearKeyKeySystem] =
-      kClearKeyKeySystemNameForUMA;
 }
 
 void KeySystemsImpl::UpdateIfNeeded() {
@@ -348,9 +276,6 @@ void KeySystemsImpl::UpdateSupportedKeySystems() {
   // Add key systems supported by the MediaClient implementation.
   if (GetMediaClient())
     GetMediaClient()->AddSupportedKeySystems(&key_systems_properties);
-
-  // Clear Key is always supported.
-  key_systems_properties.emplace_back(new ClearKeyProperties());
 
   AddSupportedKeySystems(&key_systems_properties);
 }

@@ -25,7 +25,6 @@
 #include "media/cdm/api/content_decryption_module.h"
 #include "media/cdm/cdm_adapter.h"
 #include "media/cdm/cdm_file_io.h"
-#include "media/cdm/external_clear_key_test_helper.h"
 #include "media/cdm/simple_cdm_allocator.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest-param-test.h"
@@ -247,7 +246,6 @@ class AesDecryptorTest : public testing::TestWithParam<std::string> {
     } else if (GetParam() == "CdmAdapter") {
       CdmConfig cdm_config;  // default settings of false are sufficient.
 
-      helper_.reset(new ExternalClearKeyTestHelper());
       std::unique_ptr<CdmAllocator> allocator(new SimpleCdmAllocator());
       CdmAdapter::Create(
           helper_->KeySystemName(), helper_->LibraryPath(), cdm_config,
@@ -482,9 +480,6 @@ class AesDecryptorTest : public testing::TestWithParam<std::string> {
   Decryptor::DecryptCB decrypt_cb_;
   std::string session_id_;
   CdmKeysInfo keys_info_;
-
-  // Helper class to load/unload External Clear Key Library, if necessary.
-  std::unique_ptr<ExternalClearKeyTestHelper> helper_;
 
   base::MessageLoop message_loop_;
 

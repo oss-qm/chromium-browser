@@ -53,10 +53,6 @@ const char kTestOrigin2[] = "http://host2:1/";
 const char kTestOrigin3[] = "http://host3:1/";
 const char kTestOriginDevTools[] = "chrome-devtools://abcdefghijklmnopqrstuvw/";
 
-#if defined(ENABLE_PLUGINS)
-const char kClearKeyCdmPluginId[] = "application_x-ppapi-clearkey-cdm";
-#endif  // defined(ENABLE_PLUGINS)
-
 const GURL kOrigin1(kTestOrigin1);
 const GURL kOrigin2(kTestOrigin2);
 const GURL kOrigin3(kTestOrigin3);
@@ -257,13 +253,6 @@ class RemovePluginPrivateDataTester {
     base::Time now = base::Time::Now();
     base::Time ten_days_ago = now - base::TimeDelta::FromDays(10);
     base::Time sixty_days_ago = now - base::TimeDelta::FromDays(60);
-
-    // Create a PluginPrivateFileSystem for ClearKey and add a single file
-    // with a timestamp of 1 day ago.
-    std::string clearkey_fsid =
-        CreateFileSystem(kClearKeyCdmPluginId, kOrigin1);
-    clearkey_file_ = CreateFile(kOrigin1, clearkey_fsid, "foo");
-    SetFileTimestamp(clearkey_file_, ten_days_ago);
   }
 
   // Returns true, if the given origin exists in a PluginPrivateFileSystem.
@@ -277,26 +266,6 @@ class RemovePluginPrivateDataTester {
                               &data_exists_for_origin, &await_completion));
     await_completion.BlockUntilNotified();
     return data_exists_for_origin;
-  }
-
-  // Opens the file created for ClearKey (in kOrigin1) for writing. Caller
-  // needs to verify if the file was opened or not.
-  base::File OpenClearKeyFileForWrite() {
-    AwaitCompletionHelper await_completion;
-    base::File file;
-    storage::AsyncFileUtil* async_file_util =
-        filesystem_context_->GetAsyncFileUtil(
-            storage::kFileSystemTypePluginPrivate);
-    std::unique_ptr<storage::FileSystemOperationContext> operation_context =
-        base::WrapUnique(
-            new storage::FileSystemOperationContext(filesystem_context_));
-    async_file_util->CreateOrOpen(
-        std::move(operation_context), clearkey_file_,
-        base::File::FLAG_OPEN | base::File::FLAG_WRITE,
-        base::Bind(&RemovePluginPrivateDataTester::OnFileOpened,
-                   base::Unretained(this), &file, &await_completion));
-    await_completion.BlockUntilNotified();
-    return file;
   }
 
  private:
@@ -417,9 +386,6 @@ class RemovePluginPrivateDataTester {
 
   // We don't own this pointer.
   storage::FileSystemContext* filesystem_context_;
-
-  // Keep track of the URL for the ClearKey file so that it can be written to.
-  storage::FileSystemURL clearkey_file_;
 
   DISALLOW_COPY_AND_ASSIGN(RemovePluginPrivateDataTester);
 };
@@ -1254,12 +1220,6 @@ TEST_F(StoragePartitionImplTest, RemovePluginPrivateDataWhileWriting) {
   EXPECT_TRUE(tester.DataExistsForOrigin(kOrigin1));
   EXPECT_TRUE(tester.DataExistsForOrigin(kOrigin2));
 
-  const char test_data[] = {0, 1, 2, 3, 4, 5};
-  base::File file = tester.OpenClearKeyFileForWrite();
-  EXPECT_TRUE(file.IsValid());
-  EXPECT_EQ(static_cast<int>(arraysize(test_data)),
-            file.Write(0, test_data, arraysize(test_data)));
-
   base::RunLoop run_loop;
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::Bind(&ClearPluginPrivateData, partition, GURL(),
@@ -1272,9 +1232,6 @@ TEST_F(StoragePartitionImplTest, RemovePluginPrivateDataWhileWriting) {
   const char more_data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   EXPECT_EQ(static_cast<int>(arraysize(more_data)),
             file.WriteAtCurrentPos(more_data, arraysize(more_data)));
-
-  base::File file2 = tester.OpenClearKeyFileForWrite();
-  EXPECT_FALSE(file2.IsValid());
 }
 #endif  // defined(ENABLE_PLUGINS)
 

@@ -25,7 +25,6 @@ namespace {
 
 const char kTestOrigin[] = "https://host1/";
 const GURL kOrigin(kTestOrigin);
-const char kClearKeyCdmPluginId[] = "application_x-ppapi-clearkey-cdm";
 
 class MediaLicensesCounterTest : public InProcessBrowserTest {
  public:
@@ -42,9 +41,6 @@ class MediaLicensesCounterTest : public InProcessBrowserTest {
         content::BrowserContext::GetDefaultStoragePartition(
             browser()->profile())
             ->GetFileSystemContext();
-    std::string clearkey_fsid =
-        CreateFileSystem(filesystem_context, kClearKeyCdmPluginId, kOrigin);
-    CreateFile(filesystem_context, kOrigin, clearkey_fsid, "foo");
   }
 
   // Start running and allow the asynchronous IO operations to complete.

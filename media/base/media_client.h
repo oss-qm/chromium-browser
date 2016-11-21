@@ -34,9 +34,7 @@ struct MEDIA_EXPORT KeySystemInfoForUMA {
   // Concrete key system name;
   std::string key_system;
 
-  // Display name for UMA reporting. For example, the display name for
-  // "org.w3.clearkey" is "ClearKey". When providing this value, make sure to
-  // update tools/metrics/histograms/histograms.xml.
+  // Display name for UMA reporting.
   std::string key_system_name_for_uma;
 };
 

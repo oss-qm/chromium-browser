@@ -21856,62 +21856,6 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
   </summary>
 </histogram>
 
-<histogram name="Media.EME.ClearKey" enum="CdmPromiseResult">
-  <owner>sandersd@chromium.org</owner>
-  <summary>
-    Result of promises for Clear Key key systems that were handled by Chromium
-    code.
-  </summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.addKey" enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>addKey result using the Clear Key key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.cancelKeyRequest" enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>cancelKeyRequest result using the Clear Key key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.CreateCdmTime" units="ms">
-  <owner>xhwang@chromium.org</owner>
-  <summary>
-    The time it takes to create the CDM instance for Clear Key key system.
-  </summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.generateKeyRequest"
-    enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>generateKeyRequest result using the Clear Key key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.KeyAdded">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>KeyAdded event count using the Clear Key key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.ClearKey.KeyError" enum="MediaKeyError">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>KeyError event count using the Clear Key key system.</summary>
-</histogram>
-
 <histogram name="Media.EME.NeedKey">
   <owner>xhwang@chromium.org</owner>
   <summary>EME NeedKey event count.</summary>
@@ -95677,7 +95621,6 @@ To add a new entry, add it with any value and run test to compute valid value.
   <suffix name="LoadSession" label="LoadSession promises only."/>
   <suffix name="RemoveSession" label="RemoveSession promises only."/>
   <suffix name="UpdateSession" label="UpdateSession promises only."/>
-  <affected-histogram name="Media.EME.ClearKey"/>
   <affected-histogram name="Media.EME.Unknown"/>
 </histogram_suffixes>
 
@@ -99483,7 +99426,6 @@ To add a new entry, add it with any value and run test to compute valid value.
 </histogram_suffixes>
 
 <histogram_suffixes name="RequestMediaKeySystemAccessKeySystems" separator=".">
-  <suffix name="ClearKey" label="Requests for the Clear Key key system."/>
   <suffix name="Unknown"
       label="Requests for an unknown or unsupported key system."/>
   <affected-histogram name="Media.EME.RequestMediaKeySystemAccess"/>

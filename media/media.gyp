@@ -1172,8 +1172,6 @@
         'base/wall_clock_time_source_unittest.cc',
         'base/yuv_convert_unittest.cc',
         'cdm/aes_decryptor_unittest.cc',
-        'cdm/external_clear_key_test_helper.cc',
-        'cdm/external_clear_key_test_helper.h',
         'cdm/json_web_key_unittest.cc',
         'cdm/simple_cdm_allocator.cc',
         'cdm/simple_cdm_allocator.h',

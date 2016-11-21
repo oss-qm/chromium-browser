@@ -519,8 +519,6 @@ if (is_ios) {
 test("media_unittests") {
   sources = [
     "cdm/aes_decryptor_unittest.cc",
-    "cdm/external_clear_key_test_helper.cc",
-    "cdm/external_clear_key_test_helper.h",
     "cdm/json_web_key_unittest.cc",
     "cdm/simple_cdm_allocator.cc",
     "cdm/simple_cdm_allocator.h",
