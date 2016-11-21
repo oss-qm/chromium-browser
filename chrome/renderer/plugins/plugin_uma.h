@@ -39,7 +39,6 @@ class PluginUMAReporter {
     // NOTE: Add new unsupported types only immediately above this line.
     BROWSER_PLUGIN = 10,
     SHOCKWAVE_FLASH,
-    WIDEVINE_CDM,
     // NOTE: Add new plugin types only immediately above this line.
     PLUGIN_TYPE_MAX
   };

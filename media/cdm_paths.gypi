@@ -46,11 +46,9 @@
       # TODO(xhwang): Improve how we enable platform specific path. See
       # http://crbug.com/468584
       ['( OS == "win" or OS == "mac") and (target_arch == "ia32" or target_arch == "x64")', {
-        # Path of Clear Key and Widevine CDMs relative to the output dir.
-        'widevine_cdm_path%': 'WidevineCdm/_platform_specific/<(component_os)_<(component_arch)',
+        # Path of Clear Key CDMs relative to the output dir.
         'clearkey_cdm_path%': 'ClearKeyCdm/_platform_specific/<(component_os)_<(component_arch)',
       }, {
-        'widevine_cdm_path%': '.',
         'clearkey_cdm_path%': '.',
       }],
     ]

@@ -13,19 +13,7 @@
 #include "media/base/android/provision_fetcher.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
-
 namespace media {
-
-#define EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(a)                              \
-  do {                                                                    \
-    if (!MediaDrmBridge::IsKeySystemSupported(kWidevineKeySystem)) {      \
-      VLOG(0) << "Widevine not supported on device.";                     \
-      EXPECT_FALSE(a);                                                    \
-    } else {                                                              \
-      EXPECT_TRUE(a);                                                     \
-    }                                                                     \
-  } while (0)
 
 const char kAudioMp4[] = "audio/mp4";
 const char kVideoMp4[] = "video/mp4";
@@ -62,28 +50,6 @@ class MockProvisionFetcher : public ProvisionFetcher {
 
 }  // namespace (anonymous)
 
-TEST(MediaDrmBridgeTest, IsKeySystemSupported_Widevine) {
-  // TODO(xhwang): Enable when b/13564917 is fixed.
-  // EXPECT_TRUE_IF_AVAILABLE(
-  //     IsKeySystemSupportedWithType(kWidevineKeySystem, kAudioMp4));
-  EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(
-      IsKeySystemSupportedWithType(kWidevineKeySystem, kVideoMp4));
-
-  if (base::android::BuildInfo::GetInstance()->sdk_int() <= 19) {
-    EXPECT_FALSE(IsKeySystemSupportedWithType(kWidevineKeySystem, kAudioWebM));
-    EXPECT_FALSE(IsKeySystemSupportedWithType(kWidevineKeySystem, kVideoWebM));
-  } else {
-    EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(
-        IsKeySystemSupportedWithType(kWidevineKeySystem, kAudioWebM));
-    EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(
-        IsKeySystemSupportedWithType(kWidevineKeySystem, kVideoWebM));
-  }
-
-  EXPECT_FALSE(IsKeySystemSupportedWithType(kWidevineKeySystem, "unknown"));
-  EXPECT_FALSE(IsKeySystemSupportedWithType(kWidevineKeySystem, "video/avi"));
-  EXPECT_FALSE(IsKeySystemSupportedWithType(kWidevineKeySystem, "audio/mp3"));
-}
-
 // Invalid key system is NOT supported regardless whether MediaDrm is available.
 TEST(MediaDrmBridgeTest, IsKeySystemSupported_InvalidKeySystem) {
   EXPECT_FALSE(MediaDrmBridge::IsKeySystemSupported(kInvalidKeySystem));
@@ -96,29 +62,11 @@ TEST(MediaDrmBridgeTest, IsKeySystemSupported_InvalidKeySystem) {
   EXPECT_FALSE(IsKeySystemSupportedWithType(kInvalidKeySystem, "audio/mp3"));
 }
 
-TEST(MediaDrmBridgeTest, CreateWithoutSessionSupport_Widevine) {
-  base::MessageLoop message_loop_;
-  EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(MediaDrmBridge::CreateWithoutSessionSupport(
-      kWidevineKeySystem, kDefault, base::Bind(&MockProvisionFetcher::Create)));
-}
-
 // Invalid key system is NOT supported regardless whether MediaDrm is available.
 TEST(MediaDrmBridgeTest, CreateWithoutSessionSupport_InvalidKeySystem) {
   base::MessageLoop message_loop_;
   EXPECT_FALSE(MediaDrmBridge::CreateWithoutSessionSupport(
       kInvalidKeySystem, kDefault, base::Bind(&MockProvisionFetcher::Create)));
-}
-
-TEST(MediaDrmBridgeTest, CreateWithSecurityLevel_Widevine) {
-  base::MessageLoop message_loop_;
-
-  // We test "L3" fully. But for "L1" we don't check the result as it depends on
-  // whether the test device supports "L1".
-  EXPECT_TRUE_IF_WIDEVINE_AVAILABLE(MediaDrmBridge::CreateWithoutSessionSupport(
-      kWidevineKeySystem, kL3, base::Bind(&MockProvisionFetcher::Create)));
-
-  MediaDrmBridge::CreateWithoutSessionSupport(
-      kWidevineKeySystem, kL1, base::Bind(&MockProvisionFetcher::Create));
 }
 
 }  // namespace media

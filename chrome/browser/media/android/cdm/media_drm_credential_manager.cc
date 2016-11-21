@@ -18,8 +18,6 @@
 #include "media/base/android/provision_fetcher.h"
 #include "url/gurl.h"
 
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
-
 using base::android::ScopedJavaGlobalRef;
 
 namespace {
@@ -96,9 +94,6 @@ void MediaDrmCredentialManager::ResetCredentialsInternal(
   ResetCredentialsCB reset_credentials_cb =
       base::Bind(&MediaDrmCredentialManager::OnResetCredentialsCompleted,
                  base::Unretained(this), security_level);
-
-  media_drm_bridge_ = media::MediaDrmBridge::CreateWithoutSessionSupport(
-      kWidevineKeySystem, security_level, create_fetcher_cb);
 
   // No need to reset credentials for unsupported |security_level|.
   if (!media_drm_bridge_) {

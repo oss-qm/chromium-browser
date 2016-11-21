@@ -8,7 +8,6 @@
 #include <stdint.h>
 
 #include "base/macros.h"
-#include "components/cdm/common/widevine_drm_delegate_android.h"
 #include "media/base/android/media_client_android.h"
 
 class ChromeMediaClientAndroid : public media::MediaClientAndroid {
@@ -20,8 +19,6 @@ class ChromeMediaClientAndroid : public media::MediaClientAndroid {
   // media::MediaClientAndroid implementation:
   media::MediaDrmBridgeDelegate* GetMediaDrmBridgeDelegate(
       const std::vector<uint8_t>& scheme_uuid) override;
-
-  cdm::WidevineDrmDelegateAndroid widevine_delegate_;
 
   DISALLOW_COPY_AND_ASSIGN(ChromeMediaClientAndroid);
 };

@@ -63,8 +63,6 @@ void AwMediaClientAndroid::AddKeySystemUUIDMappings(KeySystemUuidMap* map) {
 
 media::MediaDrmBridgeDelegate* AwMediaClientAndroid::GetMediaDrmBridgeDelegate(
     const media::UUID& scheme_uuid) {
-  if (scheme_uuid == widevine_delegate_.GetUUID())
-    return &widevine_delegate_;
   return nullptr;
 }
 

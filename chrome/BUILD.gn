@@ -240,8 +240,6 @@ if (!is_android && !is_mac) {
       "//third_party/adobe/flash:flapper_binaries",
     ]
 
-    data_deps += [ "//third_party/widevine/cdm:widevinecdmadapter" ]
-
     if (is_multi_dll_chrome) {
       defines += [ "CHROME_MULTIPLE_DLL" ]
       data_deps += [ ":chrome_child" ]
@@ -796,42 +794,8 @@ if (is_win) {
       ]
     }
 
-    bundle_data("widevine_cdm_library_binaries") {
-      sources = [
-        "$root_out_dir/$widevine_cdm_path/libwidevinecdm.dylib",
-        "$root_out_dir/$widevine_cdm_path/widevinecdmadapter.plugin",
-      ]
-      outputs = [
-        "{{bundle_root_dir}}/Libraries/$widevine_cdm_path/{{source_file_part}}",
-      ]
-      public_deps = [
-        "//third_party/widevine/cdm:widevinecdm",
-        "//third_party/widevine/cdm:widevinecdmadapter",
-      ]
-    }
-
-    bundle_data("widevine_cdm_library_manifest") {
-      sources = [
-        "$root_out_dir/WidevineCdm/manifest.json",
-      ]
-      outputs = [
-        "{{bundle_root_dir}}/Libraries/WidevineCdm/{{source_file_part}}",
-      ]
-      public_deps = [
-        "//third_party/widevine/cdm:widevine_cdm_manifest",
-      ]
-    }
   } else {
     group("flash_player_plugin") {
-    }
-  }
-
-  group("widevine_cdm_library") {
-    if (is_chrome_branded) {
-      deps = [
-        ":widevine_cdm_library_binaries",
-        ":widevine_cdm_library_manifest",
-      ]
     }
   }
 
@@ -957,7 +921,6 @@ if (is_win) {
       ":chrome_framework_plugins",
       ":chrome_framework_resources",
       ":flash_player_plugin",
-      ":widevine_cdm_library",
       "//build/config/sanitizers:deps",
       "//chrome/app/nibs:chrome_xibs",
     ]

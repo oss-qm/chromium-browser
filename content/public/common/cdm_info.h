@@ -23,14 +23,14 @@ struct CONTENT_EXPORT CdmInfo {
   CdmInfo(const CdmInfo& other);
   ~CdmInfo();
 
-  // Type of the CDM (e.g. Widevine).
+  // Type of the CDM.
   std::string type;
 
   // Version of the CDM. May be empty if the version is not known.
   base::Version version;
 
   // Path to the library implementing the CDM. May be empty if the
-  // CDM is not a separate library (e.g. Widevine on Android).
+  // CDM is not a separate library.
   base::FilePath path;
 
   // List of codecs supported by the CDM (e.g. vp8).

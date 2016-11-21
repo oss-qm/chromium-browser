@@ -347,7 +347,6 @@
         '../content/content.gyp:content_app_both',
         '../skia/skia.gyp:skia',
         '../third_party/WebKit/public/blink.gyp:blink',
-        '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
       ],
       'sources': [
         'app/cast_main_delegate.cc',

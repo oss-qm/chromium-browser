@@ -12,7 +12,6 @@
 #include "build/build_config.h"
 #include "chrome/browser/media/media_browsertest.h"
 #include "chrome/browser/media/test_license_server.h"
-#include "chrome/browser/media/wv_test_license_server_config.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/common/chrome_switches.h"
@@ -23,8 +22,6 @@
 #if defined(OS_ANDROID)
 #include "base/android/build_info.h"
 #endif
-
-#include "widevine_cdm_version.h"  //  In SHARED_INTERMEDIATE_DIR.
 
 // Available key systems.
 const char kClearKeyKeySystem[] = "org.w3.clearkey";
@@ -101,12 +98,6 @@ class EncryptedMediaTestBase : public MediaBrowserTest {
     std::string prefix = std::string(kExternalClearKeyKeySystem) + '.';
     return key_system.substr(0, prefix.size()) == prefix;
   }
-
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  bool IsWidevine(const std::string& key_system) {
-    return key_system == kWidevineKeySystem;
-  }
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 
   void RunEncryptedMediaTestPage(
       const std::string& html_page,
@@ -192,23 +183,11 @@ class EncryptedMediaTestBase : public MediaBrowserTest {
   }
 
   bool IsPlayBackPossible(const std::string& key_system) {
-#if defined(WIDEVINE_CDM_AVAILABLE)
-    if (IsWidevine(key_system) && !GetServerConfig(key_system))
-      return false;
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
     return true;
   }
 
   std::unique_ptr<TestLicenseServerConfig> GetServerConfig(
       const std::string& key_system) {
-#if defined(WIDEVINE_CDM_AVAILABLE)
-    if (IsWidevine(key_system)) {
-      std::unique_ptr<TestLicenseServerConfig> config(
-          new WVTestLicenseServerConfig);
-      if (config->IsPlatformSupported())
-        return config;
-    }
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
     return nullptr;
   }
 
@@ -356,14 +335,6 @@ INSTANTIATE_TEST_CASE_P(MSE_ClearKey,
 
 // External Clear Key is currently only used on platforms that use Pepper CDMs.
 
-#if defined(WIDEVINE_CDM_AVAILABLE)
-#if !defined(OS_CHROMEOS)
-INSTANTIATE_TEST_CASE_P(MSE_Widevine,
-                        EncryptedMediaTest,
-                        Combine(Values(kWidevineKeySystem), Values(MSE)));
-#endif  // !defined(OS_CHROMEOS)
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
-
 IN_PROC_BROWSER_TEST_P(EncryptedMediaTest, Playback_AudioOnly_WebM) {
   TestSimplePlayback("bear-a_enc-a.webm", kWebMAudioOnly);
 }
@@ -507,12 +478,3 @@ IN_PROC_BROWSER_TEST_P(EncryptedMediaTest,
                           EncryptedContainer::ENCRYPTED_MP4);
 }
 #endif  // defined(USE_PROPRIETARY_CODECS)
-
-#if defined(WIDEVINE_CDM_AVAILABLE)
-// The parent key system cannot be used when creating MediaKeys.
-IN_PROC_BROWSER_TEST_F(WVEncryptedMediaTest, ParentThrowsException) {
-  RunEncryptedMediaTest(kDefaultEmePlayer, "bear-a_enc-a.webm", kWebMAudioOnly,
-                        "com.widevine", MSE, kNoSessionToLoad, false,
-                        PlayTwice::NO, kEmeNotSupportedError);
-}
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)

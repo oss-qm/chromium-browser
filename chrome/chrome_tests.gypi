@@ -353,8 +353,6 @@
       'browser/media/webrtc_simulcast_browsertest.cc',
       'browser/media/webrtc_video_quality_browsertest.cc',
       'browser/media/webrtc_webcam_browsertest.cc',
-      'browser/media/wv_test_license_server_config.cc',
-      'browser/media/wv_test_license_server_config.h',
       'browser/media_galleries/fileapi/iapps_finder_impl_win_browsertest.cc',
       'browser/media_galleries/fileapi/media_file_validator_browsertest.cc',
       'browser/media_galleries/media_galleries_dialog_controller_mock.cc',
@@ -2221,7 +2219,6 @@
         '../third_party/leveldatabase/leveldatabase.gyp:leveldatabase',
         '../third_party/libaddressinput/libaddressinput.gyp:libaddressinput',
         '../third_party/webrtc/modules/modules.gyp:desktop_capture',
-        '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
         '../ui/accessibility/accessibility.gyp:accessibility_test_support',
         '../ui/compositor/compositor.gyp:compositor_test_support',
         '../ui/resources/ui_resources.gyp:ui_resources',
@@ -2233,7 +2230,6 @@
         '../remoting/remoting.gyp:remoting_browser_test_resources',
         '../remoting/remoting.gyp:remoting_webapp_unittests',
         '../third_party/mesa/mesa.gyp:osmesa',
-        '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_test_license_server',
       ],
       'include_dirs': [
         '..',
@@ -3121,7 +3117,6 @@
         '../base/base.gyp:test_support_perf',
         '../testing/gtest.gyp:gtest',
         '../testing/perf/perf_test.gyp:*',
-        '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
       ],
       'sources': [
         'browser/load_library_perf_test.cc',

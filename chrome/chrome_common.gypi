@@ -110,8 +110,6 @@
       'common/variations/variations_util.h',
       'common/web_application_info.cc',
       'common/web_application_info.h',
-      'common/widevine_cdm_constants.cc',
-      'common/widevine_cdm_constants.h',
     ],
     'chrome_common_extensions_sources': [
       'common/cast_messages.cc',
@@ -423,7 +421,6 @@
             '<(DEPTH)/ipc/ipc.gyp:ipc',
             '<(DEPTH)/media/media.gyp:media',
             '<(DEPTH)/third_party/re2/re2.gyp:re2',
-            '<(DEPTH)/third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
           ],
         }, {  # OS == ios
           'sources/': [

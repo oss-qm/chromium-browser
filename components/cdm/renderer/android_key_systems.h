@@ -12,10 +12,6 @@
 
 namespace cdm {
 
-void AddAndroidWidevine(
-    std::vector<std::unique_ptr<media::KeySystemProperties>>*
-        concrete_key_systems);
-
 // Add platform-supported key systems which are not explicitly handled
 // by Chrome.
 void AddAndroidPlatformKeySystems(

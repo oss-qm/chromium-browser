@@ -8,8 +8,6 @@
 
 #include "media/base/key_system_names.h"
 
-#include "widevine_cdm_version.h" // In SHARED_INTERMEDIATE_DIR.
-
 namespace chromecast {
 namespace media {
 
@@ -18,11 +16,6 @@ const char kChromecastPlayreadyKeySystem[] = "com.chromecast.playready";
 #endif  // defined(PLAYREADY_CDM_AVAILABLE)
 
 CastKeySystem GetKeySystemByName(const std::string& key_system_name) {
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  if (key_system_name.compare(kWidevineKeySystem) == 0) {
-    return KEY_SYSTEM_WIDEVINE;
-  }
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 
 #if defined(PLAYREADY_CDM_AVAILABLE)
   if (key_system_name.compare(kChromecastPlayreadyKeySystem) == 0) {

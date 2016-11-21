@@ -156,12 +156,6 @@ stage_install_common() {
   find "${STAGEDIR}/${INSTALLDIR}/locales" -type f -exec chmod 644 '{}' \;
   find "${STAGEDIR}/${INSTALLDIR}/locales" -type d -exec chmod 755 '{}' \;
 
-  # Widevine CDM.
-  if [ -f "${BUILDDIR}/libwidevinecdmadapter.so" ]; then
-    install -m 644 -s "${BUILDDIR}/libwidevinecdmadapter.so" "${STAGEDIR}/${INSTALLDIR}/"
-    install -m 644 "${BUILDDIR}/libwidevinecdm.so" "${STAGEDIR}/${INSTALLDIR}/"
-  fi
-
   # ANGLE
   if [ "${CHANNEL}" != "stable" ]; then
     install -m 644 "${BUILDDIR}/libGLESv2.so" "${STAGEDIR}/${INSTALLDIR}/"

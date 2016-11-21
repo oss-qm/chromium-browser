@@ -14,7 +14,6 @@ CastMediaClientAndroid::CastMediaClientAndroid() {}
 CastMediaClientAndroid::~CastMediaClientAndroid() {}
 
 void CastMediaClientAndroid::AddKeySystemUUIDMappings(KeySystemUuidMap* map) {
-// Note: MediaDrmBridge adds the Widevine UUID mapping automatically.
 #if defined(PLAYREADY_CDM_AVAILABLE)
   (*map)[kChromecastPlayreadyKeySystem] = playready_delegate_.GetUUID();
 #endif
@@ -27,9 +26,6 @@ CastMediaClientAndroid::GetMediaDrmBridgeDelegate(
   if (scheme_uuid == playready_delegate_.GetUUID())
     return &playready_delegate_;
 #endif
-
-  if (scheme_uuid == widevine_delegate_.GetUUID())
-    return &widevine_delegate_;
 
   return nullptr;
 }

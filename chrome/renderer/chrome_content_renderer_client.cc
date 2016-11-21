@@ -114,7 +114,6 @@
 #include "ui/base/layout.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/base/webui/jstemplate_builder.h"
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 
 #if !defined(DISABLE_NACL)
 #include "components/nacl/common/nacl_constants.h"

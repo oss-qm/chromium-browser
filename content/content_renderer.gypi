@@ -35,7 +35,6 @@
     '../third_party/icu/icu.gyp:icuuc',
     '../third_party/libjingle/libjingle.gyp:libjingle',
     '../third_party/libyuv/libyuv.gyp:libyuv',
-    '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
     '../ui/accessibility/accessibility.gyp:accessibility',
     '../ui/display/display.gyp:display',
     '../ui/events/blink/events_blink.gyp:events_blink',

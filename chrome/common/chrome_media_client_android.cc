@@ -11,7 +11,5 @@ ChromeMediaClientAndroid::~ChromeMediaClientAndroid() {}
 media::MediaDrmBridgeDelegate*
 ChromeMediaClientAndroid::GetMediaDrmBridgeDelegate(
     const std::vector<uint8_t>& scheme_uuid) {
-  if (scheme_uuid == widevine_delegate_.GetUUID())
-    return &widevine_delegate_;
   return nullptr;
 }

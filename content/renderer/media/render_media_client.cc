@@ -32,10 +32,6 @@ RenderMediaClient::~RenderMediaClient() {
 void RenderMediaClient::AddKeySystemsInfoForUMA(
     std::vector<media::KeySystemInfoForUMA>* key_systems_info_for_uma) {
   DVLOG(2) << __FUNCTION__;
-#if defined(WIDEVINE_CDM_AVAILABLE)
-  key_systems_info_for_uma->push_back(media::KeySystemInfoForUMA(
-      kWidevineKeySystem, kWidevineKeySystemNameForUMA));
-#endif  // WIDEVINE_CDM_AVAILABLE
 }
 
 bool RenderMediaClient::IsKeySystemsUpdateNeeded() {
@@ -78,14 +74,7 @@ void RenderMediaClient::AddSupportedKeySystems(
 
   // Check whether all potentially supported key systems are supported. If so,
   // no need to update again.
-#if defined(WIDEVINE_CDM_AVAILABLE) && defined(WIDEVINE_CDM_IS_COMPONENT)
-  for (const auto& properties : *key_systems_properties) {
-    if (properties->GetKeySystemName() == kWidevineKeySystem)
-      is_update_needed_ = false;
-  }
-#else
   is_update_needed_ = false;
-#endif
 }
 
 void RenderMediaClient::RecordRapporURL(const std::string& metric,

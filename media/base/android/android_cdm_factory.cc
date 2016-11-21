@@ -9,7 +9,6 @@
 #include "media/base/bind_to_current_loop.h"
 #include "media/base/cdm_config.h"
 #include "media/base/key_systems.h"
-#include "third_party/widevine/cdm/widevine_cdm_common.h"
 #include "url/gurl.h"
 
 namespace media {
@@ -48,11 +47,7 @@ void AndroidCdmFactory::Create(
 
   MediaDrmBridge::SecurityLevel security_level =
       MediaDrmBridge::SECURITY_LEVEL_DEFAULT;
-  if (key_system == kWidevineKeySystem) {
-    security_level = cdm_config.use_hw_secure_codecs
-                         ? MediaDrmBridge::SECURITY_LEVEL_1
-                         : MediaDrmBridge::SECURITY_LEVEL_3;
-  } else if (!cdm_config.use_hw_secure_codecs) {
+  if (!cdm_config.use_hw_secure_codecs) {
     // Assume other key systems require hardware-secure codecs and thus do not
     // support full compositing.
     error_message =

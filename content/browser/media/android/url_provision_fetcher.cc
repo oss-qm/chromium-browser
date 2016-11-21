@@ -36,7 +36,6 @@ void URLProvisionFetcher::Retrieve(
 
   // SetUploadData is mandatory even if we are not uploading anything.
   request_->SetUploadData("", "");
-  request_->AddExtraRequestHeader("User-Agent: Widevine CDM v1.0");
   request_->AddExtraRequestHeader("Content-Type: application/json");
 
   DCHECK(context_getter_);

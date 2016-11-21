@@ -36,7 +36,6 @@
 #include "content/public/common/content_constants.h"
 #include "net/base/registry_controlled_domains/registry_controlled_domain.h"
 #include "url/gurl.h"
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 
 #if defined(ENABLE_EXTENSIONS)
 #include "components/guest_view/browser/guest_view_base.h"

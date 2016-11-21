@@ -34,15 +34,12 @@
 #error This file needs to be updated to run on Android.
 #endif
 
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
-
 namespace chrome {
 
 namespace {
 
 const char kClearKey[] = "org.w3.clearkey";
 const char kExternalClearKey[] = "org.chromium.externalclearkey";
-const char kWidevine[] = "com.widevine.alpha";
 
 const char kAudioWebMMimeType[] = "audio/webm";
 const char kVideoWebMMimeType[] = "video/webm";
@@ -77,16 +74,9 @@ const char kUnexpectedResult[] = "unexpected result";
 #define EXPECT_ECK_PROPRIETARY EXPECT_UNKNOWN_KEYSYSTEM
 #define EXPECT_ECK_NO_MATCH EXPECT_UNKNOWN_KEYSYSTEM
 
-// Expectations for Widevine.
-#if defined(WIDEVINE_CDM_AVAILABLE)
-#define EXPECT_WV_SUCCESS EXPECT_SUCCESS
-#define EXPECT_WV_PROPRIETARY EXPECT_PROPRIETARY
-#define EXPECT_WV_NO_MATCH EXPECT_NO_MATCH
-#else  // defined(WIDEVINE_CDM_AVAILABLE)
 #define EXPECT_WV_SUCCESS EXPECT_UNKNOWN_KEYSYSTEM
 #define EXPECT_WV_PROPRIETARY EXPECT_UNKNOWN_KEYSYSTEM
 #define EXPECT_WV_NO_MATCH EXPECT_UNKNOWN_KEYSYSTEM
-#endif  // defined(WIDEVINE_CDM_AVAILABLE)
 
 };  // namespace
 
@@ -258,10 +248,6 @@ class EncryptedMediaSupportedTypesClearKeyTest
 
 // For ExternalClearKey tests, ensure that the ClearKey adapter is loaded.
 class EncryptedMediaSupportedTypesExternalClearKeyTest
-    : public EncryptedMediaSupportedTypesTest {
-};
-
-class EncryptedMediaSupportedTypesWidevineTest
     : public EncryptedMediaSupportedTypesTest {
 };
 
@@ -514,97 +500,6 @@ IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesExternalClearKeyTest,
       kAudioMP4MimeType, audio_webm_codecs(), kExternalClearKey));
   EXPECT_ECK_NO_MATCH(AreCodecsSupportedByKeySystem(
       kAudioMP4MimeType, video_webm_codecs(), kExternalClearKey));
-}
-
-//
-// Widevine
-//
-
-IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesWidevineTest, Basic) {
-  EXPECT_WV_SUCCESS(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, no_codecs(), kWidevine));
-  EXPECT_WV_SUCCESS(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, no_codecs(), kWidevine));
-  EXPECT_WV_PROPRIETARY(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, no_codecs(), kWidevine));
-  EXPECT_WV_PROPRIETARY(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, no_codecs(), kWidevine));
-}
-
-IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesWidevineTest, Video_WebM) {
-  // Valid video types.
-  EXPECT_WV_SUCCESS(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, video_webm_codecs(), kWidevine));
-
-  // Non-video WebM codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, audio_webm_codecs(), kWidevine));
-
-  // Invalid or non-Webm codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, invalid_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, audio_mp4_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoWebMMimeType, video_mp4_codecs(), kWidevine));
-}
-
-IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesWidevineTest, Audio_WebM) {
-  // Valid audio types.
-  EXPECT_WV_SUCCESS(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, audio_webm_codecs(), kWidevine));
-
-  // Non-audio WebM codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, video_webm_codecs(), kWidevine));
-
-  // Invalid or non-Webm codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, invalid_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, audio_mp4_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioWebMMimeType, video_mp4_codecs(), kWidevine));
-}
-
-IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesWidevineTest, Video_MP4) {
-  // Valid video types.
-  EXPECT_WV_PROPRIETARY(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, video_mp4_codecs(), kWidevine));
-
-  // High 10-bit Profile is not supported when using Widevine.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, video_mp4_hi10p_codecs(), kWidevine));
-
-  // Non-video MP4 codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, audio_mp4_codecs(), kWidevine));
-
-  // Invalid or non-MP4 codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, invalid_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, audio_webm_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kVideoMP4MimeType, video_webm_codecs(), kWidevine));
-}
-
-IN_PROC_BROWSER_TEST_F(EncryptedMediaSupportedTypesWidevineTest, Audio_MP4) {
-  // Valid audio types.
-  EXPECT_WV_PROPRIETARY(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, audio_mp4_codecs(), kWidevine));
-
-  // Non-audio MP4 codecs.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, video_mp4_codecs(), kWidevine));
-
-  // Invalid or Non-MP4 codec.
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, invalid_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, audio_webm_codecs(), kWidevine));
-  EXPECT_WV_NO_MATCH(AreCodecsSupportedByKeySystem(
-      kAudioMP4MimeType, video_webm_codecs(), kWidevine));
 }
 
 }  // namespace chrome

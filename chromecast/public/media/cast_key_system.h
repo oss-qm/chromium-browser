@@ -13,7 +13,6 @@ enum CastKeySystem {
   KEY_SYSTEM_NONE = 0,
   KEY_SYSTEM_CLEAR_KEY,
   KEY_SYSTEM_PLAYREADY,
-  KEY_SYSTEM_WIDEVINE
 };
 
 }  // namespace media

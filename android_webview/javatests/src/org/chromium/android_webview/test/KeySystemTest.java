@@ -125,13 +125,6 @@ public class KeySystemTest extends AwTestBase {
 
     @Feature({"AndroidWebView"})
     @SmallTest
-    public void testSupportWidevineKeySystem() throws Throwable {
-        assertEquals(
-                getPlatformKeySystemExpectations(), isKeySystemSupported("com.widevine.alpha"));
-    }
-
-    @Feature({"AndroidWebView"})
-    @SmallTest
     public void testNotSupportFooKeySystem() throws Throwable {
         assertEquals("\"NotSupportedError\"", isKeySystemSupported("com.foo.keysystem"));
     }

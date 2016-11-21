@@ -1142,7 +1142,6 @@
             '../courgette/courgette.gyp:courgette',
             '../courgette/courgette.gyp:courgette64',
             '../remoting/remoting.gyp:remoting_webapp',
-            '../third_party/widevine/cdm/widevine_cdm.gyp:widevinecdmadapter',
           ],
           'conditions': [
             ['component != "shared_library" and wix_exists == "True"', {

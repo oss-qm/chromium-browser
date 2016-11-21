@@ -603,7 +603,6 @@ test("media_unittests") {
     "//testing/gtest",
     "//third_party/libwebm",
     "//third_party/libyuv",
-    "//third_party/widevine/cdm:version_h",
     "//ui/gfx:test_support",
     "//url",
   ]
@@ -720,7 +719,6 @@ test("media_perftests") {
     "//testing/gmock",
     "//testing/gtest",
     "//testing/perf",
-    "//third_party/widevine/cdm:version_h",
     "//ui/gfx:test_support",
   ]
   if (media_use_ffmpeg) {

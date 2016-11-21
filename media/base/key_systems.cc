@@ -20,7 +20,6 @@
 #include "media/base/key_system_properties.h"
 #include "media/base/media.h"
 #include "media/base/media_client.h"
-#include "third_party/widevine/cdm/widevine_cdm_common.h"
 
 namespace media {
 
@@ -151,8 +150,6 @@ class ClearKeyProperties : public KeySystemProperties {
 // KeySystemsImpl. Only then should you change this function.
 static bool IsPotentiallySupportedKeySystem(const std::string& key_system) {
   // Known and supported key systems.
-  if (key_system == kWidevineKeySystem)
-    return true;
   if (key_system == kClearKeyKeySystem)
     return true;
 

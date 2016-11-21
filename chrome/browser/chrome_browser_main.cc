@@ -56,7 +56,6 @@
 #include "chrome/browser/component_updater/subresource_filter_component_installer.h"
 #include "chrome/browser/component_updater/supervised_user_whitelist_installer.h"
 #include "chrome/browser/component_updater/swiftshader_component_installer.h"
-#include "chrome/browser/component_updater/widevine_cdm_component_installer.h"
 #include "chrome/browser/defaults.h"
 #include "chrome/browser/first_run/first_run.h"
 #include "chrome/browser/gpu/gl_string_manager.h"
@@ -462,7 +461,6 @@ void RegisterComponentsForUpdate() {
   RegisterRecoveryComponent(cus, g_browser_process->local_state());
   RegisterPepperFlashComponent(cus);
   RegisterSwiftShaderComponent(cus);
-  RegisterWidevineCdmComponent(cus);
 #endif  // !defined(OS_CHROMEOS) && !defined(OS_ANDROID)
 
 #if !defined(DISABLE_NACL) && !defined(OS_ANDROID)

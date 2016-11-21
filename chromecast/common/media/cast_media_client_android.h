@@ -9,7 +9,6 @@
 
 #include "base/macros.h"
 #include "chromecast/media/cdm/playready_drm_delegate_android.h"
-#include "components/cdm/common/widevine_drm_delegate_android.h"
 #include "media/base/android/media_client_android.h"
 
 namespace chromecast {
@@ -29,8 +28,6 @@ class CastMediaClientAndroid : public ::media::MediaClientAndroid {
 #if defined(PLAYREADY_CDM_AVAILABLE)
   PlayreadyDrmDelegateAndroid playready_delegate_;
 #endif
-
-  cdm::WidevineDrmDelegateAndroid widevine_delegate_;
 
   DISALLOW_COPY_AND_ASSIGN(CastMediaClientAndroid);
 };

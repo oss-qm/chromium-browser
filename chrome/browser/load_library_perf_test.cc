@@ -16,8 +16,6 @@
 #include "testing/gtest/include/gtest/gtest.h"
 #include "testing/perf/perf_test.h"
 
-#include "widevine_cdm_version.h"  //  In SHARED_INTERMEDIATE_DIR.
-
 namespace {
 
 // Measures the size (bytes) and time to load (sec) of a native library.

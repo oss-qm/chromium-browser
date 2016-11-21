@@ -78,7 +78,6 @@
     # into PRODUCT_DIR.
     '../third_party/adobe/flash/flash_player.gyp:flapper_binaries',
     '../third_party/crashpad/crashpad/handler/handler.gyp:crashpad_handler',
-    '../third_party/widevine/cdm/widevine_cdm.gyp:widevinecdmadapter',
     'chrome_resources.gyp:packed_extra_resources',
     'chrome_resources.gyp:packed_resources',
   ],
@@ -130,31 +129,6 @@
           'files': [
             '<(PRODUCT_DIR)/PepperFlash/PepperFlashPlayer.plugin',
             '<(PRODUCT_DIR)/PepperFlash/manifest.json',
-          ],
-        }],
-      ],
-    },
-    {
-      # The adapter is not a complete library on its own. It needs the Widevine
-      # CDM to work.
-      'destination': '<(PRODUCT_DIR)/$(CONTENTS_FOLDER_PATH)/Libraries/<(widevine_cdm_path)',
-      'files': [],
-      'conditions': [
-        ['branding == "Chrome"', {
-          'files': [
-            '<(PRODUCT_DIR)/<(widevine_cdm_path)/libwidevinecdm.dylib',
-            '<(PRODUCT_DIR)/<(widevine_cdm_path)/widevinecdmadapter.plugin',
-          ],
-        }],
-      ],
-    },
-    {
-      'destination': '<(PRODUCT_DIR)/$(CONTENTS_FOLDER_PATH)/Libraries/WidevineCdm',
-      'files': [],
-      'conditions': [
-        ['branding == "Chrome"', {
-          'files': [
-            '<(PRODUCT_DIR)/WidevineCdm/manifest.json',
           ],
         }],
       ],

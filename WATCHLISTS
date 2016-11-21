@@ -393,7 +393,6 @@
                   'content/renderer/media/crypto/|' \
                   'media/base/android/*drm*|' \
                   'media/cdm/|' \
-                  'third_party/widevine/cdm/'
     },
     'events': {
       'filepath': 'ui/events/',

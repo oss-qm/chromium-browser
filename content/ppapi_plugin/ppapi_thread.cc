@@ -60,8 +60,6 @@
 #endif
 
 #if defined(OS_WIN)
-const char kWidevineCdmAdapterFileName[] = "widevinecdmadapter.dll";
-
 extern sandbox::TargetServices* g_target_services;
 
 // Used by EnumSystemLocales for warming up.
@@ -353,9 +351,8 @@ void PpapiThread::OnLoadPlugin(const base::FilePath& path,
   // can be loaded. TODO(cpu): consider changing to the loading style of
   // regular plugins.
   if (g_target_services) {
-    // Let Flash and Widevine CDM adapter load DXVA before lockdown on Vista+.
-    if (permissions.HasPermission(ppapi::PERMISSION_FLASH) ||
-        path.BaseName().MaybeAsASCII() == kWidevineCdmAdapterFileName) {
+    // Let Flash adapter load DXVA before lockdown on Vista+.
+    if (permissions.HasPermission(ppapi::PERMISSION_FLASH)) {
       if (base::win::OSInfo::GetInstance()->version() >=
           base::win::VERSION_VISTA) {
         LoadLibraryA("dxva2.dll");

@@ -229,7 +229,6 @@ split_static_library("browser") {
     "//third_party/icu",
     "//third_party/libjingle",
     "//third_party/libxml",
-    "//third_party/widevine/cdm:version_h",
     "//third_party/zlib",
     "//third_party/zlib:compression_utils",
     "//third_party/zlib:minizip",

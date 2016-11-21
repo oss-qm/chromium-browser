@@ -53,7 +53,6 @@
         'libcast_media_1.0',
         '../../base/base.gyp:base',
         '../../crypto/crypto.gyp:crypto',
-        '../../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
       ],
       'sources': [
         'base/decrypt_context_impl.cc',

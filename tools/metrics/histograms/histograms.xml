@@ -21912,18 +21912,6 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
   <summary>KeyError event count using the Clear Key key system.</summary>
 </histogram>
 
-<histogram name="Media.EME.KeySystemSupport.Widevine"
-    enum="MediaKeySystemSupportStatus">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>
-    Key system support query status and result. Each enum value will be reported
-    at most once per renderer process.
-  </summary>
-</histogram>
-
 <histogram name="Media.EME.NeedKey">
   <owner>xhwang@chromium.org</owner>
   <summary>EME NeedKey event count.</summary>
@@ -22005,77 +21993,6 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
 <histogram name="Media.EME.Unknown.SystemCode" units="system code">
   <owner>xhwang@chromium.org</owner>
   <summary>System code count using an unknown key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine" enum="CdmPromiseResult">
-  <owner>sandersd@chromium.org</owner>
-  <summary>
-    Result of promises for Widevine key systems that were handled by Chromium
-    code.
-  </summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.addKey" enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>addKey result using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.cancelKeyRequest" enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>cancelKeyRequest result using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.CreateCdmTime" units="ms">
-  <owner>xhwang@chromium.org</owner>
-  <summary>
-    The time it takes to create the CDM instance for the Widevine key system.
-  </summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.generateKeyRequest"
-    enum="MediaKeyException">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>generateKeyRequest result using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.KeyAdded">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>KeyAdded event count using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.KeyError" enum="MediaKeyError">
-  <obsolete>
-    Deprecated 02/2016 with removal of prefixed EME.
-  </obsolete>
-  <owner>xhwang@chromium.org</owner>
-  <summary>KeyError event count using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.SystemCode" units="system code">
-  <owner>xhwang@chromium.org</owner>
-  <summary>System code count using the Widevine key system.</summary>
-</histogram>
-
-<histogram name="Media.EME.Widevine.VideoCapability.HasEmptyRobustness"
-    enum="BooleanEmpty">
-  <owner>xhwang@chromium.org</owner>
-  <summary>
-    Whether the robustness level of any video capability in the supported
-    configuration passed into requestMediaKeySystemAccess() is empty. This is
-    specific to the Widevine key system.
-  </summary>
 </histogram>
 
 <histogram name="Media.FallbackHardwareAudioBitsPerChannel">
@@ -41770,17 +41687,6 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
     This time is based on the User Timing spec and reports the time between two
     arbitrary points defined by the page being loaded and directly matches the
     measurement exposed by performance.measure().
-  </summary>
-</histogram>
-
-<histogram name="Plugin.AvailabilityStatus.WidevineCdm"
-    enum="PluginAvailabilityStatus">
-  <owner>xhwang@chromium.org</owner>
-  <summary>
-    The availability status of Widevine CDM. In normal cases, this is reported
-    per render process if EME API is used. This is not reported if EME API is
-    not used. This could be reported multiple times per render process until
-    PLUGIN_AVAILABLE is reported (which should be a rare case).
   </summary>
 </histogram>
 
@@ -95773,7 +95679,6 @@ To add a new entry, add it with any value and run test to compute valid value.
   <suffix name="UpdateSession" label="UpdateSession promises only."/>
   <affected-histogram name="Media.EME.ClearKey"/>
   <affected-histogram name="Media.EME.Unknown"/>
-  <affected-histogram name="Media.EME.Widevine"/>
 </histogram_suffixes>
 
 <histogram_suffixes name="EngagementScoreBuckets">
@@ -98904,12 +98809,8 @@ To add a new entry, add it with any value and run test to compute valid value.
 
 <histogram_suffixes name="PpapiPluginName">
   <suffix name="libpepflashplayer.so" label="Flash player on Linux or Cros"/>
-  <suffix name="libwidevinecdmadapter.so"
-      label="Widevine CDM on Linux or Cros"/>
   <suffix name="pepflashplayer.dll" label="Flash player on Windows"/>
   <suffix name="PepperFlashPlayer.plugin" label="Flash player on Mac"/>
-  <suffix name="widevinecdmadapter.dll" label="Widevine CDM on Windows"/>
-  <suffix name="widevinecdmadapter.plugin" label="Widevine CDM on Mac"/>
   <affected-histogram name="Plugin.PpapiBrokerLoadErrorCode"/>
   <affected-histogram name="Plugin.PpapiBrokerLoadResult"/>
   <affected-histogram name="Plugin.PpapiBrokerLoadTime"/>
@@ -99585,7 +99486,6 @@ To add a new entry, add it with any value and run test to compute valid value.
   <suffix name="ClearKey" label="Requests for the Clear Key key system."/>
   <suffix name="Unknown"
       label="Requests for an unknown or unsupported key system."/>
-  <suffix name="Widevine" label="Requests for the Widevine key system."/>
   <affected-histogram name="Media.EME.RequestMediaKeySystemAccess"/>
 </histogram_suffixes>
 

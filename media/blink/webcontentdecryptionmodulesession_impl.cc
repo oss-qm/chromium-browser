@@ -220,7 +220,6 @@ static bool SanitizeResponse(const std::string& key_system,
     return true;
   }
 
-  // TODO(jrummell): Verify responses for Widevine.
   sanitized_response->assign(response, response + response_length);
   return true;
 }

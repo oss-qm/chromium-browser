@@ -54,7 +54,6 @@ const char kTestOrigin3[] = "http://host3:1/";
 const char kTestOriginDevTools[] = "chrome-devtools://abcdefghijklmnopqrstuvw/";
 
 #if defined(ENABLE_PLUGINS)
-const char kWidevineCdmPluginId[] = "application_x-ppapi-widevine-cdm";
 const char kClearKeyCdmPluginId[] = "application_x-ppapi-clearkey-cdm";
 #endif  // defined(ENABLE_PLUGINS)
 
@@ -254,7 +253,6 @@ class RemovePluginPrivateDataTester {
 
   // Add some files to the PluginPrivateFileSystem. They are created as follows:
   //   kOrigin1 - ClearKey - 1 file - timestamp 10 days ago
-  //   kOrigin2 - Widevine - 2 files - timestamps now and 60 days ago
   void AddPluginPrivateTestData() {
     base::Time now = base::Time::Now();
     base::Time ten_days_ago = now - base::TimeDelta::FromDays(10);
@@ -266,17 +264,6 @@ class RemovePluginPrivateDataTester {
         CreateFileSystem(kClearKeyCdmPluginId, kOrigin1);
     clearkey_file_ = CreateFile(kOrigin1, clearkey_fsid, "foo");
     SetFileTimestamp(clearkey_file_, ten_days_ago);
-
-    // Create a second PluginPrivateFileSystem for Widevine and add two files
-    // with different times.
-    std::string widevine_fsid =
-        CreateFileSystem(kWidevineCdmPluginId, kOrigin2);
-    storage::FileSystemURL widevine_file1 =
-        CreateFile(kOrigin2, widevine_fsid, "bar1");
-    storage::FileSystemURL widevine_file2 =
-        CreateFile(kOrigin2, widevine_fsid, "bar2");
-    SetFileTimestamp(widevine_file1, now);
-    SetFileTimestamp(widevine_file2, sixty_days_ago);
   }
 
   // Returns true, if the given origin exists in a PluginPrivateFileSystem.

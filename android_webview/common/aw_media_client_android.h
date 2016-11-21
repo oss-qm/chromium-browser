@@ -6,7 +6,6 @@
 #define ANDROID_WEBVIEW_COMMON_AW_MEDIA_CLIENT_ANDROID_H_
 
 #include "base/macros.h"
-#include "components/cdm/common/widevine_drm_delegate_android.h"
 #include "media/base/android/media_client_android.h"
 
 namespace android_webview {
@@ -26,7 +25,6 @@ class AwMediaClientAndroid : public media::MediaClientAndroid {
       const media::UUID& scheme_uuid) override;
 
   std::vector<std::string> key_system_uuid_mappings_;
-  cdm::WidevineDrmDelegateAndroid widevine_delegate_;
 
   DISALLOW_COPY_AND_ASSIGN(AwMediaClientAndroid);
 };

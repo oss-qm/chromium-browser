@@ -30,7 +30,6 @@
 #include "media/base/android/media_drm_bridge_delegate.h"
 #include "media/base/android/provision_fetcher.h"
 #include "media/base/cdm_key_information.h"
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 
 using base::android::AttachCurrentThread;
 using base::android::ConvertUTF8ToJavaString;
@@ -67,10 +66,6 @@ std::string AsString(JNIEnv* env, jbyteArray j_byte_array) {
   JavaByteArrayToByteVector(env, j_byte_array, &byte_vector);
   return std::string(byte_vector.begin(), byte_vector.end());
 }
-
-const uint8_t kWidevineUuid[16] = {
-    0xED, 0xEF, 0x8B, 0xA9, 0x79, 0xD6, 0x4A, 0xCE,  //
-    0xA3, 0xC8, 0x27, 0xDC, 0xD5, 0x1D, 0x21, 0xED};
 
 // Convert |init_data_type| to a string supported by MediaDRM.
 // "audio"/"video" does not matter, so use "video".
@@ -139,9 +134,6 @@ class KeySystemManager {
 };
 
 KeySystemManager::KeySystemManager() {
-  // Widevine is always supported in Android.
-  key_system_uuid_map_[kWidevineKeySystem] =
-      UUID(kWidevineUuid, kWidevineUuid + arraysize(kWidevineUuid));
   MediaClientAndroid* client = GetMediaClientAndroid();
   if (client)
     client->AddKeySystemUUIDMappings(&key_system_uuid_map_);
@@ -158,9 +150,6 @@ std::vector<std::string> KeySystemManager::GetPlatformKeySystemNames() {
   std::vector<std::string> key_systems;
   for (KeySystemUuidMap::iterator it = key_system_uuid_map_.begin();
        it != key_system_uuid_map_.end(); ++it) {
-    // Rule out the key system handled by Chrome explicitly.
-    if (it->first != kWidevineKeySystem)
-      key_systems.push_back(it->first);
   }
   return key_systems;
 }
@@ -203,21 +192,6 @@ MediaDrmBridge::SecurityLevel GetSecurityLevelFromString(
     return MediaDrmBridge::SECURITY_LEVEL_3;
   DCHECK(security_level_str.empty());
   return MediaDrmBridge::SECURITY_LEVEL_DEFAULT;
-}
-
-// Do not change the return values as they are part of Android MediaDrm API for
-// Widevine.
-std::string GetSecurityLevelString(
-    MediaDrmBridge::SecurityLevel security_level) {
-  switch (security_level) {
-    case MediaDrmBridge::SECURITY_LEVEL_DEFAULT:
-      return "";
-    case MediaDrmBridge::SECURITY_LEVEL_1:
-      return "L1";
-    case MediaDrmBridge::SECURITY_LEVEL_3:
-      return "L3";
-  }
-  return "";
 }
 
 bool AreMediaDrmApisAvailable() {
@@ -502,11 +476,7 @@ void MediaDrmBridge::UnregisterPlayer(int registration_id) {
 }
 
 bool MediaDrmBridge::IsProtectedSurfaceRequired() {
-  // For Widevine, this depends on the security level.
-  if (std::equal(scheme_uuid_.begin(), scheme_uuid_.end(), kWidevineUuid))
-    return IsSecureDecoderRequired(GetSecurityLevel());
-
-  // For other key systems, assume true.
+  // DELETE_ME
   return true;
 }
 
@@ -790,7 +760,7 @@ MediaDrmBridge::MediaDrmBridge(
   ScopedJavaLocalRef<jbyteArray> j_scheme_uuid =
       base::android::ToJavaByteArray(env, &scheme_uuid[0], scheme_uuid.size());
 
-  std::string security_level_str = GetSecurityLevelString(security_level);
+  std::string security_level_str = "";
   ScopedJavaLocalRef<jstring> j_security_level =
       ConvertUTF8ToJavaString(env, security_level_str);
 
@@ -820,13 +790,6 @@ MediaDrmBridge::~MediaDrmBridge() {
 
   // Rejects all pending promises.
   cdm_promise_adapter_.Clear();
-}
-
-// TODO(ddorwin): This is specific to Widevine. http://crbug.com/459400
-// static
-bool MediaDrmBridge::IsSecureDecoderRequired(SecurityLevel security_level) {
-  DCHECK(IsAvailable());
-  return SECURITY_LEVEL_1 == security_level;
 }
 
 MediaDrmBridge::SecurityLevel MediaDrmBridge::GetSecurityLevel() {

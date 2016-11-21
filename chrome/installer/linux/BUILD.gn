@@ -180,12 +180,6 @@ group("installer_deps") {
       "//ppapi/native_client:irt",
     ]
   }
-  if (current_cpu == "x86" || current_cpu == "x64") {
-    public_deps += [
-      "//third_party/widevine/cdm:widevinecdm",
-      "//third_party/widevine/cdm:widevinecdmadapter",
-    ]
-  }
   if (!is_chromeos) {
     public_deps += [ ":rpm_packaging_files" ]
   }
@@ -224,14 +218,10 @@ template("linux_package") {
   if (current_cpu == "x86") {
     packaging_files_binaries += [
       "$root_out_dir/nacl_irt_x86_32.nexe",
-      "$root_out_dir/$widevine_cdm_path/libwidevinecdmadapter.so",
-      "$root_out_dir/$widevine_cdm_path/libwidevinecdm.so",
     ]
   } else if (current_cpu == "x64") {
     packaging_files_binaries += [
       "$root_out_dir/nacl_irt_x86_64.nexe",
-      "$root_out_dir/$widevine_cdm_path/libwidevinecdmadapter.so",
-      "$root_out_dir/$widevine_cdm_path/libwidevinecdm.so",
     ]
   } else if (current_cpu == "arm") {
     packaging_files_binaries += [ "$root_out_dir/nacl_irt_arm.nexe" ]

@@ -160,7 +160,6 @@ TEST(VerifyCastDeviceCertTest, ChromecastGen2) {
 //
 //   0: -6394818897508095075
 //   1: Asus fugu Cast ICA
-//   2: Widevine Cast Subroot
 //
 // Chains to trust anchor:
 //   Cast Root CA     (not included)

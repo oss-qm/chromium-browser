@@ -1020,7 +1020,6 @@ if (!is_android) {
       "//third_party/leveldatabase",
       "//third_party/libjingle",
       "//third_party/webrtc/modules/desktop_capture",
-      "//third_party/widevine/cdm:version_h",
       "//ui/accessibility:test_support",
       "//ui/base:test_support",
       "//ui/compositor:test_support",
@@ -1042,7 +1041,6 @@ if (!is_android) {
       "//remoting/webapp:browser_test_resources",
       "//remoting/webapp:unit_tests",
       "//third_party/mesa:osmesa",
-      "//third_party/widevine/cdm:widevine_test_license_server",
     ]
 
     if (!is_mac) {
@@ -1660,7 +1658,6 @@ if (!is_android) {
       "//base/test:test_support_perf",
       "//testing/gtest",
       "//testing/perf",
-      "//third_party/widevine/cdm:version_h",
     ]
 
     # This target should not require the Chrome executable to run.

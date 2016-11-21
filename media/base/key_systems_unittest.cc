@@ -245,7 +245,6 @@ class PotentiallySupportedNamesTestMediaClient : public TestMediaClient {
 void PotentiallySupportedNamesTestMediaClient::AddSupportedKeySystems(
     std::vector<std::unique_ptr<KeySystemProperties>>* key_systems) {
   // org.w3.clearkey is automatically registered.
-  key_systems->emplace_back(new AesKeySystemProperties("com.widevine.alpha"));
   key_systems->emplace_back(
       new AesKeySystemProperties("org.chromium.externalclearkey"));
   key_systems->emplace_back(
@@ -716,14 +715,6 @@ TEST_F(KeySystemsPotentiallySupportedNamesTest, PotentiallySupportedNames) {
   EXPECT_FALSE(IsSupportedKeySystem("org.w3.clearke"));
   EXPECT_TRUE(IsSupportedKeySystem("org.w3.clearkey"));
   EXPECT_FALSE(IsSupportedKeySystem("org.w3.clearkeys"));
-
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine"));
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine."));
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine.alph"));
-  EXPECT_TRUE(IsSupportedKeySystem("com.widevine.alpha"));
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine.beta"));
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine.alphabeta"));
-  EXPECT_FALSE(IsSupportedKeySystem("com.widevine.alpha.beta"));
 
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium"));
   EXPECT_FALSE(IsSupportedKeySystem("org.chromium."));

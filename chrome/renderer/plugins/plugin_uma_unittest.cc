@@ -102,18 +102,6 @@ TEST_F(PluginUMATest, ShockwaveFlash) {
                    GURL("some url"));
 }
 
-TEST_F(PluginUMATest, WidevineCdm) {
-  ExpectPluginType(PluginUMAReporter::UNSUPPORTED_MIMETYPE,
-                   "application/x-ppapi-widevine-cdm",
-                   GURL("some url"));
-  ExpectPluginType(PluginUMAReporter::UNSUPPORTED_MIMETYPE,
-                   "application/x-ppapi-widevine-cdm-sufix",
-                   GURL("some url"));
-  ExpectPluginType(PluginUMAReporter::UNSUPPORTED_MIMETYPE,
-                   "prefix-application/x-ppapi-widevine-cdm",
-                   GURL("some url"));
-}
-
 TEST_F(PluginUMATest, BySrcExtension) {
   ExpectPluginType(
       PluginUMAReporter::QUICKTIME, std::string(), GURL("file://file.mov"));

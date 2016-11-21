@@ -155,7 +155,6 @@ static_library("common") {
       "//media",
       "//mojo/public/cpp/bindings",
       "//third_party/re2",
-      "//third_party/widevine/cdm:version_h",
     ]
   }
 
@@ -341,7 +340,6 @@ static_library("constants") {
     "//components/bookmarks/common",
     "//components/nacl/common:switches",
     "//media:cdm_paths",  # Needed by chrome_paths.cc.
-    "//third_party/widevine/cdm:version_h",
   ]
 
   if (is_android) {

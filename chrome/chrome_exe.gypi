@@ -357,10 +357,6 @@
             # file decide what to do on a per-OS basis; on Mac, internal plugins
             # go inside the framework, so this dependency is in chrome_dll.gypi.
             '../third_party/adobe/flash/flash_player.gyp:flapper_binaries',
-            # Copy CDM files to PRODUCT_DIR if applicable. Let the .gyp
-            # file decide what to do on a per-OS basis; on Mac, internal plugins
-            # go inside the framework, so this dependency is in chrome_dll.gypi.
-            '../third_party/widevine/cdm/widevine_cdm.gyp:widevinecdmadapter',
           ],
         }],
         ['chrome_multiple_dll', {

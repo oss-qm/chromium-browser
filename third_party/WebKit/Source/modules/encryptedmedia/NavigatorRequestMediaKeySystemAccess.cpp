@@ -110,13 +110,6 @@ public:
     }
 
 private:
-    // For widevine key system, generate warning and report to UMA if
-    // |m_supportedConfigurations| contains any video capability with empty
-    // robustness string.
-    // TODO(xhwang): Remove after we handle empty robustness correctly.
-    // See http://crbug.com/482277
-    void checkVideoCapabilityRobustness() const;
-
     // Generate deprecation warning and log UseCounter if configuration
     // contains only container-only contentType strings.
     // TODO(jrummell): Remove once this is no longer allowed.
@@ -160,8 +153,6 @@ MediaKeySystemAccessInitializer::MediaKeySystemAccessInitializer(ScriptState* sc
         webConfig.label = config.label();
         m_supportedConfigurations[i] = webConfig;
     }
-
-    checkVideoCapabilityRobustness();
 }
 
 void MediaKeySystemAccessInitializer::requestSucceeded(WebContentDecryptionModuleAccess* access)
@@ -176,44 +167,6 @@ void MediaKeySystemAccessInitializer::requestNotSupported(const WebString& error
 {
     m_resolver->reject(DOMException::create(NotSupportedError, errorMessage));
     m_resolver.clear();
-}
-
-void MediaKeySystemAccessInitializer::checkVideoCapabilityRobustness() const
-{
-    // Only check for widevine key system.
-    if (keySystem() != "com.widevine.alpha")
-        return;
-
-    bool hasVideoCapabilities = false;
-    bool hasEmptyRobustness = false;
-
-    for (const auto& config : m_supportedConfigurations) {
-        if (!config.hasVideoCapabilities)
-            continue;
-
-        hasVideoCapabilities = true;
-
-        for (const auto& capability : config.videoCapabilities) {
-            if (capability.robustness.isEmpty()) {
-                hasEmptyRobustness = true;
-                break;
-            }
-        }
-
-        if (hasEmptyRobustness)
-            break;
-    }
-
-    if (hasVideoCapabilities) {
-        DEFINE_THREAD_SAFE_STATIC_LOCAL(EnumerationHistogram, emptyRobustnessHistogram, new EnumerationHistogram("Media.EME.Widevine.VideoCapability.HasEmptyRobustness", 2));
-        emptyRobustnessHistogram.count(hasEmptyRobustness);
-    }
-
-    if (hasEmptyRobustness) {
-        m_resolver->getExecutionContext()->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel,
-            "It is recommended that a robustness level be specified. Not specifying the robustness level could "
-            "result in unexpected behavior in the future, potentially including failure to play."));
-    }
 }
 
 void MediaKeySystemAccessInitializer::checkEmptyCodecs(const WebMediaKeySystemConfiguration& config)

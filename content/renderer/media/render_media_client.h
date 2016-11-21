@@ -14,7 +14,6 @@
 #include "base/time/time.h"
 #include "content/common/content_export.h"
 #include "media/base/media_client.h"
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 
 namespace content {
 

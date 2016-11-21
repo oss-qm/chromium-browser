@@ -33,8 +33,6 @@
 #include "base/win/registry.h"
 #endif
 
-#include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
-
 namespace {
 
 // The Pepper Flash plugins are in a directory with this name.

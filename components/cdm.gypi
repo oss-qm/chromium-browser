@@ -18,14 +18,6 @@
         'cdm/common/cdm_message_generator.h',
         'cdm/common/cdm_messages_android.h',
       ],
-      'conditions': [
-        ['OS == "android"', {
-          'sources': [
-            'cdm/common/widevine_drm_delegate_android.cc',
-            'cdm/common/widevine_drm_delegate_android.h',
-          ],
-        }],
-      ],
     },
     {
       # GN version: //components/cdm/renderer
@@ -35,15 +27,9 @@
         'cdm_common',
         '../base/base.gyp:base',
         '../content/content.gyp:content_renderer',
-        '../third_party/widevine/cdm/widevine_cdm.gyp:widevine_cdm_version_h',
       ],
       'include_dirs': [
-        # Needed by widevine_key_system_properties.cc.
         '<(SHARED_INTERMEDIATE_DIR)',
-      ],
-      'sources': [
-        'cdm/renderer/widevine_key_system_properties.cc',
-        'cdm/renderer/widevine_key_system_properties.h',
       ],
       'conditions': [
         ['OS == "android"', {

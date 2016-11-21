@@ -17,9 +17,7 @@ extern const char kClearKeyCdmLibraryName[];
 // Returns the path of a CDM relative to DIR_COMPONENTS.
 // On platforms where a platform specific path is used, returns
 //   |cdm_base_path|/_platform_specific/<platform>_<arch>
-//   e.g. WidevineCdm/_platform_specific/win_x64
 // Otherwise, returns an empty path.
-// TODO(xhwang): Use this function in Widevine CDM component installer.
 base::FilePath GetPlatformSpecificDirectory(const std::string& cdm_base_path);
 
 }  // namespace media

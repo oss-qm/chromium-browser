@@ -273,8 +273,6 @@ class MEDIA_EXPORT MediaDrmBridge : public MediaKeys, public PlayerTracker {
 
   ~MediaDrmBridge() override;
 
-  static bool IsSecureDecoderRequired(SecurityLevel security_level);
-
   // Get the security level of the media.
   SecurityLevel GetSecurityLevel();
 
