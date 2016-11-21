@@ -38,10 +38,6 @@ source_set("media") {
       "//media/base/android",
     ]
   }
-
-  if (use_playready) {
-    public_configs = [ "//chromecast:playready_config" ]
-  }
 }
 
 # GYP target: chromecast.gyp:cast_shell_common

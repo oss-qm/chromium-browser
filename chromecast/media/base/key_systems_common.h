@@ -12,10 +12,6 @@
 namespace chromecast {
 namespace media {
 
-#if defined(PLAYREADY_CDM_AVAILABLE)
-extern const char kChromecastPlayreadyKeySystem[];
-#endif  // defined(PLAYREADY_CDM_AVAILABLE)
-
 // Translates a key system string into a CastKeySystem, calling into the
 // platform for known key systems if needed.
 CastKeySystem GetKeySystemByName(const std::string& key_system_name);

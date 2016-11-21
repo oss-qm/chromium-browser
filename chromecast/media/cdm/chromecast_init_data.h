@@ -28,13 +28,6 @@ struct ChromecastInitData {
   std::vector<uint8_t> data;
 };
 
-// Searches for a ChromecastInitData blob inside a CENC |init_data| message of
-// type |type|. If such a blob is found, returns true and fills
-// |chromecast_init_data_out|. If not found, returns false.
-bool FindChromecastInitData(const std::vector<uint8_t>& init_data,
-                            InitDataMessageType type,
-                            ChromecastInitData* chromecast_init_data_out);
-
 }  // namespace media
 }  // namespace chromecast
 

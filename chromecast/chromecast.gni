@@ -19,11 +19,6 @@ declare_args() {
   cast_build_incremental = "999999"
 }
 
-declare_args() {
-  # Use Playready CDMs for internal non-desktop builds.
-  use_playready = !is_cast_desktop_build && chromecast_branding != "public"
-}
-
 # This is the release version, which takes the form <major>.<minor>. Internal
 # builds will read the value from an internal file containing this value as a
 # string. Public builds, lacking this file, will set a dummy value.

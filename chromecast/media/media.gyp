@@ -84,8 +84,6 @@
       'sources': [
         'cdm/browser_cdm_cast.cc',
         'cdm/browser_cdm_cast.h',
-        'cdm/chromecast_init_data.cc',
-        'cdm/chromecast_init_data.h',
       ],
     },
     {
@@ -284,7 +282,6 @@
       'sources': [
         'audio/cast_audio_output_stream_unittest.cc',
         'base/media_resource_tracker_unittest.cc',
-        'cdm/chromecast_init_data_unittest.cc',
         'cma/backend/audio_video_pipeline_device_unittest.cc',
         'cma/base/balanced_media_task_runner_unittest.cc',
         'cma/base/buffering_controller_unittest.cc',

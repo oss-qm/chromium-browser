@@ -17,12 +17,6 @@ if (is_android) {
   import("//build/config/android/rules.gni")
 }
 
-config("playready_config") {
-  if (use_playready) {
-    defines = [ "PLAYREADY_CDM_AVAILABLE" ]
-  }
-}
-
 # A list of all public test() binaries. This is an organizational target that
 # cannot be depended upon or built directly. Build cast_group_test_list instead.
 cast_test_group("cast_tests") {

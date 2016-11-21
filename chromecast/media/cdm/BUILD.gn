@@ -13,8 +13,6 @@ source_set("cdm") {
     "cast_cdm_context.h",
     "cast_cdm_proxy.cc",
     "cast_cdm_proxy.h",
-    "chromecast_init_data.cc",
-    "chromecast_init_data.h",
   ]
 
   configs += [ "//media/mojo/services:mojo_media_config" ]
@@ -24,13 +22,4 @@ source_set("cdm") {
     "//chromecast/media/base",
     "//media",
   ]
-
-  if (is_android && use_playready) {
-    sources += [
-      "playready_drm_delegate_android.cc",
-      "playready_drm_delegate_android.h",
-    ]
-
-    deps += [ "//media/base/android" ]
-  }
 }

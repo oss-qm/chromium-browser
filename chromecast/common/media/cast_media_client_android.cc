@@ -14,18 +14,11 @@ CastMediaClientAndroid::CastMediaClientAndroid() {}
 CastMediaClientAndroid::~CastMediaClientAndroid() {}
 
 void CastMediaClientAndroid::AddKeySystemUUIDMappings(KeySystemUuidMap* map) {
-#if defined(PLAYREADY_CDM_AVAILABLE)
-  (*map)[kChromecastPlayreadyKeySystem] = playready_delegate_.GetUUID();
-#endif
 }
 
 ::media::MediaDrmBridgeDelegate*
 CastMediaClientAndroid::GetMediaDrmBridgeDelegate(
     const ::media::UUID& scheme_uuid) {
-#if defined(PLAYREADY_CDM_AVAILABLE)
-  if (scheme_uuid == playready_delegate_.GetUUID())
-    return &playready_delegate_;
-#endif
 
   return nullptr;
 }
