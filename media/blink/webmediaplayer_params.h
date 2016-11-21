@@ -55,7 +55,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerParams {
       const scoped_refptr<base::SingleThreadTaskRunner>& compositor_task_runner,
       const Context3DCB& context_3d,
       const AdjustAllocatedMemoryCB& adjust_allocated_memory_cb,
-      blink::WebContentDecryptionModule* initial_cdm,
       SurfaceManager* surface_manager,
       blink::WebMediaSession* media_session);
 
@@ -87,10 +86,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerParams {
 
   Context3DCB context_3d_cb() const { return context_3d_cb_; }
 
-  blink::WebContentDecryptionModule* initial_cdm() const {
-    return initial_cdm_;
-  }
-
   AdjustAllocatedMemoryCB adjust_allocated_memory_cb() const {
     return adjust_allocated_memory_cb_;
   }
@@ -109,7 +104,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerParams {
   Context3DCB context_3d_cb_;
   AdjustAllocatedMemoryCB adjust_allocated_memory_cb_;
 
-  blink::WebContentDecryptionModule* initial_cdm_;
   SurfaceManager* surface_manager_;
 
   blink::WebMediaSession* media_session_;

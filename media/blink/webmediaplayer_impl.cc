@@ -221,12 +221,6 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
   media_log_->AddEvent(
       media_log_->CreateEvent(MediaLogEvent::WEBMEDIAPLAYER_CREATED));
 
-  if (params.initial_cdm()) {
-    SetCdm(base::Bind(&IgnoreCdmAttached),
-           ToWebContentDecryptionModuleImpl(params.initial_cdm())
-               ->GetCdmContext());
-  }
-
   // TODO(xhwang): When we use an external Renderer, many methods won't work,
   // e.g. GetCurrentFrameFromCompositor(). See http://crbug.com/434861
 

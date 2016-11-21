@@ -823,8 +823,7 @@ std::unique_ptr<WebMediaPlayer> FrameLoaderClientImpl::createWebMediaPlayer(
     HTMLMediaElementEncryptedMedia& encryptedMedia = HTMLMediaElementEncryptedMedia::from(htmlMediaElement);
     WebString sinkId(HTMLMediaElementAudioOutputDevice::sinkId(htmlMediaElement));
     return wrapUnique(webFrame->client()->createMediaPlayer(source,
-        client, &encryptedMedia,
-        encryptedMedia.contentDecryptionModule(), sinkId, webMediaSession));
+        client, sinkId, webMediaSession));
 }
 
 std::unique_ptr<WebMediaSession> FrameLoaderClientImpl::createWebMediaSession()

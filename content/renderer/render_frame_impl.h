@@ -439,7 +439,6 @@ class CONTENT_EXPORT RenderFrameImpl
   blink::WebMediaPlayer* createMediaPlayer(
       const blink::WebMediaPlayerSource& source,
       blink::WebMediaPlayerClient* client,
-      blink::WebContentDecryptionModule* initial_cdm,
       const blink::WebString& sink_id,
       blink::WebMediaSession* media_session) override;
   blink::WebMediaSession* createMediaSession() override;

@@ -2569,7 +2569,6 @@ blink::WebPlugin* RenderFrameImpl::createPlugin(
 blink::WebMediaPlayer* RenderFrameImpl::createMediaPlayer(
     const blink::WebMediaPlayerSource& source,
     WebMediaPlayerClient* client,
-    WebContentDecryptionModule* initial_cdm,
     const blink::WebString& sink_id,
     WebMediaSession* media_session) {
 #if defined(VIDEO_HOLE)
@@ -2621,7 +2620,7 @@ blink::WebMediaPlayer* RenderFrameImpl::createMediaPlayer(
       render_thread->compositor_task_runner(), context_3d_cb,
       base::Bind(&v8::Isolate::AdjustAmountOfExternalAllocatedMemory,
                  base::Unretained(blink::mainThreadIsolate())),
-      initial_cdm, media_surface_manager_, media_session);
+      NULL, media_surface_manager_, media_session);
 
 #if defined(OS_ANDROID)
   if (!UseWebMediaPlayerImpl(url)) {

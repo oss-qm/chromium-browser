@@ -243,11 +243,6 @@ WebMediaPlayerAndroid::WebMediaPlayerAndroid(
 #endif  // defined(VIDEO_HOLE)
   TryCreateStreamTextureProxyIfNeeded();
   interpolator_.SetUpperBound(base::TimeDelta());
-
-  if (params.initial_cdm()) {
-    cdm_context_ = media::ToWebContentDecryptionModuleImpl(params.initial_cdm())
-                       ->GetCdmContext();
-  }
 }
 
 WebMediaPlayerAndroid::~WebMediaPlayerAndroid() {
