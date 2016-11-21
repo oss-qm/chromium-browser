@@ -5,10 +5,6 @@
 {
   'variables': {
     # Allow widevinecdmadapter to be built in Chromium.
-    'variables': {
-      'enable_widevine%': 0,
-    },
-    'enable_widevine%': '<(enable_widevine)',
     'widevine_cdm_version_h_file%': 'widevine_cdm_version.h',
     'widevine_cdm_binary_files%': [],
     'widevine_cdm_manifest_file%': [],
@@ -55,13 +51,6 @@
       [ 'OS == "android"', {
         'widevine_cdm_version_h_file%':
             'android/widevine_cdm_version.h',
-      }],
-      [ 'branding != "Chrome" and OS != "android" and enable_widevine == 1', {
-        # If enable_widevine==1 then create a dummy widevinecdm. On Win/Mac
-        # the component updater will get the latest version and use it.
-        # Other systems are not currently supported.
-        'widevine_cdm_version_h_file%':
-            'stub/widevine_cdm_version.h',
       }],
     ],
   },
@@ -146,22 +135,6 @@
             'files': [ '<@(widevine_cdm_binary_files)' ],
           }],
         }],
-        [ 'branding != "Chrome" and enable_widevine == 1', {
-          # On Mac this copies the widevinecdm binary to <(widevine_cdm_path).
-          # On other platforms the binary is already in <(widevine_cdm_path).
-          # See "widevinecdm_binary".
-          'dependencies': [
-            'widevinecdm_binary',
-          ],
-          'conditions': [
-            ['OS == "mac"', {
-              'copies': [{
-                'destination': '<(PRODUCT_DIR)/<(widevine_cdm_path)',
-                'files': [ '<(PRODUCT_DIR)/libwidevinecdm.dylib' ],
-              }],
-            }],
-          ],
-        }],
       ],
     },
     {
@@ -176,44 +149,5 @@
         }],
       ],
     },
-  ],
-  'conditions': [
-    [ 'branding != "Chrome" and enable_widevine == 1', {
-      'targets': [
-        {
-          'target_name': 'widevinecdm_binary',
-          'product_name': 'widevinecdm',
-          'type': 'none',
-          'conditions': [
-            ['os_posix == 1 and OS != "mac"', {
-              'type': 'loadable_module',
-            }],
-            ['OS == "mac" or OS == "win"', {
-              'type': 'shared_library',
-            }],
-            ['OS == "mac"', {
-              'xcode_settings': {
-                'DYLIB_INSTALL_NAME_BASE': '@loader_path',
-              },
-            }, {
-              # Put Widevine CDM in the correct path directly except
-              # for mac. On mac strip_save_dsym doesn't work with product_dir
-              # so we rely on the "widevinecdm" target to copy it over.
-              # See http://crbug.com/611990
-              'product_dir': '<(PRODUCT_DIR)/<(widevine_cdm_path)',
-            }],
-          ],
-          'defines': ['CDM_IMPLEMENTATION'],
-          'dependencies': [
-            'widevine_cdm_version_h',
-            '<(DEPTH)/base/base.gyp:base',
-          ],
-          'sources': [
-            '<(DEPTH)/media/cdm/stub/stub_cdm.cc',
-            '<(DEPTH)/media/cdm/stub/stub_cdm.h',
-          ],
-        },
-      ],
-    }],
   ],
 }
