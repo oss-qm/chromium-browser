@@ -237,9 +237,6 @@ class WebMediaPlayerAndroid
 
   void OnMediaSourceOpened(blink::WebMediaSource* web_media_source);
 
-  void OnEncryptedMediaInitData(media::EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data);
-
   // Called when a decoder detects that the key needed to decrypt the stream
   // is not available.
   void OnWaitingForDecryptionKey() override;

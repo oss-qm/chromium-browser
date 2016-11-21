@@ -817,19 +817,6 @@ void WebMediaPlayerImpl::setContentDecryptionModule(
          ToWebContentDecryptionModuleImpl(cdm)->GetCdmContext());
 }
 
-void WebMediaPlayerImpl::OnEncryptedMediaInitData(
-    EmeInitDataType init_data_type,
-    const std::vector<uint8_t>& init_data) {
-  DCHECK(init_data_type != EmeInitDataType::UNKNOWN);
-
-  // TODO(xhwang): Update this UMA name. https://crbug.com/589251
-  UMA_HISTOGRAM_COUNTS("Media.EME.NeedKey", 1);
-
-  encrypted_client_->encrypted(
-      ConvertToWebInitDataType(init_data_type), init_data.data(),
-      base::saturated_cast<unsigned int>(init_data.size()));
-}
-
 void WebMediaPlayerImpl::OnFFmpegMediaTracksUpdated(
     std::unique_ptr<MediaTracks> tracks) {
   // For MSE/chunk_demuxer case the media track updates are handled by
@@ -1317,9 +1304,6 @@ std::unique_ptr<Renderer> WebMediaPlayerImpl::CreateRenderer() {
 
 void WebMediaPlayerImpl::StartPipeline() {
   DCHECK(main_task_runner_->BelongsToCurrentThread());
-
-  Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb =
-      BIND_TO_RENDER_LOOP(&WebMediaPlayerImpl::OnEncryptedMediaInitData);
 
   // Figure out which demuxer to use.
   if (load_type_ != LoadTypeMediaSource) {

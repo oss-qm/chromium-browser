@@ -219,12 +219,8 @@ int WebMStreamParser::ParseInfoAndTracks(const uint8_t* data, int size) {
   }
 
   const AudioDecoderConfig& audio_config = tracks_parser.audio_decoder_config();
-  if (audio_config.is_encrypted())
-    OnEncryptedMediaInitData(tracks_parser.audio_encryption_key_id());
 
   const VideoDecoderConfig& video_config = tracks_parser.video_decoder_config();
-  if (video_config.is_encrypted())
-    OnEncryptedMediaInitData(tracks_parser.video_encryption_key_id());
 
   std::unique_ptr<MediaTracks> media_tracks = tracks_parser.media_tracks();
   CHECK(media_tracks.get());
@@ -282,11 +278,6 @@ int WebMStreamParser::ParseCluster(const uint8_t* data, int size) {
   }
 
   return bytes_parsed;
-}
-
-void WebMStreamParser::OnEncryptedMediaInitData(const std::string& key_id) {
-  std::vector<uint8_t> key_id_vector(key_id.begin(), key_id.end());
-  encrypted_media_init_data_cb_.Run(EmeInitDataType::WEBM, key_id_vector);
 }
 
 }  // namespace media

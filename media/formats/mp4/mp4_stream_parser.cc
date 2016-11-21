@@ -395,9 +395,6 @@ bool MP4StreamParser::ParseMoov(BoxReader* reader) {
       detected_text_track_count++;
   }
 
-  if (!moov_->pssh.empty())
-    OnEncryptedMediaInitData(moov_->pssh);
-
   RCHECK(config_cb_.Run(std::move(media_tracks), TextTrackConfigMap()));
 
   StreamParser::InitParameters params(kInfiniteDuration());
@@ -441,31 +438,9 @@ bool MP4StreamParser::ParseMoof(BoxReader* reader) {
   RCHECK(runs_->Init(moof));
   RCHECK(ComputeHighestEndOffset(moof));
 
-  if (!moof.pssh.empty())
-    OnEncryptedMediaInitData(moof.pssh);
-
   new_segment_cb_.Run();
   ChangeState(kWaitingForSampleData);
   return true;
-}
-
-void MP4StreamParser::OnEncryptedMediaInitData(
-    const std::vector<ProtectionSystemSpecificHeader>& headers) {
-  // TODO(strobe): ensure that the value of init_data (all PSSH headers
-  // concatenated in arbitrary order) matches the EME spec.
-  // See https://www.w3.org/Bugs/Public/show_bug.cgi?id=17673.
-  size_t total_size = 0;
-  for (size_t i = 0; i < headers.size(); i++)
-    total_size += headers[i].raw_box.size();
-
-  std::vector<uint8_t> init_data(total_size);
-  size_t pos = 0;
-  for (size_t i = 0; i < headers.size(); i++) {
-    memcpy(&init_data[pos], &headers[i].raw_box[0],
-           headers[i].raw_box.size());
-    pos += headers[i].raw_box.size();
-  }
-  encrypted_media_init_data_cb_.Run(EmeInitDataType::CENC, init_data);
 }
 
 bool MP4StreamParser::PrepareAACBuffer(

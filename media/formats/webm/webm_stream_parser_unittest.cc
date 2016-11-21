@@ -31,9 +31,6 @@ class WebMStreamParserTest : public testing::Test {
                      const StreamParser::InitParameters& expected_params) {
     scoped_refptr<DecoderBuffer> buffer = ReadTestDataFile(filename);
     parser_.reset(new WebMStreamParser());
-    Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb =
-        base::Bind(&WebMStreamParserTest::OnEncryptedMediaInitData,
-                   base::Unretained(this));
 
     EXPECT_CALL(*this, InitCB(_));
     EXPECT_CALL(*this, NewMediaSegmentCB()).Times(testing::AnyNumber());
@@ -83,9 +80,6 @@ class WebMStreamParserTest : public testing::Test {
                bool(const StreamParser::BufferQueue&,
                     const StreamParser::BufferQueue&,
                     const StreamParser::TextBufferQueueMap&));
-  MOCK_METHOD2(OnEncryptedMediaInitData,
-               void(EmeInitDataType init_data_type,
-                    const std::vector<uint8_t>& init_data));
   MOCK_METHOD0(NewMediaSegmentCB, void());
   MOCK_METHOD0(EndMediaSegmentCB, void());
 

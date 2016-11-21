@@ -172,8 +172,6 @@ void MediaSourceDelegate::InitializeMediaSource(
   chunk_demuxer_.reset(new media::ChunkDemuxer(
       media::BindToCurrentLoop(
           base::Bind(&MediaSourceDelegate::OnDemuxerOpened, main_weak_this_)),
-      media::BindToCurrentLoop(base::Bind(
-          &MediaSourceDelegate::OnEncryptedMediaInitData, main_weak_this_)),
       media_log_, false));
 
   // |this| will be retained until StopDemuxer() is posted, so Unretained() is
@@ -717,16 +715,6 @@ void MediaSourceDelegate::OnDemuxerOpened() {
 
   media_source_opened_cb_.Run(
       new media::WebMediaSourceImpl(chunk_demuxer_.get(), media_log_));
-}
-
-void MediaSourceDelegate::OnEncryptedMediaInitData(
-    media::EmeInitDataType init_data_type,
-    const std::vector<uint8_t>& init_data) {
-  DCHECK(main_task_runner_->BelongsToCurrentThread());
-  if (encrypted_media_init_data_cb_.is_null())
-    return;
-
-  encrypted_media_init_data_cb_.Run(init_data_type, init_data);
 }
 
 bool MediaSourceDelegate::IsSeeking() const {

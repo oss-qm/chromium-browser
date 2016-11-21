@@ -156,8 +156,6 @@ class MediaSourceDelegate : public media::DemuxerHost {
   void FinishResettingDecryptingDemuxerStreams();
 
   void OnDemuxerOpened();
-  void OnEncryptedMediaInitData(media::EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data);
   void NotifyDemuxerReady(bool is_cdm_attached);
 
   // Stops and clears objects on the media thread.

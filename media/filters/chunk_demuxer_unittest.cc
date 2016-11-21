@@ -275,8 +275,6 @@ class ChunkDemuxerTest : public ::testing::Test {
   void CreateNewDemuxer() {
     base::Closure open_cb =
         base::Bind(&ChunkDemuxerTest::DemuxerOpened, base::Unretained(this));
-    Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb = base::Bind(
-        &ChunkDemuxerTest::OnEncryptedMediaInitData, base::Unretained(this));
     demuxer_.reset(new ChunkDemuxer(open_cb, encrypted_media_init_data_cb,
                                     media_log_, true));
   }
@@ -845,13 +843,6 @@ class ChunkDemuxerTest : public ::testing::Test {
 
       int need_key_count =
           (is_audio_encrypted ? 1 : 0) + (is_video_encrypted ? 1 : 0);
-      EXPECT_CALL(*this, OnEncryptedMediaInitData(
-                             EmeInitDataType::WEBM,
-                             std::vector<uint8_t>(
-                                 kEncryptedMediaInitData,
-                                 kEncryptedMediaInitData +
-                                     arraysize(kEncryptedMediaInitData))))
-          .Times(Exactly(need_key_count));
     }
 
     // Adding expectations prior to CreateInitDoneCB() here because InSequence
@@ -1360,9 +1351,6 @@ class ChunkDemuxerTest : public ::testing::Test {
   }
 
   MOCK_METHOD0(DemuxerOpened, void());
-  MOCK_METHOD2(OnEncryptedMediaInitData,
-               void(EmeInitDataType init_data_type,
-                    const std::vector<uint8_t>& init_data));
 
   MOCK_METHOD1(InitSegmentReceivedMock, void(std::unique_ptr<MediaTracks>&));
 

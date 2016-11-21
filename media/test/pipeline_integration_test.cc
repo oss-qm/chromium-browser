@@ -225,10 +225,6 @@ class FakeEncryptedMedia {
                                       const std::string& error_message) {
       FAIL() << "Unexpected Key Error";
     }
-
-    virtual void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                          const std::vector<uint8_t>& init_data,
-                                          AesDecryptor* decryptor) = 0;
   };
 
   FakeEncryptedMedia(AppBase* app)
@@ -271,11 +267,6 @@ class FakeEncryptedMedia {
                             const std::string& error_message) {
     app_->OnLegacySessionError(session_id, error_name, system_code,
                                error_message);
-  }
-
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data) {
-    app_->OnEncryptedMediaInitData(init_data_type, init_data, decryptor_.get());
   }
 
  private:
@@ -382,23 +373,6 @@ class KeyProvidingApp : public FakeEncryptedMedia::AppBase {
     EXPECT_EQ(has_additional_usable_key, true);
   }
 
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data,
-                                AesDecryptor* decryptor) override {
-    // Since only 1 session is created, skip the request if the |init_data|
-    // has been seen before (no need to add the same key again).
-    if (init_data == prev_init_data_)
-      return;
-    prev_init_data_ = init_data;
-
-    if (current_session_id_.empty()) {
-      decryptor->CreateSessionAndGenerateRequest(
-          MediaKeys::TEMPORARY_SESSION, init_data_type, init_data,
-          CreateSessionPromise(RESOLVED));
-      EXPECT_FALSE(current_session_id_.empty());
-    }
-  }
-
   virtual bool LookupKey(const std::vector<uint8_t>& key_id,
                          std::vector<uint8_t>* key) {
     // As there is no key rotation, the key ID provided should be |kKeyId|
@@ -419,20 +393,6 @@ class RotatingKeyProvidingApp : public KeyProvidingApp {
     // Expect that OnEncryptedMediaInitData is fired multiple times with
     // different |init_data|.
     EXPECT_GT(num_distinct_need_key_calls_, 1u);
-  }
-
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data,
-                                AesDecryptor* decryptor) override {
-    // Skip the request if the |init_data| has been seen.
-    if (init_data == prev_init_data_)
-      return;
-    prev_init_data_ = init_data;
-    ++num_distinct_need_key_calls_;
-
-    decryptor->CreateSessionAndGenerateRequest(MediaKeys::TEMPORARY_SESSION,
-                                               init_data_type, init_data,
-                                               CreateSessionPromise(RESOLVED));
   }
 
   bool LookupKey(const std::vector<uint8_t>& key_id,
@@ -482,10 +442,6 @@ class NoResponseApp : public FakeEncryptedMedia::AppBase {
     EXPECT_FALSE(session_id.empty());
     EXPECT_EQ(has_additional_usable_key, true);
   }
-
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data,
-                                AesDecryptor* decryptor) override {}
 };
 
 // Helper class that emulates calls made on the ChunkDemuxer by the
@@ -500,8 +456,7 @@ class MockMediaSource {
         mimetype_(mimetype),
         chunk_demuxer_(new ChunkDemuxer(
             base::Bind(&MockMediaSource::DemuxerOpened, base::Unretained(this)),
-            base::Bind(&MockMediaSource::OnEncryptedMediaInitData,
-                       base::Unretained(this)),
+            NULL,
             scoped_refptr<MediaLog>(new MediaLog()),
             true)),
         owned_chunk_demuxer_(chunk_demuxer_) {
@@ -655,13 +610,6 @@ class MockMediaSource {
     return chunk_demuxer_->AddId(kSourceId, type, codecs);
   }
 
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data) {
-    DCHECK(!init_data.empty());
-    CHECK(!encrypted_media_init_data_cb_.is_null());
-    encrypted_media_init_data_cb_.Run(init_data_type, init_data);
-  }
-
   base::TimeDelta last_timestamp_offset() const {
     return last_timestamp_offset_;
   }
@@ -784,11 +732,6 @@ class PipelineIntegrationTest : public PipelineIntegrationTestHost {
                      base::Bind(&PipelineIntegrationTest::OnStatusCallback,
                                 base::Unretained(this)));
 
-    if (encrypted_media) {
-      source->set_encrypted_media_init_data_cb(
-          base::Bind(&FakeEncryptedMedia::OnEncryptedMediaInitData,
-                     base::Unretained(encrypted_media)));
-    }
     message_loop_.Run();
     return pipeline_status_;
   }
@@ -1061,21 +1004,6 @@ TEST_F(PipelineIntegrationTest, F32PlaybackHashed) {
   ASSERT_TRUE(WaitUntilOnEnded());
   EXPECT_HASH_EQ(std::string(kNullVideoHash), GetVideoHash());
   EXPECT_HASH_EQ("3.03,2.86,2.99,3.31,3.57,4.06,", GetAudioHash());
-}
-
-TEST_F(PipelineIntegrationTest, MAYBE_EME(BasicPlaybackEncrypted)) {
-  FakeEncryptedMedia encrypted_media(new KeyProvidingApp());
-  set_encrypted_media_init_data_cb(
-      base::Bind(&FakeEncryptedMedia::OnEncryptedMediaInitData,
-                 base::Unretained(&encrypted_media)));
-
-  ASSERT_EQ(PIPELINE_OK, Start("bear-320x240-av_enc-av.webm",
-                               encrypted_media.GetCdmContext()));
-
-  Play();
-
-  ASSERT_TRUE(WaitUntilOnEnded());
-  Stop();
 }
 
 TEST_F(PipelineIntegrationTest, BasicPlayback_MediaSource) {

@@ -54,11 +54,6 @@ static void QuitLoopWithStatus(base::MessageLoop* message_loop,
       FROM_HERE, base::MessageLoop::QuitWhenIdleClosure());
 }
 
-static void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                     const std::vector<uint8_t>& init_data) {
-  VLOG(0) << "File is encrypted.";
-}
-
 static void OnMediaTracksUpdated(std::unique_ptr<MediaTracks> tracks) {
   VLOG(0) << "Got media tracks info, tracks = " << tracks->tracks().size();
 }
@@ -191,8 +186,6 @@ static void RunDemuxerBenchmark(const std::string& filename) {
     FileDataSource data_source;
     ASSERT_TRUE(data_source.Initialize(file_path));
 
-    Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb =
-        base::Bind(&OnEncryptedMediaInitData);
     Demuxer::MediaTracksUpdatedCB tracks_updated_cb =
         base::Bind(&OnMediaTracksUpdated);
     FFmpegDemuxer demuxer(message_loop.task_runner(), &data_source,

@@ -54,9 +54,6 @@ class MEDIA_EXPORT MP4StreamParser : public StreamParser {
   bool ParseMoov(mp4::BoxReader* reader);
   bool ParseMoof(mp4::BoxReader* reader);
 
-  void OnEncryptedMediaInitData(
-      const std::vector<ProtectionSystemSpecificHeader>& headers);
-
   // To retain proper framing, each 'mdat' atom must be read; to limit memory
   // usage, the atom's data needs to be discarded incrementally as frames are
   // extracted from the stream. This function discards data from the stream up

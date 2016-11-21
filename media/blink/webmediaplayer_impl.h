@@ -290,10 +290,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
   // compositor can return the frame.
   scoped_refptr<VideoFrame> GetCurrentFrameFromCompositor();
 
-  // Called when the demuxer encounters encrypted streams.
-  void OnEncryptedMediaInitData(EmeInitDataType init_data_type,
-                                const std::vector<uint8_t>& init_data);
-
   // Called when the FFmpegDemuxer encounters new media tracks. This is only
   // invoked when using FFmpegDemuxer, since MSE/ChunkDemuxer handle media
   // tracks separately in WebSourceBufferImpl.

@@ -347,8 +347,6 @@ void WebMediaPlayerAndroid::DoLoad(LoadType load_type,
       media_source_delegate_->InitializeMediaSource(
           base::Bind(&WebMediaPlayerAndroid::OnMediaSourceOpened,
                      weak_factory_.GetWeakPtr()),
-          base::Bind(&WebMediaPlayerAndroid::OnEncryptedMediaInitData,
-                     weak_factory_.GetWeakPtr()),
           base::Bind(&WebMediaPlayerAndroid::SetCdmReadyCB,
                      weak_factory_.GetWeakPtr()),
           base::Bind(&WebMediaPlayerAndroid::UpdateNetworkState,
@@ -1488,20 +1486,6 @@ void WebMediaPlayerAndroid::ContentDecryptionModuleAttached(
 void WebMediaPlayerAndroid::OnMediaSourceOpened(
     blink::WebMediaSource* web_media_source) {
   client_->mediaSourceOpened(web_media_source);
-}
-
-void WebMediaPlayerAndroid::OnEncryptedMediaInitData(
-    media::EmeInitDataType init_data_type,
-    const std::vector<uint8_t>& init_data) {
-  DCHECK(main_thread_checker_.CalledOnValidThread());
-
-  // TODO(xhwang): Update this UMA name. https://crbug.com/589251
-  UMA_HISTOGRAM_COUNTS("Media.EME.NeedKey", 1);
-
-  DCHECK(init_data_type != media::EmeInitDataType::UNKNOWN);
-
-  encrypted_client_->encrypted(ConvertToWebInitDataType(init_data_type),
-                               init_data.data(), init_data.size());
 }
 
 void WebMediaPlayerAndroid::OnWaitingForDecryptionKey() {
