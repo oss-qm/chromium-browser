@@ -440,7 +440,6 @@ class CONTENT_EXPORT RenderFrameImpl
   blink::WebMediaPlayer* createMediaPlayer(
       const blink::WebMediaPlayerSource& source,
       blink::WebMediaPlayerClient* client,
-      blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
       blink::WebContentDecryptionModule* initial_cdm,
       const blink::WebString& sink_id,
       blink::WebMediaSession* media_session) override;
@@ -1011,7 +1010,6 @@ class CONTENT_EXPORT RenderFrameImpl
 #if defined(OS_ANDROID)
   blink::WebMediaPlayer* CreateAndroidWebMediaPlayer(
       blink::WebMediaPlayerClient* client,
-      blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
       const media::WebMediaPlayerParams& params);
 
   RendererMediaPlayerManager* GetMediaPlayerManager();

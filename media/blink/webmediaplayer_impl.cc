@@ -47,7 +47,6 @@
 #include "media/filters/ffmpeg_demuxer.h"
 #include "third_party/WebKit/public/platform/WebEncryptedMediaTypes.h"
 #include "third_party/WebKit/public/platform/WebMediaPlayerClient.h"
-#include "third_party/WebKit/public/platform/WebMediaPlayerEncryptedMediaClient.h"
 #include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "third_party/WebKit/public/platform/WebMediaSource.h"
 #include "third_party/WebKit/public/platform/WebRect.h"
@@ -150,7 +149,6 @@ STATIC_ASSERT_ENUM(WebMediaPlayer::CORSModeUseCredentials,
 WebMediaPlayerImpl::WebMediaPlayerImpl(
     blink::WebLocalFrame* frame,
     blink::WebMediaPlayerClient* client,
-    blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
     base::WeakPtr<WebMediaPlayerDelegate> delegate,
     std::unique_ptr<RendererFactory> renderer_factory,
     linked_ptr<UrlIndex> url_index,
@@ -188,7 +186,6 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
       fullscreen_(false),
       decoder_requires_restart_for_fullscreen_(false),
       client_(client),
-      encrypted_client_(encrypted_client),
       delegate_(delegate),
       delegate_id_(0),
       defer_load_cb_(params.defer_load_cb()),
@@ -1051,12 +1048,6 @@ void WebMediaPlayerImpl::OnAddTextTrack(const TextTrackConfig& config,
 
 void WebMediaPlayerImpl::OnWaitingForDecryptionKey() {
   DCHECK(main_task_runner_->BelongsToCurrentThread());
-
-  encrypted_client_->didBlockPlaybackWaitingForKey();
-  // TODO(jrummell): didResumePlaybackBlockedForKey() should only be called
-  // when a key has been successfully added (e.g. OnSessionKeysChange() with
-  // |has_additional_usable_key| = true). http://crbug.com/461903
-  encrypted_client_->didResumePlaybackBlockedForKey();
 }
 
 void WebMediaPlayerImpl::OnVideoNaturalSizeChange(const gfx::Size& size) {

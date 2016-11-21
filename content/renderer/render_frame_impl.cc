@@ -146,7 +146,6 @@
 #include "media/base/media_log.h"
 #include "media/base/media_switches.h"
 #include "media/blink/url_index.h"
-#include "media/blink/webencryptedmediaclient_impl.h"
 #include "media/blink/webmediaplayer_impl.h"
 #include "media/renderers/gpu_video_accelerator_factories.h"
 #include "mojo/edk/js/core.h"
@@ -267,7 +266,6 @@ using blink::WebHTTPBody;
 using blink::WebLocalFrame;
 using blink::WebMediaPlayer;
 using blink::WebMediaPlayerClient;
-using blink::WebMediaPlayerEncryptedMediaClient;
 using blink::WebMediaSession;
 using blink::WebNavigationPolicy;
 using blink::WebNavigationType;
@@ -2571,7 +2569,6 @@ blink::WebPlugin* RenderFrameImpl::createPlugin(
 blink::WebMediaPlayer* RenderFrameImpl::createMediaPlayer(
     const blink::WebMediaPlayerSource& source,
     WebMediaPlayerClient* client,
-    WebMediaPlayerEncryptedMediaClient* encrypted_client,
     WebContentDecryptionModule* initial_cdm,
     const blink::WebString& sink_id,
     WebMediaSession* media_session) {
@@ -2628,7 +2625,7 @@ blink::WebMediaPlayer* RenderFrameImpl::createMediaPlayer(
 
 #if defined(OS_ANDROID)
   if (!UseWebMediaPlayerImpl(url)) {
-    return CreateAndroidWebMediaPlayer(client, encrypted_client, params);
+    return CreateAndroidWebMediaPlayer(client, params);
   }
 #endif  // defined(OS_ANDROID)
 
@@ -2655,7 +2652,7 @@ blink::WebMediaPlayer* RenderFrameImpl::createMediaPlayer(
     url_index_.reset(new media::UrlIndex(frame_));
 
   media::WebMediaPlayerImpl* media_player = new media::WebMediaPlayerImpl(
-      frame_, client, encrypted_client,
+      frame_, client, NULL,
       GetWebMediaPlayerDelegate()->AsWeakPtr(),
       std::move(media_renderer_factory), url_index_, params);
 
@@ -4310,19 +4307,6 @@ blink::WebUserMediaClient* RenderFrameImpl::userMediaClient() {
   if (!web_user_media_client_)
     InitializeUserMediaClient();
   return web_user_media_client_;
-}
-
-blink::WebEncryptedMediaClient* RenderFrameImpl::encryptedMediaClient() {
-  if (!web_encrypted_media_client_) {
-    web_encrypted_media_client_.reset(new media::WebEncryptedMediaClientImpl(
-        // base::Unretained(this) is safe because WebEncryptedMediaClientImpl
-        // is destructed before |this|, and does not give away ownership of the
-        // callback.
-        base::Bind(&RenderFrameImpl::AreSecureCodecsSupported,
-                   base::Unretained(this)),
-        GetCdmFactory(), GetMediaPermission()));
-  }
-  return web_encrypted_media_client_.get();
 }
 
 blink::WebMIDIClient* RenderFrameImpl::webMIDIClient() {
@@ -6059,7 +6043,6 @@ void RenderFrameImpl::UpdateNavigationState(DocumentState* document_state,
 #if defined(OS_ANDROID)
 WebMediaPlayer* RenderFrameImpl::CreateAndroidWebMediaPlayer(
     WebMediaPlayerClient* client,
-    WebMediaPlayerEncryptedMediaClient* encrypted_client,
     const media::WebMediaPlayerParams& params) {
   scoped_refptr<StreamTextureFactory> stream_texture_factory =
       RenderThreadImpl::current()->GetStreamTexureFactory();
@@ -6071,7 +6054,7 @@ WebMediaPlayer* RenderFrameImpl::CreateAndroidWebMediaPlayer(
   bool enable_texture_copy =
       RenderThreadImpl::current()->EnableStreamTextureCopy();
   return new WebMediaPlayerAndroid(
-      frame_, client, encrypted_client,
+      frame_, client, NULL,
       GetWebMediaPlayerDelegate()->AsWeakPtr(), GetMediaPlayerManager(),
       stream_texture_factory, routing_id_, enable_texture_copy, params);
 }

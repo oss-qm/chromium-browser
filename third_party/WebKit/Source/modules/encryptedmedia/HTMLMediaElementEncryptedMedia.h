@@ -12,7 +12,6 @@
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebEncryptedMediaTypes.h"
-#include "public/platform/WebMediaPlayerEncryptedMediaClient.h"
 
 namespace blink {
 
@@ -24,7 +23,7 @@ class ScriptState;
 class WebContentDecryptionModule;
 class WebMediaPlayer;
 
-class MODULES_EXPORT HTMLMediaElementEncryptedMedia final : public GarbageCollectedFinalized<HTMLMediaElementEncryptedMedia>, public Supplement<HTMLMediaElement>, public WebMediaPlayerEncryptedMediaClient {
+class MODULES_EXPORT HTMLMediaElementEncryptedMedia final : public GarbageCollectedFinalized<HTMLMediaElementEncryptedMedia>, public Supplement<HTMLMediaElement> {
     USING_GARBAGE_COLLECTED_MIXIN(HTMLMediaElementEncryptedMedia);
 public:
     static MediaKeys* mediaKeys(HTMLMediaElement&);
@@ -32,9 +31,6 @@ public:
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(encrypted);
 
     // WebMediaPlayerEncryptedMediaClient methods
-    void encrypted(WebEncryptedMediaInitDataType, const unsigned char* initData, unsigned initDataLength) final;
-    void didBlockPlaybackWaitingForKey() final;
-    void didResumePlaybackBlockedForKey() final;
     WebContentDecryptionModule* contentDecryptionModule();
 
     static HTMLMediaElementEncryptedMedia& from(HTMLMediaElement&);

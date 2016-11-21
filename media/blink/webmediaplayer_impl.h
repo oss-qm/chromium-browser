@@ -48,7 +48,6 @@
 namespace blink {
 class WebLocalFrame;
 class WebMediaPlayerClient;
-class WebMediaPlayerEncryptedMediaClient;
 }
 
 namespace base {
@@ -91,7 +90,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
   WebMediaPlayerImpl(
       blink::WebLocalFrame* frame,
       blink::WebMediaPlayerClient* client,
-      blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
       base::WeakPtr<WebMediaPlayerDelegate> delegate,
       std::unique_ptr<RendererFactory> renderer_factory,
       linked_ptr<UrlIndex> url_index,
@@ -426,7 +424,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
   bool decoder_requires_restart_for_fullscreen_;
 
   blink::WebMediaPlayerClient* client_;
-  blink::WebMediaPlayerEncryptedMediaClient* encrypted_client_;
 
   // WebMediaPlayer notifies the |delegate_| of playback state changes using
   // |delegate_id_|; an id provided after registering with the delegate.  The

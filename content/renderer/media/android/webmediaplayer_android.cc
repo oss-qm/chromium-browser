@@ -56,7 +56,6 @@
 #include "third_party/WebKit/public/platform/WebEncryptedMediaTypes.h"
 #include "third_party/WebKit/public/platform/WebGraphicsContext3DProvider.h"
 #include "third_party/WebKit/public/platform/WebMediaPlayerClient.h"
-#include "third_party/WebKit/public/platform/WebMediaPlayerEncryptedMediaClient.h"
 #include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "third_party/WebKit/public/platform/WebSecurityOrigin.h"
 #include "third_party/WebKit/public/platform/WebString.h"
@@ -167,7 +166,6 @@ namespace content {
 WebMediaPlayerAndroid::WebMediaPlayerAndroid(
     blink::WebFrame* frame,
     blink::WebMediaPlayerClient* client,
-    blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
     base::WeakPtr<media::WebMediaPlayerDelegate> delegate,
     RendererMediaPlayerManager* player_manager,
     scoped_refptr<StreamTextureFactory> factory,
@@ -176,7 +174,6 @@ WebMediaPlayerAndroid::WebMediaPlayerAndroid(
     const media::WebMediaPlayerParams& params)
     : frame_(frame),
       client_(client),
-      encrypted_client_(encrypted_client),
       delegate_(delegate),
       delegate_id_(0),
       defer_load_cb_(params.defer_load_cb()),
@@ -1489,12 +1486,6 @@ void WebMediaPlayerAndroid::OnMediaSourceOpened(
 }
 
 void WebMediaPlayerAndroid::OnWaitingForDecryptionKey() {
-  encrypted_client_->didBlockPlaybackWaitingForKey();
-
-  // TODO(jrummell): didResumePlaybackBlockedForKey() should only be called
-  // when a key has been successfully added (e.g. OnSessionKeysChange() with
-  // |has_additional_usable_key| = true). http://crbug.com/461903
-  encrypted_client_->didResumePlaybackBlockedForKey();
 }
 
 void WebMediaPlayerAndroid::OnHidden() {

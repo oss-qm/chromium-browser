@@ -350,58 +350,6 @@ static Event* createEncryptedEvent(WebEncryptedMediaInitDataType initDataType, c
     return MediaEncryptedEvent::create(EventTypeNames::encrypted, initializer);
 }
 
-void HTMLMediaElementEncryptedMedia::encrypted(WebEncryptedMediaInitDataType initDataType, const unsigned char* initData, unsigned initDataLength)
-{
-    DVLOG(EME_LOG_LEVEL) << __FUNCTION__;
-
-    Event* event;
-    if (m_mediaElement->isMediaDataCORSSameOrigin(m_mediaElement->getExecutionContext()->getSecurityOrigin())) {
-        event = createEncryptedEvent(initDataType, initData, initDataLength);
-    } else {
-        // Current page is not allowed to see content from the media file,
-        // so don't return the initData. However, they still get an event.
-        event = createEncryptedEvent(WebEncryptedMediaInitDataType::Unknown, nullptr, 0);
-    }
-
-    event->setTarget(m_mediaElement);
-    m_mediaElement->scheduleEvent(event);
-}
-
-void HTMLMediaElementEncryptedMedia::didBlockPlaybackWaitingForKey()
-{
-    DVLOG(EME_LOG_LEVEL) << __FUNCTION__;
-
-    // From https://w3c.github.io/encrypted-media/#queue-waitingforkey:
-    // It should only be called when the HTMLMediaElement object is potentially
-    // playing and its readyState is equal to HAVE_FUTURE_DATA or greater.
-    // FIXME: Is this really required?
-
-    // 1. Let the media element be the specified HTMLMediaElement object.
-    // 2. If the media element's waiting for key value is false, queue a task
-    //    to fire a simple event named waitingforkey at the media element.
-    if (!m_isWaitingForKey) {
-        Event* event = Event::create(EventTypeNames::waitingforkey);
-        event->setTarget(m_mediaElement);
-        m_mediaElement->scheduleEvent(event);
-    }
-
-    // 3. Set the media element's waiting for key value to true.
-    m_isWaitingForKey = true;
-
-    // 4. Suspend playback.
-    //    (Already done on the Chromium side by the decryptors.)
-}
-
-void HTMLMediaElementEncryptedMedia::didResumePlaybackBlockedForKey()
-{
-    DVLOG(EME_LOG_LEVEL) << __FUNCTION__;
-
-    // Logic is on the Chromium side to attempt to resume playback when a new
-    // key is available. However, |m_isWaitingForKey| needs to be cleared so
-    // that a later waitingForKey() call can generate the event.
-    m_isWaitingForKey = false;
-}
-
 WebContentDecryptionModule* HTMLMediaElementEncryptedMedia::contentDecryptionModule()
 {
     return m_mediaKeys ? m_mediaKeys->contentDecryptionModule() : 0;

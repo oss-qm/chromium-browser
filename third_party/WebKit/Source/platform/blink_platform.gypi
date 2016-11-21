@@ -324,7 +324,6 @@
       'exported/WebMediaConstraints.cpp',
       'exported/WebMediaDeviceInfo.cpp',
       'exported/WebMediaPlayerClient.cpp',
-      'exported/WebMediaPlayerEncryptedMediaClient.cpp',
       'exported/WebMediaPlayerSource.cpp',
       'exported/WebMediaRecorderHandler.cpp',
       'exported/WebMediaStream.cpp',

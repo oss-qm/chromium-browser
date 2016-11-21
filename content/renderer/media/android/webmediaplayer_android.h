@@ -47,7 +47,6 @@ class WebContentDecryptionModule;
 class WebContentDecryptionModuleResult;
 class WebFrame;
 class WebMediaPlayerClient;
-class WebMediaPlayerEncryptedMediaClient;
 class WebURL;
 }
 
@@ -91,7 +90,6 @@ class WebMediaPlayerAndroid
   WebMediaPlayerAndroid(
       blink::WebFrame* frame,
       blink::WebMediaPlayerClient* client,
-      blink::WebMediaPlayerEncryptedMediaClient* encrypted_client,
       base::WeakPtr<media::WebMediaPlayerDelegate> delegate,
       RendererMediaPlayerManager* player_manager,
       scoped_refptr<StreamTextureFactory> factory,
@@ -318,7 +316,6 @@ class WebMediaPlayerAndroid
   blink::WebFrame* const frame_;
 
   blink::WebMediaPlayerClient* const client_;
-  blink::WebMediaPlayerEncryptedMediaClient* const encrypted_client_;
 
   // WebMediaPlayer notifies the |delegate_| of playback state changes using
   // |delegate_id_|; an id provided after registering with the delegate.  The
