@@ -83,7 +83,6 @@ WebEncryptedMediaClientImpl::WebEncryptedMediaClientImpl(
     MediaPermission* media_permission)
     : are_secure_codecs_supported_cb_(are_secure_codecs_supported_cb),
       cdm_factory_(cdm_factory),
-      key_system_config_selector_(KeySystems::GetInstance(), media_permission),
       weak_factory_(this) {
   DCHECK(cdm_factory_);
 }
