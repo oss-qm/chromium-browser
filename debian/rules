@@ -500,14 +500,6 @@ override_dh_clean:
 	find $(SRC_DIR) \( -name \*.pyc -o -name \*.pyo -name \*.o \) -delete
 	find $(SRC_DIR) -regex '.*/\([^/]*\)/\1[^/]*\.\(Makefile\|\(target\|host\)\.mk\)' -delete
 
-	set +x
-	echo
-	echo VERIFICATION:
-	cd .. && for crypto in md5 sha1 sha224 sha256 sha384 sha512; do $${crypto}sum 'chromium-browser_$(DEBIAN_UPSTREAM_VERSION).orig.tar.xz' |sed -e 's/-browser//' -e "s/^/$${crypto}  /"; done
-	echo VERIFICATION-
-	echo Compare to https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$(DEBIAN_UPSTREAM_VERSION).tar.xz.hashes
-	echo
-
 	-find $(SRC_DIR)/native_client $(SRC_DIR)/build/linux $(SRC_DIR)/third_party/binutils -type f -executable -exec chmod -x {} \;
 
 debian/chromium-browser.sh: debian/chromium-browser.sh.in
