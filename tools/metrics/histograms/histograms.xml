@@ -21869,16 +21869,6 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
   </summary>
 </histogram>
 
-<histogram name="Media.EME.RequestMediaKeySystemAccess"
-    enum="RequestMediaKeySystemAccessStatus">
-  <owner>sandersd@chromium.org</owner>
-  <summary>
-    Key system support query status and result, as reported by
-    RequestMediaKeySystemAccess. Each value will be reported at most once per
-    renderer process.
-  </summary>
-</histogram>
-
 <histogram name="Media.EME.Unknown" enum="CdmPromiseResult">
   <owner>sandersd@chromium.org</owner>
   <summary>
@@ -88165,11 +88155,6 @@ To add a new entry, add it with any value and run test to compute valid value.
   <int value="7" label="Unknown"/>
 </enum>
 
-<enum name="RequestMediaKeySystemAccessStatus" type="int">
-  <int value="0" label="Requested"/>
-  <int value="1" label="Supported"/>
-</enum>
-
 <enum name="ResolutionCategory" type="int">
   <int value="0" label="RESOLVE_SUCCESS"/>
   <int value="1" label="RESOLVE_FAIL"/>
@@ -99423,12 +99408,6 @@ To add a new entry, add it with any value and run test to compute valid value.
   <affected-histogram name="Event.Latency.Renderer"/>
   <affected-histogram name="Event.Latency.Renderer2"/>
   <affected-histogram name="Event.Latency.RendererImpl"/>
-</histogram_suffixes>
-
-<histogram_suffixes name="RequestMediaKeySystemAccessKeySystems" separator=".">
-  <suffix name="Unknown"
-      label="Requests for an unknown or unsupported key system."/>
-  <affected-histogram name="Media.EME.RequestMediaKeySystemAccess"/>
 </histogram_suffixes>
 
 <histogram_suffixes name="ResourceLoaderSizeSlice" separator=".">

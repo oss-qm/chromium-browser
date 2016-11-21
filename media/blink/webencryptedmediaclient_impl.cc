@@ -27,12 +27,6 @@ namespace media {
 
 namespace {
 
-// Used to name UMAs in Reporter.
-const char kKeySystemSupportUMAPrefix[] =
-    "Media.EME.RequestMediaKeySystemAccess.";
-
-}  // namespace
-
 // Report usage of key system to UMA. There are 2 different counts logged:
 // 1. The key system is requested.
 // 2. The requested key system and options are supported.
@@ -95,31 +89,6 @@ WebEncryptedMediaClientImpl::WebEncryptedMediaClientImpl(
 }
 
 WebEncryptedMediaClientImpl::~WebEncryptedMediaClientImpl() {
-}
-
-void WebEncryptedMediaClientImpl::requestMediaKeySystemAccess(
-    blink::WebEncryptedMediaRequest request) {
-  GetReporter(request.keySystem())->ReportRequested();
-
-  if (GetMediaClient()) {
-    GURL security_origin(
-        blink::WebStringToGURL(request.getSecurityOrigin().toString()));
-
-    GetMediaClient()->RecordRapporURL("Media.OriginUrl.EME", security_origin);
-
-    if (!request.getSecurityOrigin().isPotentiallyTrustworthy()) {
-      GetMediaClient()->RecordRapporURL("Media.OriginUrl.EME.Insecure",
-                                        security_origin);
-    }
-  }
-
-  key_system_config_selector_.SelectConfig(
-      request.keySystem(), request.supportedConfigurations(),
-      request.getSecurityOrigin(), are_secure_codecs_supported_cb_.Run(),
-      base::Bind(&WebEncryptedMediaClientImpl::OnRequestSucceeded,
-                 weak_factory_.GetWeakPtr(), request),
-      base::Bind(&WebEncryptedMediaClientImpl::OnRequestNotSupported,
-                 weak_factory_.GetWeakPtr(), request));
 }
 
 void WebEncryptedMediaClientImpl::CreateCdm(

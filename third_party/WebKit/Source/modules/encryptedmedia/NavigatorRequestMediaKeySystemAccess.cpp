@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "modules/encryptedmedia/NavigatorRequestMediaKeySystemAccess.h"
-
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
 #include "core/dom/DOMException.h"
@@ -197,64 +195,5 @@ void MediaKeySystemAccessInitializer::checkEmptyCodecs(const WebMediaKeySystemCo
 }
 
 } // namespace
-
-ScriptPromise NavigatorRequestMediaKeySystemAccess::requestMediaKeySystemAccess(
-    ScriptState* scriptState,
-    Navigator& navigator,
-    const String& keySystem,
-    const HeapVector<MediaKeySystemConfiguration>& supportedConfigurations)
-{
-    DVLOG(3) << __FUNCTION__;
-
-    // From https://w3c.github.io/encrypted-media/#requestMediaKeySystemAccess
-    // When this method is invoked, the user agent must run the following steps:
-    // 1. If keySystem is an empty string, return a promise rejected with a
-    //    new DOMException whose name is InvalidAccessError.
-    if (keySystem.isEmpty()) {
-        return ScriptPromise::rejectWithDOMException(
-            scriptState, DOMException::create(InvalidAccessError, "The keySystem parameter is empty."));
-    }
-
-    // 2. If supportedConfigurations was provided and is empty, return a
-    //    promise rejected with a new DOMException whose name is
-    //    InvalidAccessError.
-    if (!supportedConfigurations.size()) {
-        return ScriptPromise::rejectWithDOMException(
-            scriptState, DOMException::create(InvalidAccessError, "The supportedConfigurations parameter is empty."));
-    }
-
-    // 3-4. 'May Document use powerful features?' check.
-    ExecutionContext* executionContext = scriptState->getExecutionContext();
-    String errorMessage;
-    if (executionContext->isSecureContext(errorMessage)) {
-        UseCounter::count(executionContext, UseCounter::EncryptedMediaSecureOrigin);
-    } else {
-        Deprecation::countDeprecation(executionContext, UseCounter::EncryptedMediaInsecureOrigin);
-        // TODO(ddorwin): Implement the following:
-        // Reject promise with a new DOMException whose name is NotSupportedError.
-    }
-
-    // 5. Let origin be the origin of document.
-    //    (Passed with the execution context in step 7.)
-
-    // 6. Let promise be a new promise.
-    Document* document = toDocument(executionContext);
-    if (!document->page()) {
-        return ScriptPromise::rejectWithDOMException(
-            scriptState, DOMException::create(InvalidStateError, "The context provided is not associated with a page."));
-    }
-
-    MediaKeySystemAccessInitializer* initializer = new MediaKeySystemAccessInitializer(scriptState, keySystem, supportedConfigurations);
-    ScriptPromise promise = initializer->promise();
-
-    // 7. Asynchronously determine support, and if allowed, create and
-    //    initialize the MediaKeySystemAccess object.
-    MediaKeysController* controller = MediaKeysController::from(document->page());
-    WebEncryptedMediaClient* mediaClient = controller->encryptedMediaClient(executionContext);
-    mediaClient->requestMediaKeySystemAccess(WebEncryptedMediaRequest(initializer));
-
-    // 8. Return promise.
-    return promise;
-}
 
 } // namespace blink
