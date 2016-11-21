@@ -1,0 +1,4 @@
+Description: GCC doesn't allow -Wno-format with hardening
+  -Werror=format-security .
+Author: Chad Miller <chad.miller@canonical.com>
+
