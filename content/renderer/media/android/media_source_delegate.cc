@@ -503,24 +503,8 @@ void MediaSourceDelegate::OnDemuxerInitDone(media::PipelineStatus status) {
   video_stream_ = chunk_demuxer_->GetStream(DemuxerStream::VIDEO);
   DCHECK(audio_stream_ || video_stream_);
 
-  if (HasEncryptedStream()) {
-    set_cdm_ready_cb_.Run(BindToCurrentLoop(base::Bind(
-        &MediaSourceDelegate::SetCdm, media_weak_factory_.GetWeakPtr())));
-    return;
-  }
-
   // Notify demuxer ready when both streams are not encrypted.
   NotifyDemuxerReady(false);
-}
-
-bool MediaSourceDelegate::HasEncryptedStream() {
-  DCHECK(media_task_runner_->BelongsToCurrentThread());
-  DCHECK(audio_stream_ || video_stream_);
-
-  return (audio_stream_ &&
-          audio_stream_->audio_decoder_config().is_encrypted()) ||
-         (video_stream_ &&
-          video_stream_->video_decoder_config().is_encrypted());
 }
 
 void MediaSourceDelegate::SetCdm(media::CdmContext* cdm_context,
@@ -529,7 +513,6 @@ void MediaSourceDelegate::SetCdm(media::CdmContext* cdm_context,
   DCHECK(cdm_context);
   DCHECK(!cdm_attached_cb.is_null());
   DCHECK(!is_demuxer_ready_);
-  DCHECK(HasEncryptedStream());
 
   cdm_context_ = cdm_context;
   pending_cdm_attached_cb_ = cdm_attached_cb;

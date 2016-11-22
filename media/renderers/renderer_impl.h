@@ -87,8 +87,6 @@ class MEDIA_EXPORT RendererImpl : public Renderer {
   bool GetWallClockTimes(const std::vector<base::TimeDelta>& media_timestamps,
                          std::vector<base::TimeTicks>* wall_clock_times);
 
-  bool HasEncryptedStream();
-
   void FinishInitialization(PipelineStatus status);
 
   // Helper functions and callbacks for Initialize().

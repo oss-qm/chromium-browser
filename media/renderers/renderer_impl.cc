@@ -129,11 +129,6 @@ void RendererImpl::Initialize(DemuxerStreamProvider* demuxer_stream_provider,
   demuxer_stream_provider_ = demuxer_stream_provider;
   init_cb_ = init_cb;
 
-  if (HasEncryptedStream() && !cdm_context_) {
-    state_ = STATE_INIT_PENDING_CDM;
-    return;
-  }
-
   state_ = STATE_INITIALIZING;
   InitializeAudioRenderer();
 }
@@ -286,20 +281,6 @@ bool RendererImpl::GetWallClockTimes(
   }
 
   return time_source_->GetWallClockTimes(media_timestamps, wall_clock_times);
-}
-
-bool RendererImpl::HasEncryptedStream() {
-  DemuxerStream* audio_stream =
-      demuxer_stream_provider_->GetStream(DemuxerStream::AUDIO);
-  if (audio_stream && audio_stream->audio_decoder_config().is_encrypted())
-    return true;
-
-  DemuxerStream* video_stream =
-      demuxer_stream_provider_->GetStream(DemuxerStream::VIDEO);
-  if (video_stream && video_stream->video_decoder_config().is_encrypted())
-    return true;
-
-  return false;
 }
 
 void RendererImpl::FinishInitialization(PipelineStatus status) {

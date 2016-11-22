@@ -132,8 +132,6 @@ class MediaSourceDelegate : public media::DemuxerHost {
   // Callback for ChunkDemuxer initialization.
   void OnDemuxerInitDone(media::PipelineStatus status);
 
-  bool HasEncryptedStream();
-
   // Callback to set CDM and fires |cdm_attached_cb| with the result.
   void SetCdm(media::CdmContext* cdm_context,
               const media::CdmAttachedCB& cdm_attached_cb);
