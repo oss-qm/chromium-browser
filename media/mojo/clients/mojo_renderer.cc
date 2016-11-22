@@ -120,8 +120,6 @@ void MojoRenderer::SetCdm(CdmContext* cdm_context,
   BindRemoteRendererIfNeeded();
 
   cdm_attached_cb_ = cdm_attached_cb;
-  remote_renderer_->SetCdm(
-      cdm_id, base::Bind(&MojoRenderer::OnCdmAttached, base::Unretained(this)));
 }
 
 void MojoRenderer::Flush(const base::Closure& flush_cb) {
@@ -304,14 +302,6 @@ void MojoRenderer::OnFlushed() {
   DCHECK(!flush_cb_.is_null());
 
   base::ResetAndReturn(&flush_cb_).Run();
-}
-
-void MojoRenderer::OnCdmAttached(bool success) {
-  DVLOG(1) << __FUNCTION__;
-  DCHECK(task_runner_->BelongsToCurrentThread());
-  DCHECK(!cdm_attached_cb_.is_null());
-
-  base::ResetAndReturn(&cdm_attached_cb_).Run(success);
 }
 
 void MojoRenderer::CancelPendingCallbacks() {

@@ -97,9 +97,6 @@ void MojoRendererService::SetCdm(int32_t cdm_id,
     callback.Run(false);
     return;
   }
-
-  renderer_->SetCdm(cdm_context, base::Bind(&MojoRendererService::OnCdmAttached,
-                                            weak_this_, cdm, callback));
 }
 
 void MojoRendererService::OnError(PipelineStatus error) {
@@ -192,18 +189,6 @@ void MojoRendererService::OnFlushCompleted(const FlushCallback& callback) {
   DCHECK_EQ(state_, STATE_FLUSHING);
   state_ = STATE_PLAYING;
   callback.Run();
-}
-
-void MojoRendererService::OnCdmAttached(
-    scoped_refptr<MediaKeys> cdm,
-    const base::Callback<void(bool)>& callback,
-    bool success) {
-  DVLOG(1) << __FUNCTION__ << "(" << success << ")";
-
-  if (success)
-    cdm_ = cdm;
-
-  callback.Run(success);
 }
 
 }  // namespace media

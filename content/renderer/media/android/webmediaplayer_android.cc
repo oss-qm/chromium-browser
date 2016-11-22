@@ -1493,11 +1493,6 @@ void WebMediaPlayerAndroid::OnCdmContextReady(media::CdmContext* cdm_context) {
     return;
 }
 
-void WebMediaPlayerAndroid::OnCdmAttached(
-    const media::CdmAttachedCB& cdm_attached_cb,
-    bool success) {
-}
-
 void WebMediaPlayerAndroid::SetCdmReadyCB(
     const MediaSourceDelegate::CdmReadyCB& cdm_ready_cb) {
   DCHECK(main_thread_checker_.CalledOnValidThread());

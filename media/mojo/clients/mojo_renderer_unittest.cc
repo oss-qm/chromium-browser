@@ -76,7 +76,6 @@ class MojoRendererTest : public ::testing::Test {
   // Completion callbacks.
   MOCK_METHOD1(OnInitialized, void(PipelineStatus));
   MOCK_METHOD0(OnFlushed, void());
-  MOCK_METHOD1(OnCdmAttached, void(bool));
 
   std::unique_ptr<StrictMock<MockDemuxerStream>> CreateStream(
       DemuxerStream::Type type) {
@@ -128,11 +127,6 @@ class MojoRendererTest : public ::testing::Test {
 
   void SetCdmAndExpect(bool success) {
     DVLOG(1) << __FUNCTION__;
-    // Set CDM callback should always be fired.
-    EXPECT_CALL(*this, OnCdmAttached(success));
-    mojo_renderer_->SetCdm(
-        &cdm_context_,
-        base::Bind(&MojoRendererTest::OnCdmAttached, base::Unretained(this)));
     base::RunLoop().RunUntilIdle();
   }
 
@@ -355,10 +349,6 @@ TEST_F(MojoRendererTest, Destroy_PendingInitialize) {
 TEST_F(MojoRendererTest, Destroy_PendingFlush) {
   EXPECT_CALL(*mock_renderer_, SetCdm(_, _))
       .WillRepeatedly(RunCallback<1>(true));
-  EXPECT_CALL(*this, OnCdmAttached(false));
-  mojo_renderer_->SetCdm(
-      &cdm_context_,
-      base::Bind(&MojoRendererTest::OnCdmAttached, base::Unretained(this)));
   Destroy();
 }
 

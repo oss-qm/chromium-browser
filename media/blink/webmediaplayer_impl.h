@@ -293,9 +293,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
   // Parameter order is reversed for easy binding.
   void SetCdm(const CdmAttachedCB& cdm_attached_cb, CdmContext* cdm_context);
 
-  // Called when a CDM has been attached to the |pipeline_|.
-  void OnCdmAttached(bool success);
-
   // Inspects the current playback state and:
   //   - notifies |delegate_|,
   //   - toggles the memory usage reporting timer, and

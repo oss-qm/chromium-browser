@@ -821,20 +821,6 @@ void WebMediaPlayerImpl::SetCdm(const CdmAttachedCB& cdm_attached_cb,
   pipeline_.SetCdm(cdm_context, cdm_attached_cb);
 }
 
-void WebMediaPlayerImpl::OnCdmAttached(bool success) {
-  if (success) {
-    set_cdm_result_->complete();
-    set_cdm_result_.reset();
-    is_cdm_attached_ = true;
-    return;
-  }
-
-  set_cdm_result_->completeWithError(
-      blink::WebContentDecryptionModuleExceptionNotSupportedError, 0,
-      "Unable to set MediaKeys object");
-  set_cdm_result_.reset();
-}
-
 void WebMediaPlayerImpl::OnPipelineSeeked(bool time_updated) {
   seeking_ = false;
   seek_time_ = base::TimeDelta();

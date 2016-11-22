@@ -80,7 +80,6 @@ class MojoRenderer : public Renderer, public mojom::RendererClient {
   // Callbacks for |remote_renderer_| methods.
   void OnInitialized(media::RendererClient* client, bool success);
   void OnFlushed();
-  void OnCdmAttached(bool success);
 
   void CancelPendingCallbacks();
 

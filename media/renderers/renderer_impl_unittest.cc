@@ -50,7 +50,6 @@ class RendererImplTest : public ::testing::Test {
     // Completion callbacks.
     MOCK_METHOD1(OnInitialize, void(PipelineStatus));
     MOCK_METHOD0(OnFlushed, void());
-    MOCK_METHOD1(OnCdmAttached, void(bool));
 
    private:
     DISALLOW_COPY_AND_ASSIGN(CallbackHelper);
@@ -242,10 +241,6 @@ class RendererImplTest : public ::testing::Test {
   }
 
   void SetCdmAndExpect(bool expected_result) {
-    EXPECT_CALL(callbacks_, OnCdmAttached(expected_result));
-    renderer_impl_->SetCdm(cdm_context_.get(),
-                           base::Bind(&CallbackHelper::OnCdmAttached,
-                                      base::Unretained(&callbacks_)));
     base::RunLoop().RunUntilIdle();
   }
 

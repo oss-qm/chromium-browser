@@ -113,9 +113,6 @@ class PipelineImpl::RendererWrapper : public DemuxerHost,
 
   // Common handlers for notifications from renderers and demuxer.
   void OnPipelineError(PipelineStatus error);
-  void OnCdmAttached(const CdmAttachedCB& cdm_attached_cb,
-                     CdmContext* cdm_context,
-                     bool success);
   void CheckPlaybackEnded();
 
   // State transition tasks.
@@ -416,10 +413,6 @@ void PipelineImpl::RendererWrapper::SetCdm(
     cdm_attached_cb.Run(true);
     return;
   }
-
-  shared_state_.renderer->SetCdm(
-      cdm_context, base::Bind(&RendererWrapper::OnCdmAttached, weak_this_,
-                              cdm_attached_cb, cdm_context));
 }
 
 void PipelineImpl::RendererWrapper::OnBufferedTimeRangesChanged(
@@ -592,17 +585,6 @@ void PipelineImpl::RendererWrapper::OnPipelineError(PipelineStatus error) {
   status_ = error;
   main_task_runner_->PostTask(
       FROM_HERE, base::Bind(&PipelineImpl::OnError, weak_pipeline_, error));
-}
-
-void PipelineImpl::RendererWrapper::OnCdmAttached(
-    const CdmAttachedCB& cdm_attached_cb,
-    CdmContext* cdm_context,
-    bool success) {
-  DCHECK(media_task_runner_->BelongsToCurrentThread());
-
-  if (success)
-    cdm_context_ = cdm_context;
-  cdm_attached_cb.Run(success);
 }
 
 void PipelineImpl::RendererWrapper::CheckPlaybackEnded() {

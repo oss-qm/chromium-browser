@@ -90,9 +90,6 @@ class MEDIA_MOJO_EXPORT MojoRendererService
   void OnFlushCompleted(const FlushCallback& callback);
 
   // Callback executed once SetCdm() completes.
-  void OnCdmAttached(scoped_refptr<MediaKeys> cdm,
-                     const base::Callback<void(bool)>& callback,
-                     bool success);
 
   mojo::StrongBinding<mojom::Renderer> binding_;
 
