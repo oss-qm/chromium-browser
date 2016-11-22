@@ -309,15 +309,6 @@ void AvPipelineImpl::OnDecoderError() {
     base::ResetAndReturn(&flush_cb_).Run();
 }
 
-void AvPipelineImpl::OnKeyStatusChanged(const std::string& key_id,
-                                        CastKeyStatus key_status,
-                                        uint32_t system_code) {
-  CMALOG(kLogControl) << __FUNCTION__ << " key_status= " << key_status
-                      << " system_code=" << system_code;
-  DCHECK(cast_cdm_context_);
-  cast_cdm_context_->SetKeyStatus(key_id, key_status, system_code);
-}
-
 void AvPipelineImpl::OnVideoResolutionChanged(const Size& size) {
   // Ignored here; VideoPipelineImpl overrides this method.
 }

@@ -60,11 +60,6 @@ class MediaPipelineBackend {
       // will be made after this is called.
       virtual void OnDecoderError() = 0;
 
-      // Must be called when a decryption key status changes.
-      virtual void OnKeyStatusChanged(const std::string& key_id,
-                                      CastKeyStatus key_status,
-                                      uint32_t system_code) = 0;
-
       // Must be called when video resolution change is detected by the decoder.
       // Only relevant for video decoders.
       virtual void OnVideoResolutionChanged(const Size& size) = 0;

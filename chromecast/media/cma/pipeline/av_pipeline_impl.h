@@ -94,9 +94,6 @@ class AvPipelineImpl : MediaPipelineBackend::Decoder::Delegate {
   void OnPushBufferComplete(BufferStatus status) override;
   void OnEndOfStream() override;
   void OnDecoderError() override;
-  void OnKeyStatusChanged(const std::string& key_id,
-                          CastKeyStatus key_status,
-                          uint32_t system_code) override;
   void OnVideoResolutionChanged(const Size& size) override;
 
   // Feed the pipeline, getting the frames from |frame_provider_|.

@@ -49,9 +49,6 @@ class AudioDecoderSoftwareWrapper
   void OnPushBufferComplete(MediaPipelineBackend::BufferStatus status) override;
   void OnEndOfStream() override;
   void OnDecoderError() override;
-  void OnKeyStatusChanged(const std::string& key_id,
-                          CastKeyStatus key_status,
-                          uint32_t system_code) override;
   void OnVideoResolutionChanged(const Size& size) override;
 
   MediaPipelineBackend::AudioDecoder* const backend_decoder_;

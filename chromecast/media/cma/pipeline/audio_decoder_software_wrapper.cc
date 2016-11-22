@@ -129,13 +129,6 @@ void AudioDecoderSoftwareWrapper::OnDecoderError() {
   delegate_->OnDecoderError();
 }
 
-void AudioDecoderSoftwareWrapper::OnKeyStatusChanged(const std::string& key_id,
-                                                     CastKeyStatus key_status,
-                                                     uint32_t system_code) {
-  DCHECK(delegate_);
-  delegate_->OnKeyStatusChanged(key_id, key_status, system_code);
-}
-
 void AudioDecoderSoftwareWrapper::OnVideoResolutionChanged(const Size& size) {
   NOTREACHED();
 }

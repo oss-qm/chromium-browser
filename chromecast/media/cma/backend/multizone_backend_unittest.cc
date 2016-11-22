@@ -88,12 +88,6 @@ class BufferFeeder : public MediaPipelineBackend::Decoder::Delegate {
       ASSERT_TRUE(false);
     }
   }
-  void OnKeyStatusChanged(const std::string& key_id,
-                          CastKeyStatus key_status,
-                          uint32_t system_code) override {
-    DCHECK(thread_checker_.CalledOnValidThread());
-    ASSERT_TRUE(false);
-  }
   void OnVideoResolutionChanged(const Size& size) override {
     DCHECK(thread_checker_.CalledOnValidThread());
   }

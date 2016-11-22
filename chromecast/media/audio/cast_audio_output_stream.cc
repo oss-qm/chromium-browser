@@ -142,10 +142,6 @@ class CastAudioOutputStream::Backend
       OnPushBufferComplete(MediaPipelineBackend::kBufferFailed);
   }
 
-  void OnKeyStatusChanged(const std::string& key_id,
-                          CastKeyStatus key_status,
-                          uint32_t system_code) override {}
-
   void OnVideoResolutionChanged(const Size& size) override {}
 
   std::unique_ptr<MediaPipelineBackend> backend_;

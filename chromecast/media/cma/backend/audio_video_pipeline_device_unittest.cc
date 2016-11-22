@@ -127,9 +127,6 @@ class BufferFeeder : public MediaPipelineBackend::Decoder::Delegate {
   void OnPushBufferComplete(MediaPipelineBackend::BufferStatus status) override;
   void OnEndOfStream() override;
   void OnDecoderError() override;
-  void OnKeyStatusChanged(const std::string& key_id,
-                          CastKeyStatus key_status,
-                          uint32_t system_code) override;
   void OnVideoResolutionChanged(const Size& size) override;
 
  private:
@@ -416,13 +413,6 @@ void BufferFeeder::OnDecoderError() {
   } else {
     ASSERT_TRUE(false);
   }
-}
-
-void BufferFeeder::OnKeyStatusChanged(const std::string& key_id,
-                                      CastKeyStatus key_status,
-                                      uint32_t system_code) {
-  DCHECK(thread_checker_.CalledOnValidThread());
-  ASSERT_TRUE(false);
 }
 
 void BufferFeeder::OnVideoResolutionChanged(const Size& size) {
