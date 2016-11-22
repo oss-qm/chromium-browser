@@ -8,8 +8,6 @@
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/track/AudioTrackList.h"
 #include "core/html/track/VideoTrackList.h"
-#include "modules/encryptedmedia/HTMLMediaElementEncryptedMedia.h"
-#include "modules/encryptedmedia/MediaKeys.h"
 #include "modules/mediastream/MediaStream.h"
 #include "modules/mediastream/MediaStreamRegistry.h"
 #include "platform/mediastream/MediaStreamCenter.h"
