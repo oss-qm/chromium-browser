@@ -54,12 +54,6 @@ void ContentDecryptionModuleResultPromise::complete()
     reject(InvalidStateError, "Unexpected completion.");
 }
 
-void ContentDecryptionModuleResultPromise::completeWithContentDecryptionModule(WebContentDecryptionModule* cdm)
-{
-    NOTREACHED();
-    reject(InvalidStateError, "Unexpected completion.");
-}
-
 void ContentDecryptionModuleResultPromise::completeWithSession(WebContentDecryptionModuleResult::SessionStatus status)
 {
     NOTREACHED();

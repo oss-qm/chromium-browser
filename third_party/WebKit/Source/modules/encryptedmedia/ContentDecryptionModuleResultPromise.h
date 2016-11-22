@@ -24,7 +24,6 @@ public:
 
     // ContentDecryptionModuleResult implementation.
     void complete() override;
-    void completeWithContentDecryptionModule(WebContentDecryptionModule*) override;
     void completeWithSession(WebContentDecryptionModuleResult::SessionStatus) override;
     void completeWithError(WebContentDecryptionModuleException, unsigned long systemCode, const WebString&) override;
 

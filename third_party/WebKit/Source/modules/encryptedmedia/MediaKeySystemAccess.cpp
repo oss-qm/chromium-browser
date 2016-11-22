@@ -45,17 +45,6 @@ public:
     {
     }
 
-    // ContentDecryptionModuleResult implementation.
-    void completeWithContentDecryptionModule(WebContentDecryptionModule* cdm) override
-    {
-        // NOTE: Continued from step 2.8 of createMediaKeys().
-        // 2.9. Let media keys be a new MediaKeys object.
-        MediaKeys* mediaKeys = MediaKeys::create(getExecutionContext(), m_supportedSessionTypes, wrapUnique(cdm));
-
-        // 2.10. Resolve promise with media keys.
-        resolve(mediaKeys);
-    }
-
 private:
     WebVector<WebEncryptedMediaSessionType> m_supportedSessionTypes;
 };

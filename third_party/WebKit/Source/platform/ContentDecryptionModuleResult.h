@@ -20,7 +20,6 @@ public:
     virtual ~ContentDecryptionModuleResult() { }
 
     virtual void complete() = 0;
-    virtual void completeWithContentDecryptionModule(WebContentDecryptionModule*) = 0;
     virtual void completeWithSession(WebContentDecryptionModuleResult::SessionStatus) = 0;
     virtual void completeWithError(WebContentDecryptionModuleException, unsigned long systemCode, const WebString&) = 0;
 

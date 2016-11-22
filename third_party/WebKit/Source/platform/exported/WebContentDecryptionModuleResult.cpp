@@ -14,12 +14,6 @@ void WebContentDecryptionModuleResult::complete()
     reset();
 }
 
-void WebContentDecryptionModuleResult::completeWithContentDecryptionModule(WebContentDecryptionModule* cdm)
-{
-    m_impl->completeWithContentDecryptionModule(cdm);
-    reset();
-}
-
 void WebContentDecryptionModuleResult::completeWithSession(SessionStatus status)
 {
     m_impl->completeWithSession(status);

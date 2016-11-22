@@ -166,8 +166,6 @@ void CdmSessionAdapter::OnCdmCreated(const std::string& key_system,
 
   cdm_ = cdm;
 
-  cdm_created_result_->completeWithContentDecryptionModule(
-      new WebContentDecryptionModuleImpl(this));
   cdm_created_result_.reset();
 }
 

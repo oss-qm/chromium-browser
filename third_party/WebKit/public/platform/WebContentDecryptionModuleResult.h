@@ -49,9 +49,6 @@ public:
     // pass back.
     BLINK_PLATFORM_EXPORT void complete();
 
-    // Called when a CDM is created.
-    BLINK_PLATFORM_EXPORT void completeWithContentDecryptionModule(WebContentDecryptionModule*);
-
     // Called when the CDM completes a session operation.
     BLINK_PLATFORM_EXPORT void completeWithSession(SessionStatus);
 
