@@ -280,12 +280,6 @@ class WebMediaPlayerAndroid
   // Called when |cdm_context| is ready.
   void OnCdmContextReady(media::CdmContext* cdm_context);
 
-  // Requests that this object notifies when a CDM is ready through the
-  // |cdm_ready_cb| provided.
-  // If |cdm_ready_cb| is null, the existing callback will be fired with
-  // NULL immediately and reset.
-  void SetCdmReadyCB(const MediaSourceDelegate::CdmReadyCB& cdm_ready_cb);
-
   // Called when the ContentDecryptionModule has been attached to the
   // pipeline/decoders.
   void ContentDecryptionModuleAttached(

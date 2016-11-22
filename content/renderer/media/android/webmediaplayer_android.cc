@@ -338,8 +338,6 @@ void WebMediaPlayerAndroid::DoLoad(LoadType load_type,
       media_source_delegate_->InitializeMediaSource(
           base::Bind(&WebMediaPlayerAndroid::OnMediaSourceOpened,
                      weak_factory_.GetWeakPtr()),
-          base::Bind(&WebMediaPlayerAndroid::SetCdmReadyCB,
-                     weak_factory_.GetWeakPtr()),
           base::Bind(&WebMediaPlayerAndroid::UpdateNetworkState,
                      weak_factory_.GetWeakPtr()),
           base::Bind(&WebMediaPlayerAndroid::OnDurationChanged,
@@ -1491,29 +1489,6 @@ void WebMediaPlayerAndroid::OnVolumeMultiplierUpdate(double multiplier) {
 void WebMediaPlayerAndroid::OnCdmContextReady(media::CdmContext* cdm_context) {
     LOG(ERROR) << "CdmContext not available (e.g. CDM creation failed).";
     return;
-}
-
-void WebMediaPlayerAndroid::SetCdmReadyCB(
-    const MediaSourceDelegate::CdmReadyCB& cdm_ready_cb) {
-  DCHECK(main_thread_checker_.CalledOnValidThread());
-  DCHECK(is_player_initialized_);
-
-  // Cancels the previous CDM request.
-  if (cdm_ready_cb.is_null()) {
-    if (!cdm_ready_cb_.is_null()) {
-      base::ResetAndReturn(&cdm_ready_cb_)
-          .Run(nullptr, base::Bind(&media::IgnoreCdmAttached));
-    }
-    return;
-  }
-
-  // TODO(xhwang): Support multiple CDM notification request (e.g. from
-  // video and audio). The current implementation is okay for the current
-  // media pipeline since we initialize audio and video decoders in sequence.
-  // But WebMediaPlayerAndroid should not depend on media pipeline's
-  // implementation detail.
-  DCHECK(cdm_ready_cb_.is_null());
-  cdm_ready_cb_ = cdm_ready_cb;
 }
 
 bool WebMediaPlayerAndroid::supportsOverlayFullscreenVideo() {

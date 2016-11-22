@@ -148,21 +148,18 @@ void MediaSourceDelegate::InitializeMediaSource(
     const MediaSourceOpenedCB& media_source_opened_cb,
     const media::Demuxer::EncryptedMediaInitDataCB&
         encrypted_media_init_data_cb,
-    const SetCdmReadyCB& set_cdm_ready_cb,
     const UpdateNetworkStateCB& update_network_state_cb,
     const DurationChangeCB& duration_change_cb,
     const base::Closure& waiting_for_decryption_key_cb) {
   DCHECK(main_task_runner_->BelongsToCurrentThread());
   DCHECK(!media_source_opened_cb.is_null());
   DCHECK(!encrypted_media_init_data_cb.is_null());
-  DCHECK(!set_cdm_ready_cb.is_null());
   DCHECK(!update_network_state_cb.is_null());
   DCHECK(!duration_change_cb.is_null());
   DCHECK(!waiting_for_decryption_key_cb.is_null());
 
   media_source_opened_cb_ = media_source_opened_cb;
   encrypted_media_init_data_cb_ = encrypted_media_init_data_cb;
-  set_cdm_ready_cb_ = media::BindToCurrentLoop(set_cdm_ready_cb);
   update_network_state_cb_ = media::BindToCurrentLoop(update_network_state_cb);
   duration_change_cb_ = duration_change_cb;
   waiting_for_decryption_key_cb_ =

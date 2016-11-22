@@ -56,9 +56,6 @@ class MediaSourceDelegate : public media::DemuxerHost {
   typedef base::Callback<void(media::CdmContext*, const media::CdmAttachedCB&)>
       CdmReadyCB;
 
-  // Callback to set a CdmReadyCB, which will be called when a CDM is ready.
-  typedef base::Callback<void(const CdmReadyCB&)> SetCdmReadyCB;
-
   MediaSourceDelegate(
       RendererDemuxerAndroid* demuxer_client,
       int demuxer_client_id,
@@ -72,7 +69,6 @@ class MediaSourceDelegate : public media::DemuxerHost {
       const MediaSourceOpenedCB& media_source_opened_cb,
       const media::Demuxer::EncryptedMediaInitDataCB&
           encrypted_media_init_data_cb,
-      const SetCdmReadyCB& set_cdm_ready_cb,
       const UpdateNetworkStateCB& update_network_state_cb,
       const DurationChangeCB& duration_change_cb,
       const base::Closure& waiting_for_decryption_key_cb);
@@ -200,7 +196,6 @@ class MediaSourceDelegate : public media::DemuxerHost {
   std::unique_ptr<media::ChunkDemuxer> chunk_demuxer_;
   bool is_demuxer_ready_;
 
-  SetCdmReadyCB set_cdm_ready_cb_;
   media::CdmContext* cdm_context_;
   media::CdmAttachedCB pending_cdm_attached_cb_;
 
