@@ -166,10 +166,6 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
 
   blink::WebAudioSourceProvider* getAudioSourceProvider() override;
 
-  void setContentDecryptionModule(
-      blink::WebContentDecryptionModule* cdm,
-      blink::WebContentDecryptionModuleResult result) override;
-
   bool supportsOverlayFullscreenVideo() override;
   void enteredFullscreen() override;
   void exitedFullscreen() override;

@@ -229,10 +229,6 @@ class WebMediaPlayerAndroid
   const gfx::RectF GetBoundaryRectangle() override;
 #endif  // defined(VIDEO_HOLE)
 
-  void setContentDecryptionModule(
-      blink::WebContentDecryptionModule* cdm,
-      blink::WebContentDecryptionModuleResult result) override;
-
   void OnMediaSourceOpened(blink::WebMediaSource* web_media_source);
 
   // Called when a decoder detects that the key needed to decrypt the stream
@@ -283,11 +279,6 @@ class WebMediaPlayerAndroid
 
   // Called when |cdm_context| is ready.
   void OnCdmContextReady(media::CdmContext* cdm_context);
-
-  // Sets the CDM. Should only be called when |is_player_initialized_| is true
-  // and a new non-null |cdm_context_| is available. Fires |cdm_attached_cb_| on
-  // the main thread with the result after the CDM is attached.
-  void SetCdmInternal(const media::CdmAttachedCB& cdm_attached_cb);
 
   // Called when the CDM is attached.
   void OnCdmAttached(const media::CdmAttachedCB& cdm_attached_cb, bool success);
@@ -463,10 +454,6 @@ class WebMediaPlayerAndroid
   scoped_refptr<media::MediaLog> media_log_;
 
   std::unique_ptr<MediaInfoLoader> info_loader_;
-
-  // Non-owned pointer to the CdmContext. Updated in the constructor,
-  // generateKeyRequest() or setContentDecryptionModule().
-  media::CdmContext* cdm_context_;
 
   // This is only Used by Clear Key key system implementation, where a renderer
   // side CDM will be used. This is similar to WebMediaPlayerImpl. For other key

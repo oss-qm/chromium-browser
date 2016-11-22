@@ -782,32 +782,6 @@ bool WebMediaPlayerImpl::copyVideoTextureToPlatformTexture(
       premultiply_alpha, flip_y);
 }
 
-void WebMediaPlayerImpl::setContentDecryptionModule(
-    blink::WebContentDecryptionModule* cdm,
-    blink::WebContentDecryptionModuleResult result) {
-  DCHECK(main_task_runner_->BelongsToCurrentThread());
-
-  // Once the CDM is set it can't be cleared as there may be frames being
-  // decrypted on other threads. So fail this request.
-  // http://crbug.com/462365#c7.
-  if (!cdm) {
-    result.completeWithError(
-        blink::WebContentDecryptionModuleExceptionInvalidStateError, 0,
-        "The existing MediaKeys object cannot be removed at this time.");
-    return;
-  }
-
-  // Create a local copy of |result| to avoid problems with the callback
-  // getting passed to the media thread and causing |result| to be destructed
-  // on the wrong thread in some failure conditions. Blink should prevent
-  // multiple simultaneous calls.
-  DCHECK(!set_cdm_result_);
-  set_cdm_result_.reset(new blink::WebContentDecryptionModuleResult(result));
-
-  SetCdm(BIND_TO_RENDER_LOOP(&WebMediaPlayerImpl::OnCdmAttached),
-         ToWebContentDecryptionModuleImpl(cdm)->GetCdmContext());
-}
-
 void WebMediaPlayerImpl::OnFFmpegMediaTracksUpdated(
     std::unique_ptr<MediaTracks> tracks) {
   // For MSE/chunk_demuxer case the media track updates are handled by

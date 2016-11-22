@@ -183,8 +183,6 @@ public:
 
     virtual WebAudioSourceProvider* getAudioSourceProvider() { return nullptr; }
 
-    virtual void setContentDecryptionModule(WebContentDecryptionModule* cdm, WebContentDecryptionModuleResult result) { result.completeWithError(WebContentDecryptionModuleExceptionNotSupportedError, 0, "ERROR"); }
-
     // Sets the poster image URL.
     virtual void setPoster(const WebURL& poster) { }
 

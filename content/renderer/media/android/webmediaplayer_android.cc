@@ -209,7 +209,6 @@ WebMediaPlayerAndroid::WebMediaPlayerAndroid(
       player_type_(MEDIA_PLAYER_TYPE_URL),
       is_remote_(false),
       media_log_(params.media_log()),
-      cdm_context_(nullptr),
       allow_stored_credentials_(false),
       is_local_resource_(false),
       interpolator_(&default_tick_clock_),
@@ -1157,9 +1156,6 @@ void WebMediaPlayerAndroid::InitializePlayer(
 
   if (is_fullscreen_)
     player_manager_->EnterFullscreen(player_id_);
-
-  if (cdm_context_)
-    SetCdmInternal(base::Bind(&media::IgnoreCdmAttached));
 }
 
 void WebMediaPlayerAndroid::Pause(bool is_media_related_action) {
@@ -1433,34 +1429,6 @@ const gfx::RectF WebMediaPlayerAndroid::GetBoundaryRectangle() {
 }
 #endif
 
-void WebMediaPlayerAndroid::setContentDecryptionModule(
-    blink::WebContentDecryptionModule* cdm,
-    blink::WebContentDecryptionModuleResult result) {
-  DCHECK(main_thread_checker_.CalledOnValidThread());
-
-  // Once the CDM is set it can't be cleared as there may be frames being
-  // decrypted on other threads. So fail this request.
-  // http://crbug.com/462365#c7.
-  if (!cdm) {
-    result.completeWithError(
-        blink::WebContentDecryptionModuleExceptionInvalidStateError, 0,
-        "The existing MediaKeys object cannot be removed at this time.");
-    return;
-  }
-
-  cdm_context_ = media::ToWebContentDecryptionModuleImpl(cdm)->GetCdmContext();
-
-  if (is_player_initialized_) {
-    SetCdmInternal(
-        base::Bind(&WebMediaPlayerAndroid::ContentDecryptionModuleAttached,
-                   weak_factory_.GetWeakPtr(), result));
-  } else {
-    // No pipeline/decoder connected, so resolve the promise. When something
-    // is connected, setting the CDM will happen in SetCdmReadyCB().
-    ContentDecryptionModuleAttached(result, true);
-  }
-}
-
 void WebMediaPlayerAndroid::ContentDecryptionModuleAttached(
     blink::WebContentDecryptionModuleResult result,
     bool success) {
@@ -1521,59 +1489,13 @@ void WebMediaPlayerAndroid::OnVolumeMultiplierUpdate(double multiplier) {
 }
 
 void WebMediaPlayerAndroid::OnCdmContextReady(media::CdmContext* cdm_context) {
-  DCHECK(!cdm_context_);
-
-  if (!cdm_context) {
     LOG(ERROR) << "CdmContext not available (e.g. CDM creation failed).";
     return;
-  }
-
-  cdm_context_ = cdm_context;
-
-  if (is_player_initialized_)
-    SetCdmInternal(base::Bind(&media::IgnoreCdmAttached));
-}
-
-void WebMediaPlayerAndroid::SetCdmInternal(
-    const media::CdmAttachedCB& cdm_attached_cb) {
-  DCHECK(main_thread_checker_.CalledOnValidThread());
-  DCHECK(cdm_context_ && is_player_initialized_);
-  DCHECK(cdm_context_->GetDecryptor() ||
-         cdm_context_->GetCdmId() != media::CdmContext::kInvalidCdmId)
-      << "CDM should support either a Decryptor or a CDM ID.";
-
-  if (cdm_ready_cb_.is_null()) {
-    cdm_attached_cb.Run(true);
-    return;
-  }
-
-  // Satisfy |cdm_ready_cb_|. Use BindToCurrentLoop() since the callback could
-  // be fired on other threads.
-  base::ResetAndReturn(&cdm_ready_cb_)
-      .Run(cdm_context_, media::BindToCurrentLoop(base::Bind(
-                             &WebMediaPlayerAndroid::OnCdmAttached,
-                             weak_factory_.GetWeakPtr(), cdm_attached_cb)));
 }
 
 void WebMediaPlayerAndroid::OnCdmAttached(
     const media::CdmAttachedCB& cdm_attached_cb,
     bool success) {
-  DVLOG(1) << __FUNCTION__ << ": success: " << success;
-  DCHECK(main_thread_checker_.CalledOnValidThread());
-
-  if (!success) {
-    if (cdm_context_->GetCdmId() == media::CdmContext::kInvalidCdmId) {
-      NOTREACHED() << "CDM cannot be attached to media player.";
-      cdm_attached_cb.Run(false);
-      return;
-    }
-
-    // If the CDM is not attached (e.g. the CDM does not support a Decryptor),
-    // MediaSourceDelegate will fall back to use a browser side (IPC-based) CDM.
-    player_manager_->SetCdm(player_id_, cdm_context_->GetCdmId());
-  }
-
-  cdm_attached_cb.Run(true);
 }
 
 void WebMediaPlayerAndroid::SetCdmReadyCB(
@@ -1597,9 +1519,6 @@ void WebMediaPlayerAndroid::SetCdmReadyCB(
   // implementation detail.
   DCHECK(cdm_ready_cb_.is_null());
   cdm_ready_cb_ = cdm_ready_cb;
-
-  if (cdm_context_)
-    SetCdmInternal(base::Bind(&media::IgnoreCdmAttached));
 }
 
 bool WebMediaPlayerAndroid::supportsOverlayFullscreenVideo() {
