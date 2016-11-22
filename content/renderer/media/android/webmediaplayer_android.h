@@ -43,8 +43,6 @@ class SingleThreadTaskRunner;
 }
 
 namespace blink {
-class WebContentDecryptionModule;
-class WebContentDecryptionModuleResult;
 class WebFrame;
 class WebMediaPlayerClient;
 class WebURL;
@@ -64,7 +62,6 @@ struct MailboxHolder;
 namespace media {
 class CdmContext;
 class MediaLog;
-class WebContentDecryptionModuleImpl;
 }
 
 namespace content {

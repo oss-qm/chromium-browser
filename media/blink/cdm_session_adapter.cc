@@ -16,7 +16,6 @@
 #include "media/base/cdm_key_information.h"
 #include "media/base/cdm_promise.h"
 #include "media/base/key_systems.h"
-#include "media/blink/webcontentdecryptionmodule_impl.h"
 #include "media/blink/webcontentdecryptionmodulesession_impl.h"
 #include "url/gurl.h"
 

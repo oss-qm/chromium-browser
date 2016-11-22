@@ -44,7 +44,6 @@
 #include "media/base/media_switches.h"
 #include "media/base/timestamp_constants.h"
 #include "media/base/video_frame.h"
-#include "media/blink/webcontentdecryptionmodule_impl.h"
 #include "media/blink/webmediaplayer_cast_android.h"
 #include "media/blink/webmediaplayer_delegate.h"
 #include "media/blink/webmediaplayer_util.h"

@@ -82,7 +82,6 @@
 #include "media/audio/audio_output_device.h"
 #include "media/base/audio_hardware_config.h"
 #include "media/base/mime_util.h"
-#include "media/blink/webcontentdecryptionmodule_impl.h"
 #include "media/filters/stream_parser_factory.h"
 #include "mojo/common/common_type_converters.h"
 #include "storage/common/database/database_identifier.h"

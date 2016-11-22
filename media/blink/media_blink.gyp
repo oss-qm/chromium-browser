@@ -65,8 +65,6 @@
         'video_frame_compositor.h',
         'webaudiosourceprovider_impl.cc',
         'webaudiosourceprovider_impl.h',
-        'webcontentdecryptionmodule_impl.cc',
-        'webcontentdecryptionmodule_impl.h',
         'webcontentdecryptionmoduleaccess_impl.cc',
         'webcontentdecryptionmoduleaccess_impl.h',
         'webcontentdecryptionmodulesession_impl.cc',

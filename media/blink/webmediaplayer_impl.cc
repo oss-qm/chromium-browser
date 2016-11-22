@@ -38,7 +38,6 @@
 #include "media/base/video_frame.h"
 #include "media/blink/texttrack_impl.h"
 #include "media/blink/webaudiosourceprovider_impl.h"
-#include "media/blink/webcontentdecryptionmodule_impl.h"
 #include "media/blink/webinbandtexttrack_impl.h"
 #include "media/blink/webmediaplayer_delegate.h"
 #include "media/blink/webmediaplayer_util.h"
