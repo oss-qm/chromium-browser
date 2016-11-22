@@ -44,11 +44,5 @@ std::unique_ptr<DecryptContextImpl> CastCdmContext::GetDecryptContext(
   return cast_cdm_->GetDecryptContext(key_id);
 }
 
-void CastCdmContext::SetKeyStatus(const std::string& key_id,
-                                  CastKeyStatus key_status,
-                                  uint32_t system_code) {
-  cast_cdm_->SetKeyStatus(key_id, key_status, system_code);
-}
-
 }  // namespace media
 }  // namespace chromecast

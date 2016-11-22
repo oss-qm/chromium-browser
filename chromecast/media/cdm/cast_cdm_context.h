@@ -45,12 +45,6 @@ class CastCdmContext : public ::media::CdmContext {
   std::unique_ptr<DecryptContextImpl> GetDecryptContext(
       const std::string& key_id);
 
-  // Notifies that key status has changed (e.g. if expiry is detected by
-  // hardware decoder).
-  void SetKeyStatus(const std::string& key_id,
-                    CastKeyStatus key_status,
-                    uint32_t system_code);
-
  private:
   // The CastCdm object which owns |this|.
   CastCdm* const cast_cdm_;

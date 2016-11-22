@@ -63,12 +63,6 @@ class CastCdm : public ::media::MediaKeys {
   virtual std::unique_ptr<DecryptContextImpl> GetDecryptContext(
       const std::string& key_id) const = 0;
 
-  // Notifies that key status has changed (e.g. if expiry is detected by
-  // hardware decoder).
-  virtual void SetKeyStatus(const std::string& key_id,
-                            CastKeyStatus key_status,
-                            uint32_t system_code) = 0;
-
   // ::media::MediaKeys implementation.
   ::media::CdmContext* GetCdmContext() override;
 
